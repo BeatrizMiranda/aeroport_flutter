@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:aeroport/views/categories_bar.dart';
-import 'package:aeroport/views/most_viewed_bar.dart';
-import 'package:aeroport/views/primary_title_bar.dart';
-import 'package:aeroport/views/custom_slider.dart';
-import 'package:aeroport/views/secondary_title_bar.dart';
+import 'package:airport/views/categories_bar.dart';
+import 'package:airport/views/most_viewed_bar.dart';
+import 'package:airport/views/primary_title_bar.dart';
+import 'package:airport/views/custom_slider.dart';
+import 'package:airport/views/secondary_title_bar.dart';
 
 void main() {
   runApp(MyApp());
