@@ -18,6 +18,20 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
 
+  bool isAdmin = true;
+
+  Map<String, IconData> normalUser = {
+    'Minha Conta': Icons.account_circle,
+    'Minhas Viagens': Icons.card_travel
+  };
+
+  Map<String, IconData> adminUser = {
+    'Usuários': Icons.supervised_user_circle,
+    'Minha Conta': Icons.account_circle,
+    'Voos': Icons.flight_takeoff,
+    'Companhia': Icons.flight
+  };
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,6 +54,12 @@ class _HomeState extends State<Home> {
     );
   }
 
+  Widget getFooterIcons(Map<String, IconData> footerItems) {
+    List<Widget> list = List<Widget>();
+    footerItems.forEach((message, icon) => list.add(_footerItem(message, icon)));
+    return Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: list);
+  }
+
   Widget _footer() {
     return BottomAppBar(
         shape: const CircularNotchedRectangle(),
@@ -47,17 +67,12 @@ class _HomeState extends State<Home> {
           height: 70.0, 
           child: Padding(
             padding: EdgeInsets.fromLTRB(25, 0, 25, 5),
-            child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  _footerItem('Minha Conta', Icons.account_circle),
-                  _footerItem('Minhas Viagens', Icons.card_travel),
-                ],
-              ),
+            child: isAdmin ? getFooterIcons(adminUser) : getFooterIcons(normalUser)
           ), 
         ),
       );
   }
+
   Widget _footerItem(text, icon) {
     return Column(
       mainAxisSize: MainAxisSize.min,
