@@ -1,44 +1,31 @@
 import 'package:flutter/material.dart';
-import 'package:airport/views/categories_bar.dart';
-import 'package:airport/views/most_viewed_bar.dart';
-import 'package:airport/views/primary_title_bar.dart';
-import 'package:airport/views/custom_slider.dart';
-import 'package:airport/views/secondary_title_bar.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(MaterialApp(
+    title: 'Time To Travel',
+    home: Home(),
+    theme: ThemeData(
+      hintColor: Color(0xFFFFA251),
+      primaryColor: Colors.white,
+    ),
+  ));
 }
 
-class MyApp extends StatelessWidget {
+class Home extends StatefulWidget {
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'World Tour App',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
-      home: MyHomePage(title: 'World Tour App'),
-    );
-  }
+  _HomeState createState() => _HomeState();
 }
 
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
-  final String title;
-  @override
-  _MyHomePageState createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
+class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
       body: _body(),
-      bottomNavigationBar: _bnb(),
+      bottomNavigationBar: _footer(),
+      floatingActionButton: _footerFloatingBtn(),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      backgroundColor: Color(0xFFF2F2F2),
     );
   }
 
@@ -48,57 +35,60 @@ class _MyHomePageState extends State<MyHomePage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Container(
-            margin: EdgeInsets.only(bottom: 25),
-            child: PrimaryTitleBar('World Tour'),
-          ),
-          CategoriesBar(),
-          Container(
-            margin: EdgeInsets.symmetric(vertical: 25),
-            child: CustomSlider(),
-          ),
-          Container(
-            margin: EdgeInsets.symmetric(vertical: 25),
-            child: SecondaryTitleBar('Most viewed'),
-          ),
-          MostViewedBar(),
-          Container(
-            margin: EdgeInsets.only(bottom: 25, top: 50),
-            child: SecondaryTitleBar('You gotta see'),
-          ),
-          CategoriesBar(),
-          Container(
-            margin: EdgeInsets.symmetric(vertical: 25),
-            child: CustomSlider(),
-          ),
-          Container(
-            margin: EdgeInsets.symmetric(vertical: 25),
-            child: SecondaryTitleBar('Most wanted'),
-          ),
-          MostViewedBar(),
-          Padding(padding: EdgeInsets.only(bottom: 25),),
         ],
       ),
     );
   }
 
-  Widget _bnb() {
-    return BottomNavigationBar(
-      items: [
-        BottomNavigationBarItem(
-          icon: Icon(Icons.home),
-          title: Text('Home')
+  Widget _footer() {
+    return BottomAppBar(
+        shape: const CircularNotchedRectangle(),
+        child: Container(
+          height: 70.0, 
+          child: Padding(
+            padding: EdgeInsets.fromLTRB(25, 0, 25, 5),
+            child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  _footerItem('Minha Conta', Icons.account_circle),
+                  _footerItem('Minhas Viagens', Icons.card_travel),
+                ],
+              ),
+          ), 
         ),
-        BottomNavigationBarItem(
-            icon: Icon(Icons.search),
-            title: Text('Search')
-        ),
-        BottomNavigationBarItem(
-            icon: Icon(Icons.people),
-            title: Text('Friends')
-        ),
-      ],
-    );
+      );
+  }
+  Widget _footerItem(text, icon) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: <Widget>[
+        IconButton(onPressed: () {}, icon: Icon(icon, size: 30, color: Color(0xFF333333))),
+        Text(text)
+      ]);
   }
 
+  Widget _footerFloatingBtn() {
+    return Container(
+          height: 70,
+          width: 70,
+          child: FittedBox(
+            child: FloatingActionButton(
+            onPressed: () => {},
+            tooltip: 'Tela de Início',
+            child: Container(
+                width: 70,
+                height: 70,
+                child: Icon(Icons.flight, size: 35),
+                decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    gradient: LinearGradient(colors: [
+                      Color(0xFFFF5929), 
+                      Color(0xFFFFB162)
+                    ])
+                  ),
+            ),
+          ),
+        ),
+      );
+  }
 }
