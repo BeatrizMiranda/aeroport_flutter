@@ -1,98 +1,76 @@
+import 'package:airport/components/footer.dart';
+import 'package:airport/components/homeFlightSugestions.dart';
+import 'package:airport/layout/pallets.dart';
+import 'package:airport/views/searchPage.dart';
 import 'package:flutter/material.dart';
 
 class Home extends StatefulWidget {
+  Home({Key key}) : super(key: key);
+
   @override
   _HomeState createState() => _HomeState();
 }
-
 class _HomeState extends State<Home> {
-
-  bool isAdmin = true;
-
-  Map<String, IconData> normalUser = {
-    'Minha Conta': Icons.account_circle,
-    'Minhas Viagens': Icons.card_travel
-  };
-
-  Map<String, IconData> adminUser = {
-    'Usuários': Icons.supervised_user_circle,
-    'Minha Conta': Icons.account_circle,
-    'Voos': Icons.flight_takeoff,
-    'Companhia': Icons.flight
-  };
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: _body(),
-      bottomNavigationBar: _footer(),
-      floatingActionButton: _footerFloatingBtn(),
+      bottomNavigationBar: Footer(),
+      floatingActionButton: FooterFloatingBtn(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      backgroundColor: Color(0xFFF2F2F2),
+      backgroundColor: Palette.background,
     );
   }
 
   Widget _body() {
     return SingleChildScrollView(
-      padding: EdgeInsets.symmetric(horizontal: 15),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
+        children: [
+          ClipRRect(
+            borderRadius: BorderRadius.only(bottomLeft:  Radius.circular(15), bottomRight:  Radius.circular(15)),
+            child: Image.asset(
+              "src/img/homeImg.png",
+              fit: BoxFit.cover,
+              height: 230
+            ),
+          ),
+          Container(
+            alignment: Alignment.topLeft,
+            padding: EdgeInsets.all(20),
+            child: Column(
+              children: [
+                Text("Onde vamos agora?", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25)),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(20, 30, 20, 40),
+                  child: RaisedButton(
+                    color: Colors.white,
+                    onPressed: () => Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => SearchPage())),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+                    padding: EdgeInsets.all(10),
+                    child: Row(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(right: 10),
+                          child: Icon(Icons.search, size: 35),
+                        ),
+                        Text("Encontre um voo", style: TextStyle(fontSize: 22, color: Palette.lightBlack)),
+                      ],
+                    ),
+                  ),
+                ),
+                HomeFlightSugestions(),
+              ],
+            ),
+          ),
+          
         ],
       ),
     );
   }
 
-  Widget getFooterIcons(Map<String, IconData> footerItems) {
-    List<Widget> list = List<Widget>();
-    footerItems.forEach((message, icon) => list.add(_footerItem(message, icon)));
-    return Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: list);
-  }
-
-  Widget _footer() {
-    return BottomAppBar(
-        shape: const CircularNotchedRectangle(),
-        child: Container(
-          height: 70.0, 
-          child: Padding(
-            padding: EdgeInsets.fromLTRB(25, 0, 25, 5),
-            child: isAdmin ? getFooterIcons(adminUser) : getFooterIcons(normalUser)
-          ), 
-        ),
-      );
-  }
-
-  Widget _footerItem(text, icon) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: <Widget>[
-        IconButton(onPressed: () {}, icon: Icon(icon, size: 30, color: Color(0xFF333333))),
-        Text(text)
-      ]);
-  }
-
-  Widget _footerFloatingBtn() {
-    return Container(
-      height: 70,
-      width: 70,
-      child: FittedBox(
-        child: FloatingActionButton(
-          onPressed: () => {},
-          tooltip: 'Tela de Início',
-          child: Container(
-            width: 70,
-            height: 70,
-            child: Icon(Icons.flight, size: 35),
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              gradient: LinearGradient(colors: [
-                Color(0xFFFF5929), 
-                Color(0xFFFFB162)
-              ])
-            ),
-          ),
-        ),
-      ),
-    );
-  }
+   
+    
+      
+  
 }

@@ -1,5 +1,7 @@
+import 'package:airport/layout/pallets.dart';
 import 'package:airport/views/home.dart';
 import 'package:airport/views/initialScreen.dart';
+import 'package:airport/views/searchPage.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -7,11 +9,15 @@ void main() {
 
   runApp(MaterialApp(
     title: 'Time To Travel',
-    home: isLoged ? Home() : InitialScreen(),
     theme: ThemeData(
-      hintColor: Color(0xFFFFA251),
+      hintColor: Palette.lightOrange,
       primaryColor: Colors.white,
     ),
+    initialRoute: '/',
+    routes: {
+      '/': (context) => isLoged ? Home() : InitialScreen(),
+      '/home': (context) => Home(),
+      '/search': (context) => SearchPage(),
+    },
   ));
 }
-

@@ -1,71 +1,71 @@
 import 'package:airport/components/button.dart';
+import 'package:airport/components/footer.dart';
 import 'package:airport/layout/pallets.dart';
-import 'package:airport/views/searchPage.dart';
 import 'package:flutter/material.dart';
 
-class InitialScreen extends StatefulWidget {
-
-  InitialScreen({Key key}) : super(key: key);
+class SearchPage extends StatefulWidget {
+  SearchPage({Key key}) : super(key: key);
 
   @override
-  _InitialScreenState createState() => _InitialScreenState();
+  _SearchPageState createState() => _SearchPageState();
 }
+class _SearchPageState extends State<SearchPage> {
 
-class _InitialScreenState extends State<InitialScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: _body(),
+      bottomNavigationBar: Footer(),
+      floatingActionButton: FooterFloatingBtn(),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       backgroundColor: Palette.background,
     );
   }
 
   Widget _body() {
-    return 
-      Stack(
-        children: <Widget>[
+    return SingleChildScrollView(
+      child: Stack(
+        children: [
           ClipRRect(
             borderRadius: BorderRadius.only(bottomLeft:  Radius.circular(15), bottomRight:  Radius.circular(15)),
             child: Image.asset(
-              "src/img/InitialScreen.png",
+              "src/img/SearchImg.png",
               fit: BoxFit.cover,
-              height: 650
+              height: 325
             ),
           ),
           Positioned(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                _card(),
+                _searchForm()
               ],
             ),
-          )            
-        ]
-      );
+          ),           
+        ],
+      ),
+    );
   }
 
-  Widget _card() {
+  Widget _searchForm() {
     return Card(
       margin: EdgeInsets.all(20),
       elevation: 5,
       child: Padding(
         padding: const EdgeInsets.fromLTRB(20, 30, 20, 30),
-        child: Row(
+        child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Column(
               children: [
-                Text(
-                  "Para onde você quer ir?", 
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25)
+                CustomButton(
+                  height: 50,
+                  text : "Buscar",
+                  onClick: () => Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => SearchPage())),
                 ),
                 Container(
                   margin: EdgeInsets.only(top: 50),
-                  child: CustomButton(
-                    text : "Agende sua viagem!",
-                    onClick: () => Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => SearchPage())),
-                    height: 70,
-                  )
+                  
                 ),
               ],
             ),
