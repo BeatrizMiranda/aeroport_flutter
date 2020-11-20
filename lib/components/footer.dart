@@ -7,10 +7,11 @@ class FooterIcon {
 
   final String name;
   final IconData icon;
-  final Type goToComponent;
+  final String goToComponent;
 }
 
 const List<FooterIcon> normalUser = const <FooterIcon>[
+<<<<<<< HEAD
   const FooterIcon(
       name: 'Minha Conta', icon: Icons.account_circle, goToComponent: Home),
   const FooterIcon(
@@ -27,6 +28,17 @@ const List<FooterIcon> adminUser = const <FooterIcon>[
   const FooterIcon(
       name: 'Voos', icon: Icons.flight_takeoff, goToComponent: Home),
   const FooterIcon(name: 'Companhia', icon: Icons.flight, goToComponent: Home),
+=======
+  const FooterIcon(name: 'Minha Conta', icon: Icons.account_circle, goToComponent: '/'),
+  const FooterIcon(name: 'Minhas Viagens', icon: Icons.card_travel, goToComponent: '/viagens'),
+];
+
+const List<FooterIcon> adminUser = const <FooterIcon>[
+  const FooterIcon(name: 'Usuários', icon: Icons.supervised_user_circle, goToComponent: '/'),
+  const FooterIcon(name: 'Minha Conta', icon: Icons.account_circle, goToComponent: '/'),
+  const FooterIcon(name: 'Voos', icon: Icons.flight_takeoff, goToComponent: '/'),
+  const FooterIcon(name: 'Companhia', icon: Icons.flight, goToComponent: '/'),
+>>>>>>> f4d04958afeae0fe2849aaa3312c0598b78f3e50
 ];
 
 class Footer extends StatefulWidget {
@@ -52,6 +64,11 @@ class _Footer extends State<Footer> {
     'Companhia': Icons.flight
   };
 
+<<<<<<< HEAD
+=======
+  bool isAdmin = false;
+  
+>>>>>>> f4d04958afeae0fe2849aaa3312c0598b78f3e50
   @override
   Widget build(BuildContext context) {
     return BottomAppBar(
@@ -110,3 +127,24 @@ class FooterFloatingBtn extends StatelessWidget {
     );
   }
 }
+<<<<<<< HEAD
+=======
+
+class FooterOption extends StatelessWidget {
+  const FooterOption({Key key, this.footerIcon}) : super(key: key);
+  final FooterIcon footerIcon;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: <Widget>[
+        IconButton(
+          onPressed: () { Navigator.pushNamed(context, footerIcon.goToComponent); },
+          icon: Icon(footerIcon.icon, size: 30, color: Palette.lightBlack)
+        ),
+        Text(footerIcon.name)
+      ]);
+  }
+}
+>>>>>>> f4d04958afeae0fe2849aaa3312c0598b78f3e50
