@@ -7,19 +7,19 @@ class FooterIcon {
 
   final String name;
   final IconData icon;
-  final Type goToComponent;
+  final String goToComponent;
 }
 
 const List<FooterIcon> normalUser = const <FooterIcon>[
-  const FooterIcon(name: 'Minha Conta', icon: Icons.account_circle, goToComponent: Home),
-  const FooterIcon(name: 'Minhas Viagens', icon: Icons.card_travel, goToComponent: Home),
+  const FooterIcon(name: 'Minha Conta', icon: Icons.account_circle, goToComponent: '/'),
+  const FooterIcon(name: 'Minhas Viagens', icon: Icons.card_travel, goToComponent: '/viagens'),
 ];
 
 const List<FooterIcon> adminUser = const <FooterIcon>[
-  const FooterIcon(name: 'Usuários', icon: Icons.supervised_user_circle, goToComponent: Home),
-  const FooterIcon(name: 'Minha Conta', icon: Icons.account_circle, goToComponent: Home),
-  const FooterIcon(name: 'Voos', icon: Icons.flight_takeoff, goToComponent: Home),
-  const FooterIcon(name: 'Companhia', icon: Icons.flight, goToComponent: Home),
+  const FooterIcon(name: 'Usuários', icon: Icons.supervised_user_circle, goToComponent: '/'),
+  const FooterIcon(name: 'Minha Conta', icon: Icons.account_circle, goToComponent: '/'),
+  const FooterIcon(name: 'Voos', icon: Icons.flight_takeoff, goToComponent: '/'),
+  const FooterIcon(name: 'Companhia', icon: Icons.flight, goToComponent: '/'),
 ];
 
 
@@ -32,7 +32,7 @@ class Footer extends StatefulWidget {
 
 class _Footer extends State<Footer> {
 
-  bool isAdmin = true;
+  bool isAdmin = false;
   
   @override
   Widget build(BuildContext context) {
@@ -96,7 +96,10 @@ class FooterOption extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-        IconButton(onPressed: () {}, icon: Icon(footerIcon.icon, size: 30, color: Palette.lightBlack)),
+        IconButton(
+          onPressed: () { Navigator.pushNamed(context, footerIcon.goToComponent); },
+          icon: Icon(footerIcon.icon, size: 30, color: Palette.lightBlack)
+        ),
         Text(footerIcon.name)
       ]);
   }

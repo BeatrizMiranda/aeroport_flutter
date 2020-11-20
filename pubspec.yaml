@@ -54,6 +54,7 @@ flutter:
     - src/img/tanzania.png
     - src/img/InitialScreen.png
     - src/img/SearchImg.png
+    - src/img/EmptyTrips.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
