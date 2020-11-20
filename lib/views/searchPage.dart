@@ -9,8 +9,8 @@ class SearchPage extends StatefulWidget {
   @override
   _SearchPageState createState() => _SearchPageState();
 }
-class _SearchPageState extends State<SearchPage> {
 
+class _SearchPageState extends State<SearchPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,21 +27,18 @@ class _SearchPageState extends State<SearchPage> {
       child: Stack(
         children: [
           ClipRRect(
-            borderRadius: BorderRadius.only(bottomLeft:  Radius.circular(15), bottomRight:  Radius.circular(15)),
-            child: Image.asset(
-              "src/img/SearchImg.png",
-              fit: BoxFit.cover,
-              height: 325
-            ),
+            borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(15),
+                bottomRight: Radius.circular(15)),
+            child: Image.asset("src/img/SearchImg.png",
+                fit: BoxFit.cover, height: 325),
           ),
           Positioned(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                _searchForm()
-              ],
+              children: [_searchForm()],
             ),
-          ),           
+          ),
         ],
       ),
     );
@@ -60,12 +57,12 @@ class _SearchPageState extends State<SearchPage> {
               children: [
                 CustomButton(
                   height: 50,
-                  text : "Buscar",
-                  onClick: () => Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => SearchPage())),
+                  text: "Buscar",
+                  onClick: () => Navigator.pushReplacement(context,
+                      MaterialPageRoute(builder: (context) => SearchPage())),
                 ),
                 Container(
                   margin: EdgeInsets.only(top: 50),
-                  
                 ),
               ],
             ),

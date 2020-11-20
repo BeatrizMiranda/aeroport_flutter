@@ -2,6 +2,33 @@ import 'package:airport/layout/pallets.dart';
 import 'package:airport/views/home.dart';
 import 'package:flutter/material.dart';
 
+class FooterIcon {
+  const FooterIcon({this.name, this.icon, this.goToComponent});
+
+  final String name;
+  final IconData icon;
+  final Type goToComponent;
+}
+
+const List<FooterIcon> normalUser = const <FooterIcon>[
+  const FooterIcon(
+      name: 'Minha Conta', icon: Icons.account_circle, goToComponent: Home),
+  const FooterIcon(
+      name: 'Minhas Viagens', icon: Icons.card_travel, goToComponent: Home),
+];
+
+const List<FooterIcon> adminUser = const <FooterIcon>[
+  const FooterIcon(
+      name: 'Usuários',
+      icon: Icons.supervised_user_circle,
+      goToComponent: Home),
+  const FooterIcon(
+      name: 'Minha Conta', icon: Icons.account_circle, goToComponent: Home),
+  const FooterIcon(
+      name: 'Voos', icon: Icons.flight_takeoff, goToComponent: Home),
+  const FooterIcon(name: 'Companhia', icon: Icons.flight, goToComponent: Home),
+];
+
 class Footer extends StatefulWidget {
   Footer({Key key}) : super(key: key);
 
