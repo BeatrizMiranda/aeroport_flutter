@@ -21,6 +21,7 @@ environment:
   sdk: ">=2.7.0 <3.0.0"
 
 dependencies:
+  intl: ^0.15.7
   flutter:
     sdk: flutter
 
@@ -55,6 +56,7 @@ flutter:
     - src/img/InitialScreen.png
     - src/img/SearchImg.png
     - src/img/EmptyTrips.png
+    - src/img/planeIcon.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

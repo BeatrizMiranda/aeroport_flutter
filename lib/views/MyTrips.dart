@@ -2,6 +2,122 @@ import 'package:airport/components/footer.dart';
 import 'package:airport/layout/pallets.dart';
 import 'package:airport/views/searchPage.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart'; 
+
+class FlightInfo {
+  const FlightInfo({
+    this.destination, 
+    this.shipment, 
+    this.ship_date, 
+    this.ship_time, 
+    this.estimated_time, 
+    this.limit, 
+    this.airline_id, 
+    this.status, 
+    this.image 
+  });
+
+  final int limit;
+  final int airline_id;
+  final String image;
+  final String status;
+  final String shipment;
+  final String ship_date;
+  final String ship_time;
+  final String destination;
+  final String estimated_time;
+}
+
+const List<FlightInfo> userFlights = const <FlightInfo>[
+  FlightInfo(
+    destination: "São Paulo", 
+    shipment: "Rio de Janeiro", 
+    ship_date: "2020-07-02T03:00:00.000Z", 
+    ship_time: "18:00:00", 
+    estimated_time: "03:00:00", 
+    limit:46, 
+    airline_id: 1, 
+    status: "ativo", 
+    image: "https://cdn.pixabay.com/photo/2017/01/08/19/30/rio-de-janeiro-1963744_1280.jpg" 
+  ),
+  FlightInfo(
+    shipment: "São Paulo", 
+    destination: "Rio de Janeiro", 
+    ship_date: "2020-07-02T03:00:00.000Z", 
+    ship_time: "18:00:00", 
+    estimated_time: "03:00:00", 
+    limit:46, 
+    airline_id: 1, 
+    status: "ativo", 
+    image: "https://cdn.pixabay.com/photo/2017/01/08/19/30/rio-de-janeiro-1963744_1280.jpg" 
+  ),
+  FlightInfo(
+    shipment: "São Paulo", 
+    destination: "Rio de Janeiro", 
+    ship_date: "2020-07-02T03:00:00.000Z", 
+    ship_time: "18:00:00", 
+    estimated_time: "03:00:00", 
+    limit:46, 
+    airline_id: 1, 
+    status: "ativo", 
+    image: "https://cdn.pixabay.com/photo/2017/01/08/19/30/rio-de-janeiro-1963744_1280.jpg" 
+  ),
+  FlightInfo(
+    shipment: "São Paulo", 
+    destination: "Rio de Janeiro", 
+    ship_date: "2020-07-02T03:00:00.000Z", 
+    ship_time: "18:00:00", 
+    estimated_time: "03:00:00", 
+    limit:46, 
+    airline_id: 1, 
+    status: "ativo", 
+    image: "https://cdn.pixabay.com/photo/2017/01/08/19/30/rio-de-janeiro-1963744_1280.jpg" 
+  ),
+  FlightInfo(
+    shipment: "São Paulo", 
+    destination: "Rio de Janeiro", 
+    ship_date: "2020-07-02T03:00:00.000Z", 
+    ship_time: "18:00:00", 
+    estimated_time: "03:00:00", 
+    limit:46, 
+    airline_id: 1, 
+    status: "ativo", 
+    image: "https://cdn.pixabay.com/photo/2017/01/08/19/30/rio-de-janeiro-1963744_1280.jpg" 
+  ),
+  FlightInfo(
+    shipment: "São Paulo", 
+    destination: "Rio de Janeiro", 
+    ship_date: "2020-07-02T03:00:00.000Z", 
+    ship_time: "18:00:00", 
+    estimated_time: "03:00:00", 
+    limit:46, 
+    airline_id: 1, 
+    status: "ativo", 
+    image: "https://cdn.pixabay.com/photo/2017/01/08/19/30/rio-de-janeiro-1963744_1280.jpg" 
+  ),
+  FlightInfo(
+    shipment: "São Paulo", 
+    destination: "Rio de Janeiro", 
+    ship_date: "2020-07-02T03:00:00.000Z", 
+    ship_time: "18:00:00", 
+    estimated_time: "03:00:00", 
+    limit:46, 
+    airline_id: 1, 
+    status: "ativo", 
+    image: "https://cdn.pixabay.com/photo/2017/01/08/19/30/rio-de-janeiro-1963744_1280.jpg" 
+  ),
+  FlightInfo(
+    shipment: "São Paulo", 
+    destination: "Rio de Janeiro", 
+    ship_date: "2020-07-02T03:00:00.000Z", 
+    ship_time: "18:00:00", 
+    estimated_time: "03:00:00", 
+    limit:46, 
+    airline_id: 1, 
+    status: "ativo", 
+    image: "https://cdn.pixabay.com/photo/2017/01/08/19/30/rio-de-janeiro-1963744_1280.jpg" 
+  ),
+];
 
 class MyTrips extends StatefulWidget {
   MyTrips({Key key}) : super(key: key);
@@ -25,14 +141,13 @@ class _MyTripsState extends State<MyTrips> {
   Widget _body() {
     return SingleChildScrollView(
       child: Container(
-        padding: const EdgeInsets.fromLTRB(25, 70, 25, 40),
+        padding: const EdgeInsets.fromLTRB(25, 80, 25, 20),
         child: 
-          Column(
-            children: [
+          Column( children: [
             Center(child: Text("Minhas Viagens", style: TextStyle(fontSize: 27, fontWeight: FontWeight.bold, color: Palette.lightBlack))),
             Container(
-              padding: EdgeInsets.only(top: 50),
-              child: _emptyTrips()
+              padding: EdgeInsets.only(top: 5),
+              child: userFlights.length > 0 ? _listOfTrips() : _emptyTrips() 
             ),
           ],
         ),
@@ -62,6 +177,91 @@ class _MyTripsState extends State<MyTrips> {
             ),
           ),
         ],
+      ),
+    );
+  }
+  
+  Widget _listOfTrips() {
+    
+    return Container(
+      padding: const EdgeInsets.fromLTRB(0, 60, 0, 0),
+      child: Column(
+        children: 
+          List.generate(userFlights.length, (index) {
+            return _tripCard(userFlights[index]);
+          }),
+      ),
+    );
+  }
+ 
+  Widget _tripCard(userFlight) {
+
+    String flightDate = userFlight.ship_date.split('T')[0];
+
+    DateTime parseShipDate = DateTime.parse("${flightDate}T${userFlight.ship_time}");
+    DateTime parsedEstimatedHours = DateTime.parse("${flightDate}T${userFlight.estimated_time}");
+    DateTime deliveryTime = parseShipDate.add(Duration(minutes: (parsedEstimatedHours.hour * 60) + parsedEstimatedHours.minute));
+    
+    String deliveryTimeFormated = DateFormat.Hm().format(deliveryTime);
+    String shipTimeFormated = DateFormat.Hm().format(parseShipDate);
+    String shipDateFormated = DateFormat('dd/MM/y').format(parseShipDate);
+    String estimatedHoursFormated = "${DateFormat('hh').format(parsedEstimatedHours)}h${DateFormat('mm').format(parsedEstimatedHours)}min de voo";
+
+    return Card(
+      margin: EdgeInsets.only(bottom: 25),
+      elevation: 5,
+      child: Padding(
+        padding: const EdgeInsets.all(15),
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  userFlight.shipment, 
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)
+                ),
+                Image.asset(
+                  "src/img/planeIcon.png",
+                  fit: BoxFit.contain
+                ),
+                Text(
+                  userFlight.destination, 
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)
+                ),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  shipTimeFormated, 
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)
+                ),
+                Text(
+                  '$deliveryTimeFormated', 
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)
+                ),
+              ],
+            ),
+            Container(
+              padding: EdgeInsets.only(top: 25),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    shipDateFormated, 
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15)
+                  ),
+                  Text(
+                    estimatedHoursFormated, 
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15)
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
