@@ -11,7 +11,7 @@ class FooterIcon {
 }
 
 const List<FooterIcon> normalUser = const <FooterIcon>[
-  const FooterIcon(name: 'Minha Conta', icon: Icons.account_circle, goToComponent: '/'),
+  const FooterIcon(name: 'Minha Conta', icon: Icons.account_circle, goToComponent: '/account'),
   const FooterIcon(name: 'Minhas Viagens', icon: Icons.card_travel, goToComponent: '/viagens'),
 ];
 

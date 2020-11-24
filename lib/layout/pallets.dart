@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 class Palette {
+  static Color darkRed = Color(0xFF650606);
   static Color darkOrange = Color(0xFFFF5929);
   static Color lightOrange = Color(0xFFFFB162);
   static Color lightText = Color(0xFFFF5D2C);
