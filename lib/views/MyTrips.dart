@@ -1,8 +1,8 @@
 import 'package:airport/components/footer.dart';
+import 'package:airport/components/tripCard.dart';
 import 'package:airport/layout/pallets.dart';
 import 'package:airport/views/searchPage.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart'; 
 
 class FlightInfo {
   const FlightInfo({
@@ -188,81 +188,10 @@ class _MyTripsState extends State<MyTrips> {
       child: Column(
         children: 
           List.generate(userFlights.length, (index) {
-            return _tripCard(userFlights[index]);
+            return TripCard(userFlight: userFlights[index]);
           }),
       ),
     );
   }
- 
-  Widget _tripCard(userFlight) {
 
-    String flightDate = userFlight.ship_date.split('T')[0];
-
-    DateTime parseShipDate = DateTime.parse("${flightDate}T${userFlight.ship_time}");
-    DateTime parsedEstimatedHours = DateTime.parse("${flightDate}T${userFlight.estimated_time}");
-    DateTime deliveryTime = parseShipDate.add(Duration(minutes: (parsedEstimatedHours.hour * 60) + parsedEstimatedHours.minute));
-    
-    String deliveryTimeFormated = DateFormat.Hm().format(deliveryTime);
-    String shipTimeFormated = DateFormat.Hm().format(parseShipDate);
-    String shipDateFormated = DateFormat('dd/MM/y').format(parseShipDate);
-    String estimatedHoursFormated = "${DateFormat('hh').format(parsedEstimatedHours)}h${DateFormat('mm').format(parsedEstimatedHours)}min de voo";
-
-    return Card(
-      margin: EdgeInsets.only(bottom: 25),
-      elevation: 5,
-      child: Padding(
-        padding: const EdgeInsets.all(15),
-        child: Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  userFlight.shipment, 
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)
-                ),
-                Image.asset(
-                  "src/img/planeIcon.png",
-                  fit: BoxFit.contain
-                ),
-                Text(
-                  userFlight.destination, 
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)
-                ),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  shipTimeFormated, 
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)
-                ),
-                Text(
-                  '$deliveryTimeFormated', 
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)
-                ),
-              ],
-            ),
-            Container(
-              padding: EdgeInsets.only(top: 25),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    shipDateFormated, 
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15)
-                  ),
-                  Text(
-                    estimatedHoursFormated, 
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15)
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
 }

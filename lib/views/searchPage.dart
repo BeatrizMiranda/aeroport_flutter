@@ -1,6 +1,7 @@
 import 'package:airport/components/button.dart';
 import 'package:airport/components/footer.dart';
 import 'package:airport/layout/pallets.dart';
+import 'package:airport/views/searchResult.dart';
 import 'package:flutter/material.dart';
 
 class SearchPage extends StatefulWidget {
@@ -61,7 +62,7 @@ class _SearchPageState extends State<SearchPage> {
                 CustomButton(
                   height: 50,
                   text : "Buscar",
-                  onClick: () => Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => SearchPage())),
+                  onClick: () => Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => SearchResult())),
                 ),
                 Container(
                   margin: EdgeInsets.only(top: 50),
