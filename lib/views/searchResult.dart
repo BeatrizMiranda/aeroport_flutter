@@ -1,6 +1,8 @@
 import 'package:airport/components/footer.dart';
+import 'package:airport/components/tripCard.dart';
 import 'package:airport/layout/pallets.dart';
 import 'package:airport/views/MyTrips.dart';
+import 'package:airport/views/searchPage.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -198,11 +200,38 @@ class _SearchResultState extends State<SearchResult> {
               )
             ],
           ),
-          Positioned(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-              ],
+          Positioned.fill(
+            child: Align(
+              alignment: Alignment.bottomLeft,
+              child: Padding(
+                padding: const EdgeInsets.all(20),
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          "${userFlights.length} results found", 
+                          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22)
+                        ),
+                        IconButton(
+                          onPressed: () => Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => SearchPage())),
+                          icon: Icon(Icons.settings, color: Palette.lightBlack, size: 25),
+                        ),
+                      ],
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 20),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween, 
+                        children: List.generate(userFlights.length, (index) {
+                            return TripCard(userFlight: userFlights[index]);
+                        })
+                      ),
+                    )
+                  ],
+                ),
+              ),
             ),
           ),           
         ],

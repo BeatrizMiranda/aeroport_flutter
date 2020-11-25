@@ -6,6 +6,8 @@ class Palette {
   static Color lightOrange = Color(0xFFFFB162);
   static Color lightText = Color(0xFFFF5D2C);
 
+  static Color grayBackground = Color(0xFFEFF1F8);
+
   static Color background = Color(0xFFF2F2F2);
   static Color lightBlack = Color(0xFF333333);
 }

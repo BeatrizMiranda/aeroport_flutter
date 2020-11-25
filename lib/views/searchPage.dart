@@ -1,16 +1,34 @@
+import 'package:airport/components/PassangersPicker.dart';
 import 'package:airport/components/button.dart';
+import 'package:airport/components/dataPicker.dart';
+import 'package:airport/components/dropDown.dart';
 import 'package:airport/components/footer.dart';
 import 'package:airport/layout/pallets.dart';
 import 'package:airport/views/searchResult.dart';
 import 'package:flutter/material.dart';
 
 class SearchPage extends StatefulWidget {
+
   SearchPage({Key key}) : super(key: key);
 
   @override
   _SearchPageState createState() => _SearchPageState();
 }
+
 class _SearchPageState extends State<SearchPage> {
+
+  int qtdAdults = 1;
+  int qtdChilds = 0;
+
+  void setPassangers(adults, child) {
+    setState(() {
+      int adultsFinal = int.parse(adults);
+      int childFinal = int.parse(child);
+
+      qtdAdults = adultsFinal;
+      qtdChilds = childFinal;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -24,9 +42,9 @@ class _SearchPageState extends State<SearchPage> {
   }
 
   Widget _body() {
-    return SingleChildScrollView(
-      child: Stack(
-        children: [
+    return 
+      Stack(
+        children: <Widget>[
           ClipRRect(
             borderRadius: BorderRadius.only(bottomLeft:  Radius.circular(15), bottomRight:  Radius.circular(15)),
             child: Image.asset(
@@ -39,40 +57,145 @@ class _SearchPageState extends State<SearchPage> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                _searchForm()
+                _searchForm(),
               ],
             ),
-          ),           
-        ],
-      ),
-    );
+          )            
+        ]
+      );
   }
 
   Widget _searchForm() {
     return Card(
-      margin: EdgeInsets.all(20),
-      elevation: 5,
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(20, 30, 20, 30),
+      margin: EdgeInsets.fromLTRB(15, 20, 20, 20),
+      elevation: 10,
+      child: Container(
+        padding: EdgeInsets.fromLTRB(30, 30, 40, 50),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Column(
-              children: [
-                CustomButton(
-                  height: 50,
-                  text : "Buscar",
-                  onClick: () => Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => SearchResult())),
-                ),
-                Container(
-                  margin: EdgeInsets.only(top: 50),
-                  
-                ),
-              ],
+          mainAxisAlignment: MainAxisAlignment.spaceBetween, 
+          children: [
+            Text(
+              "Como será o seu voo?", 
+              style: TextStyle(fontSize: 27, fontWeight: FontWeight.bold, color: Palette.lightBlack),
             ),
-          ],
+            _shipAndDestination(),
+            _dataPicker(),
+            _passangersPicker(),
+            Container(
+              padding: const EdgeInsets.only(top: 40),
+              child: CustomButton(
+                height: 50,
+                text : "Buscar",
+                onClick: () => Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => SearchResult())),
+              ),
+            ),
+          ]
         ),
       ),
     );
   }
+
+  Widget _shipAndDestination() {
+    return Container(
+      color: Palette.grayBackground,
+      margin: EdgeInsets.only(bottom: 30, top: 30),
+      child: Column(
+        children: [
+          Padding(
+            padding: EdgeInsets.only(left: 15, top: 5),
+            child: DropDown(dropdownList: ['São Paulo', 'Rio de Janeiro', 'Santa Catarina'], icon: Icons.flight_takeoff, placeholder: "Local de partida"),
+          ),
+          Divider(
+            color: Colors.white,
+            thickness: 3
+          ),
+          Padding(
+            padding: EdgeInsets.only(left: 15, bottom: 5),
+            child: DropDown(dropdownList: ['Rio de Janeiro', 'São Paulo', 'Bahia'], icon: Icons.flight_land, placeholder: "Local de chegada"),
+          ),
+        ],
+      )
+    );
+  }
+
+  Widget _dataPicker() {
+    return Container(
+      decoration : BoxDecoration(
+        border: Border(
+          bottom: BorderSide(
+            width: 2,
+            color : Palette.lightBlack
+          ),
+        ),
+      ),
+      child: GestureDetector(
+        onTap: () async {
+          var r = await Navigator.push(context, MaterialPageRoute(builder: (context) => DatePicker()));
+          if (r != null) print('Retorno recebido: ' + r.toString());
+        },
+        child: Container(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                "Data:                                  ", 
+                style: TextStyle(fontSize: 27, fontWeight: FontWeight.bold, color: Palette.lightBlack),
+              ),
+              Icon(Icons.calendar_today, size: 25)
+            ],
+          ),
+        ),
+      )
+    );
+  }
+
+  Widget _passangersPicker() {
+    return Column(
+      mainAxisSize: MainAxisSize.max,
+      children: [
+        Container(
+          alignment: Alignment.topLeft,
+          padding: const EdgeInsets.fromLTRB(0, 30, 0 , 20),
+          child: Text(
+            "Passagens: ", 
+            style: TextStyle(fontSize: 20, color: Palette.lightBlack)
+          ),
+        ),
+        RaisedButton(
+          color: Palette.grayBackground,
+          child: Container(
+            child: Column(
+              children: [
+                iconText("$qtdAdults Adulto(s)", Icons.person, FontWeight.normal),
+                iconText("$qtdChilds Criança(s)", Icons.face, FontWeight.normal),
+              ],
+            ),
+          ), 
+          onPressed: () async {
+            var r = await Navigator.push(context, MaterialPageRoute(builder: (context) => PassangersPicker()));
+            if (r != null) setPassangers(r["Adult"], r["Child"]);
+          }
+        ),
+      ],
+    );
+  }
+
+  Widget iconText(text, icon, isBold) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(0, 15, 0, 15),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+        Padding(
+          padding: const EdgeInsets.only(right: 10),
+          child: Icon(icon, size: 28, color: Palette.lightBlack),
+        ),
+        Text(
+          text, 
+          style: TextStyle(fontSize: 20, color: Palette.lightBlack, fontWeight: isBold)
+        ),
+      ])
+    );
+  }
+
 }
