@@ -1,4 +1,5 @@
 import 'package:airport/layout/pallets.dart';
+import 'package:airport/views/FlightOfDestination.dart';
 import 'package:airport/views/home.dart';
 import 'package:flutter/material.dart';
 
@@ -11,7 +12,7 @@ class HomeFlightCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       child: RaisedButton(
-        onPressed: () {},
+        onPressed: () => Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => FlightOfDestination(flightSuggestion: flightSuggestion))),
         color: Colors.white,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         padding: EdgeInsets.all(0),
