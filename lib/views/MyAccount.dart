@@ -90,9 +90,12 @@ class _MyAccountState extends State<MyAccount> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween, 
                   children: [
                     Center(child: 
-                      Text(
-                        "Meus Dados", 
-                        style: TextStyle(fontSize: 27, fontWeight: FontWeight.bold, color: Palette.lightBlack)
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 20),
+                        child: Text(
+                          "Meus Dados", 
+                          style: TextStyle(fontSize: 27, fontWeight: FontWeight.bold, color: Palette.lightBlack)
+                        ),
                       )
                     ),
                     Column(
@@ -181,7 +184,7 @@ class _MyAccountState extends State<MyAccount> {
 
   Widget _renderForm(userData) {
     return  Padding(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
