@@ -1,4 +1,5 @@
 import 'package:airport/layout/pallets.dart';
+import 'package:airport/views/FlightOfDestination.dart';
 import 'package:airport/views/MyAccount.dart';
 import 'package:airport/views/MyTrips.dart';
 import 'package:airport/views/home.dart';
@@ -24,6 +25,7 @@ void main() {
       '/search-result': (context) => SearchResult(),
       '/viagens': (context) => MyTrips(),
       '/account': (context) => MyAccount(),
+      '/flight-destination': (context) => FlightOfDestination(),
     },
   ));
 }
