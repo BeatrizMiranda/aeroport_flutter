@@ -3,12 +3,25 @@ import 'package:airport/layout/pallets.dart';
 import 'package:flutter/material.dart';
 
 class PassangersPicker extends StatefulWidget {
+  PassangersPicker({Key key, this.adults, this.childs}) : super(key: key);
+
+  final int adults;
+  final int childs;
+
   _PassangersPicker createState() => _PassangersPicker();
 }
 class _PassangersPicker extends State<PassangersPicker> {
 
-  var _adultsController = TextEditingController();
-  var _childController = TextEditingController();
+  TextEditingController _adultsController; 
+  TextEditingController _childController; 
+
+  @override
+  void initState() {
+    super.initState();
+    _adultsController = TextEditingController(text: '${widget.adults}'); 
+    _childController = TextEditingController(text: '${widget.childs}'); 
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -26,15 +39,19 @@ class _PassangersPicker extends State<PassangersPicker> {
           child: Image.asset(
             "src/img/SearchImg.png",
             fit: BoxFit.cover,
-            height: 650
+            height: 325
           ),
         ),
-        Positioned(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              _card(),
-            ],
+        Center(
+          child: SingleChildScrollView(
+                    child: Positioned(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  _card(),
+                ],
+              ),
+            ),
           ),
         ),
       ]

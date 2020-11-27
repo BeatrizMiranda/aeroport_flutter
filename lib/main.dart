@@ -2,11 +2,16 @@ import 'package:airport/layout/pallets.dart';
 import 'package:airport/views/FlightOfDestination.dart';
 import 'package:airport/views/MyAccount.dart';
 import 'package:airport/views/MyTrips.dart';
+import 'package:airport/views/admin/NewAirline.dart';
+import 'package:airport/views/admin/NewUser.dart';
 import 'package:airport/views/home.dart';
 import 'package:airport/views/initialScreen.dart';
 import 'package:airport/views/searchPage.dart';
 import 'package:airport/views/searchResult.dart';
 import 'package:flutter/material.dart';
+
+import 'package:syncfusion_localizations/syncfusion_localizations.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 void main() {
   bool isLoged = false;
@@ -17,6 +22,15 @@ void main() {
       hintColor: Palette.lightOrange,
       primaryColor: Colors.white,
     ),
+    localizationsDelegates: [
+      GlobalMaterialLocalizations.delegate,
+      SfGlobalLocalizations.delegate
+    ],
+    supportedLocales: [
+      const Locale('en'),
+      const Locale('pt', 'BR'),
+    ],
+    locale: Locale('pt', 'BR'),
     initialRoute: '/',
     routes: {
       '/': (context) => isLoged ? Home() : InitialScreen(),
@@ -26,6 +40,8 @@ void main() {
       '/viagens': (context) => MyTrips(),
       '/account': (context) => MyAccount(),
       '/flight-destination': (context) => FlightOfDestination(),
+      '/new-user': (context) => NewUser(),
+      '/new-airline': (context) => NewAirline(),
     },
   ));
 }

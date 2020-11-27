@@ -6,6 +6,8 @@ import 'package:airport/components/footer.dart';
 import 'package:airport/layout/pallets.dart';
 import 'package:airport/views/searchResult.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+
 
 class SearchPage extends StatefulWidget {
 
@@ -19,14 +21,30 @@ class _SearchPageState extends State<SearchPage> {
 
   int qtdAdults = 1;
   int qtdChilds = 0;
+  DateTime chosedDate = DateTime.now();
+  String chosedDateFormated = DateFormat('dd/MM/y').format(DateTime.now());
+
 
   void setPassangers(adults, child) {
     setState(() {
-      int adultsFinal = int.parse(adults);
-      int childFinal = int.parse(child);
+      if(adults.isNotEmpty) {
+        int adultsFinal = int.parse(adults);
+        qtdAdults = adultsFinal;
+      }
+      if(child.isNotEmpty) {
+        int childFinal = int.parse(child);
+        qtdChilds = childFinal;
+      }
+    });
+  }
 
-      qtdAdults = adultsFinal;
-      qtdChilds = childFinal;
+  void setDate(newDate) {
+    setState(() {
+      print(newDate);
+      if(newDate != null) {
+        chosedDate = newDate;
+        chosedDateFormated = DateFormat('dd/MM/y').format(chosedDate);
+      }
     });
   }
 
@@ -46,7 +64,11 @@ class _SearchPageState extends State<SearchPage> {
       Stack(
         children: <Widget>[
           ClipRRect(
-            borderRadius: BorderRadius.only(bottomLeft:  Radius.circular(15), bottomRight:  Radius.circular(15)),
+            borderRadius: 
+              BorderRadius.only(
+                bottomLeft:  Radius.circular(15), 
+                bottomRight:  Radius.circular(15)
+              ),
             child: Image.asset(
               "src/img/SearchImg.png",
               fit: BoxFit.cover,
@@ -130,16 +152,30 @@ class _SearchPageState extends State<SearchPage> {
       ),
       child: GestureDetector(
         onTap: () async {
-          var r = await Navigator.push(context, MaterialPageRoute(builder: (context) => DatePicker()));
-          if (r != null) print('Retorno recebido: ' + r.toString());
+          var response = await Navigator.push(
+            context, MaterialPageRoute(
+              builder: (context) => DatePicker(initialDate: chosedDate)
+            ));
+          if (response != null) setDate(response.selectedDate);
         },
         child: Container(
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                "Data:                                  ", 
-                style: TextStyle(fontSize: 27, fontWeight: FontWeight.bold, color: Palette.lightBlack),
+              Row(
+                children: [
+                  Text(
+                    "Data: ", 
+                    style: TextStyle(fontSize: 27, fontWeight: FontWeight.bold, color: Palette.lightBlack),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(top: 5),
+                    child: Text(
+                      chosedDateFormated, 
+                      style: TextStyle(fontSize: 21, fontWeight: FontWeight.bold, color: Palette.lightBlack),
+                    ),
+                  ),
+                ],
               ),
               Icon(Icons.calendar_today, size: 25)
             ],
@@ -172,8 +208,8 @@ class _SearchPageState extends State<SearchPage> {
             ),
           ), 
           onPressed: () async {
-            var r = await Navigator.push(context, MaterialPageRoute(builder: (context) => PassangersPicker()));
-            if (r != null) setPassangers(r["Adult"], r["Child"]);
+            var response = await Navigator.push(context, MaterialPageRoute(builder: (context) => PassangersPicker(adults: qtdAdults, childs: qtdChilds)));
+            if (response != null) setPassangers(response["Adult"], response["Child"]);
           }
         ),
       ],

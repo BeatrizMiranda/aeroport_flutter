@@ -1,4 +1,5 @@
 import 'package:airport/layout/pallets.dart';
+import 'package:airport/views/admin/HomeAdmin.dart';
 import 'package:airport/views/home.dart';
 import 'package:flutter/material.dart';
 
@@ -16,10 +17,10 @@ const List<FooterIcon> normalUser = const <FooterIcon>[
 ];
 
 const List<FooterIcon> adminUser = const <FooterIcon>[
-  const FooterIcon(name: 'Usuários', icon: Icons.supervised_user_circle, goToComponent: '/'),
+  const FooterIcon(name: 'Usuários', icon: Icons.supervised_user_circle, goToComponent: '/new-user'),
   const FooterIcon(name: 'Minha Conta', icon: Icons.account_circle, goToComponent: '/'),
   const FooterIcon(name: 'Voos', icon: Icons.flight_takeoff, goToComponent: '/'),
-  const FooterIcon(name: 'Companhia', icon: Icons.flight, goToComponent: '/'),
+  const FooterIcon(name: 'Companhia', icon: Icons.flight, goToComponent: '/new-airline'),
 ];
 
 
@@ -58,7 +59,16 @@ class _Footer extends State<Footer> {
   }
 }
 
-class FooterFloatingBtn extends StatelessWidget {
+class FooterFloatingBtn extends StatefulWidget {
+  FooterFloatingBtn({Key key}) : super(key: key);
+
+  @override
+  _FooterFloatingBtn createState() => _FooterFloatingBtn();
+}
+
+class _FooterFloatingBtn extends State<FooterFloatingBtn> {
+
+  bool isAdmin = false;
 
   @override
   Widget build(BuildContext context) {
@@ -67,7 +77,12 @@ class FooterFloatingBtn extends StatelessWidget {
       width: 70,
       child: FittedBox(
         child: FloatingActionButton(
-          onPressed: () => Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Home())),
+          onPressed: () => 
+            Navigator.pushReplacement(  
+              context, MaterialPageRoute(builder: (context) => 
+                isAdmin ? HomeAdmin() : Home()
+              )
+            ),
           tooltip: 'Tela de Início',
           child: Container(
             width: 70,
