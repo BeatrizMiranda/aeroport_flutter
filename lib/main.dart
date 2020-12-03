@@ -2,7 +2,9 @@ import 'package:airport/layout/pallets.dart';
 import 'package:airport/views/FlightOfDestination.dart';
 import 'package:airport/views/MyAccount.dart';
 import 'package:airport/views/MyTrips.dart';
+import 'package:airport/views/admin/ListFlight.dart';
 import 'package:airport/views/admin/NewAirline.dart';
+import 'package:airport/views/admin/NewFlight.dart';
 import 'package:airport/views/admin/NewUser.dart';
 import 'package:airport/views/home.dart';
 import 'package:airport/views/initialScreen.dart';
@@ -42,6 +44,8 @@ void main() {
       '/flight-destination': (context) => FlightOfDestination(),
       '/new-user': (context) => NewUser(),
       '/new-airline': (context) => NewAirline(),
+      '/new-flight': (context) => NewFlight(),
+      '/list-flight': (context) => ListFlight(),
     },
   ));
 }

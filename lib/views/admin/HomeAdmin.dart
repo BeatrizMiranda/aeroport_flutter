@@ -2,6 +2,7 @@ import 'package:airport/components/button.dart';
 import 'package:airport/components/footer.dart';
 import 'package:airport/layout/pallets.dart';
 import 'package:airport/views/MyAccount.dart';
+import 'package:airport/views/admin/ListFlight.dart';
 import 'package:airport/views/admin/NewAirline.dart';
 import 'package:airport/views/admin/NewUser.dart';
 import 'package:flutter/material.dart';
@@ -57,7 +58,7 @@ class _HomeAdminState extends State<HomeAdmin> {
               children: [
                 CustomButton(text: "Cadastre um voo", height: 70, 
                   onClick: () => Navigator.pushReplacement(  
-                    context, MaterialPageRoute(builder: (context) => NewUser())
+                    context, MaterialPageRoute(builder: (context) => ListFlight())
                   )
                 ),
                 CustomButton(text: "Cadastre uma companhia", height: 70, 

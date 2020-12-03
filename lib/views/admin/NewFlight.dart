@@ -4,16 +4,21 @@ import 'package:airport/components/footer.dart';
 import 'package:airport/layout/pallets.dart';
 import 'package:flutter/material.dart';
 
-class NewAirline extends StatefulWidget {
-  NewAirline({Key key}) : super(key: key);
+class NewFlight extends StatefulWidget {
+  NewFlight({Key key}) : super(key: key);
 
   @override
-  _NewAirlineState createState() => _NewAirlineState();
+  _NewFlightState createState() => _NewFlightState();
 }
-class _NewAirlineState extends State<NewAirline> {
+class _NewFlightState extends State<NewFlight> {
 
-  TextEditingController nameController;
-  TextEditingController imgController;
+  TextEditingController embarqueController;
+  TextEditingController destinoController;
+  TextEditingController dataController;
+  TextEditingController horarioController;
+  TextEditingController tempoEstimadoController;
+  TextEditingController limiteController;
+  TextEditingController companhiaController;
 
   void _nameChange(String text) {
     if(text.isEmpty) return _throwError();
@@ -45,18 +50,18 @@ class _NewAirlineState extends State<NewAirline> {
         children:[
           SingleChildScrollView(
             child: Card(
-              margin: EdgeInsets.fromLTRB(20, 50, 20, 50),
+              margin: EdgeInsets.fromLTRB(20, 20, 20, 50),
               elevation: 5,
               child: Container(
-                padding: const EdgeInsets.fromLTRB(20, 30, 20, 20),
+                padding: const EdgeInsets.fromLTRB(20, 20, 20, 10),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween, 
                   children: [
                     Center(child: 
                       Padding(
-                        padding: const EdgeInsets.only(bottom: 20),
+                        padding: const EdgeInsets.only(bottom: 0),
                         child: Text(
-                          "Companhia Aérea", 
+                          "Cadastre um novo voo", 
                           style: TextStyle(fontSize: 27, fontWeight: FontWeight.bold, color: Palette.lightBlack)
                         ),
                       )
@@ -90,12 +95,17 @@ class _NewAirlineState extends State<NewAirline> {
 
   Widget _renderForm() {
     return  Padding(
-      padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
+      padding: const EdgeInsets.fromLTRB(20, 0, 20, 10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
-          CustomTextField(icon: Icons.flight_takeoff, label: "Nome: ", controller: nameController, handleChange: _nameChange),
-          CustomTextField(icon: Icons.cloud_download, label: "Link pra imagem: ", controller: imgController, handleChange: _nameChange),
+          CustomTextField(icon: Icons.flight_takeoff, label: "Emparque: ", controller: embarqueController, handleChange: _nameChange),
+          CustomTextField(icon: Icons.flight_land, label: "Destino: ", controller: destinoController, handleChange: _nameChange),
+          CustomTextField(icon: Icons.calendar_today, label: "Data: ", controller: dataController, handleChange: _nameChange),
+          CustomTextField(icon: Icons.access_time, label: "Horário: ", controller: horarioController, handleChange: _nameChange),
+          CustomTextField(icon: Icons.access_time, label: "Tempo estimado de voo: ", controller: tempoEstimadoController, handleChange: _nameChange),
+          CustomTextField(icon: Icons.supervisor_account, label: "Limite de passageiros: ", controller: limiteController, handleChange: _nameChange),
+          CustomTextField(icon: Icons.flight, label: "Companhia Aérea: ", controller: companhiaController, handleChange: _nameChange),
         ],
       ),
     );

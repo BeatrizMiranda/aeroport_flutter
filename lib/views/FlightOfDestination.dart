@@ -120,7 +120,7 @@ class _FlightOfDestinationState extends State<FlightOfDestination> {
       child: Column(
         children: 
           List.generate(userFlights.length, (index) {
-            return TripCard(userFlight: userFlights[index]);
+            return TripCard(userFlight: userFlights[index], isAdmin: false);
           }),
       ),
     );

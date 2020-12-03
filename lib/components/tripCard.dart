@@ -1,11 +1,13 @@
+import 'package:airport/layout/pallets.dart';
 import 'package:airport/views/MyTrips.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class TripCard extends StatefulWidget {
-  TripCard({Key key, this.userFlight}) : super(key: key);
+  TripCard({Key key, this.userFlight, this.isAdmin}) : super(key: key);
 
   final FlightInfo userFlight;
+  final bool isAdmin;
 
   @override
   _TripCard createState() => _TripCard();
@@ -78,6 +80,16 @@ class _TripCard extends State<TripCard> {
                 ],
               ),
             ),
+            widget.isAdmin ? Padding(
+              padding: const EdgeInsets.only(top: 20),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Icon(Icons.delete, color: Palette.darkRed),
+                  Icon(Icons.edit)
+                ]
+              ),
+            ) : null
           ],
         ),
       ),

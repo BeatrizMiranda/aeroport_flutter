@@ -19,7 +19,7 @@ const List<FooterIcon> normalUser = const <FooterIcon>[
 const List<FooterIcon> adminUser = const <FooterIcon>[
   const FooterIcon(name: 'Usuários', icon: Icons.supervised_user_circle, goToComponent: '/new-user'),
   const FooterIcon(name: 'Minha Conta', icon: Icons.account_circle, goToComponent: '/'),
-  const FooterIcon(name: 'Voos', icon: Icons.flight_takeoff, goToComponent: '/'),
+  const FooterIcon(name: 'Voos', icon: Icons.flight_takeoff, goToComponent: '/list-flight'),
   const FooterIcon(name: 'Companhia', icon: Icons.flight, goToComponent: '/new-airline'),
 ];
 
@@ -33,20 +33,20 @@ class Footer extends StatefulWidget {
 
 class _Footer extends State<Footer> {
 
-  bool isAdmin = false;
+  bool isAdmin = true;
   
   @override
   Widget build(BuildContext context) {
     return BottomAppBar(
-        shape: const CircularNotchedRectangle(),
-        child: Container(
-          height: 70.0, 
-          child: Padding(
-            padding: EdgeInsets.fromLTRB(25, 0, 25, 5),
-            child: isAdmin ? getFooterIcons(adminUser) : getFooterIcons(normalUser)
-          ), 
-        ),
-      );
+      shape: const CircularNotchedRectangle(),
+      child: Container(
+        height: 70.0, 
+        child: Padding(
+          padding: EdgeInsets.fromLTRB(25, 0, 25, 5),
+          child: isAdmin ? getFooterIcons(adminUser) : getFooterIcons(normalUser)
+        ), 
+      ),
+    );
   }
 
   Widget getFooterIcons(List<FooterIcon> footerItems) {
@@ -68,7 +68,7 @@ class FooterFloatingBtn extends StatefulWidget {
 
 class _FooterFloatingBtn extends State<FooterFloatingBtn> {
 
-  bool isAdmin = false;
+  bool isAdmin = true;
 
   @override
   Widget build(BuildContext context) {
