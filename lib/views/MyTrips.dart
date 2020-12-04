@@ -61,62 +61,7 @@ const List<FlightInfo> userFlights = const <FlightInfo>[
     airline_id: 1, 
     status: "ativo", 
     image: "https://cdn.pixabay.com/photo/2017/01/08/19/30/rio-de-janeiro-1963744_1280.jpg" 
-  ),
-  FlightInfo(
-    shipment: "São Paulo", 
-    destination: "Rio de Janeiro", 
-    ship_date: "2020-07-02T03:00:00.000Z", 
-    ship_time: "18:00:00", 
-    estimated_time: "03:00:00", 
-    limit:46, 
-    airline_id: 1, 
-    status: "ativo", 
-    image: "https://cdn.pixabay.com/photo/2017/01/08/19/30/rio-de-janeiro-1963744_1280.jpg" 
-  ),
-  FlightInfo(
-    shipment: "São Paulo", 
-    destination: "Rio de Janeiro", 
-    ship_date: "2020-07-02T03:00:00.000Z", 
-    ship_time: "18:00:00", 
-    estimated_time: "03:00:00", 
-    limit:46, 
-    airline_id: 1, 
-    status: "ativo", 
-    image: "https://cdn.pixabay.com/photo/2017/01/08/19/30/rio-de-janeiro-1963744_1280.jpg" 
-  ),
-  FlightInfo(
-    shipment: "São Paulo", 
-    destination: "Rio de Janeiro", 
-    ship_date: "2020-07-02T03:00:00.000Z", 
-    ship_time: "18:00:00", 
-    estimated_time: "03:00:00", 
-    limit:46, 
-    airline_id: 1, 
-    status: "ativo", 
-    image: "https://cdn.pixabay.com/photo/2017/01/08/19/30/rio-de-janeiro-1963744_1280.jpg" 
-  ),
-  FlightInfo(
-    shipment: "São Paulo", 
-    destination: "Rio de Janeiro", 
-    ship_date: "2020-07-02T03:00:00.000Z", 
-    ship_time: "18:00:00", 
-    estimated_time: "03:00:00", 
-    limit:46, 
-    airline_id: 1, 
-    status: "ativo", 
-    image: "https://cdn.pixabay.com/photo/2017/01/08/19/30/rio-de-janeiro-1963744_1280.jpg" 
-  ),
-  FlightInfo(
-    shipment: "São Paulo", 
-    destination: "Rio de Janeiro", 
-    ship_date: "2020-07-02T03:00:00.000Z", 
-    ship_time: "18:00:00", 
-    estimated_time: "03:00:00", 
-    limit:46, 
-    airline_id: 1, 
-    status: "ativo", 
-    image: "https://cdn.pixabay.com/photo/2017/01/08/19/30/rio-de-janeiro-1963744_1280.jpg" 
-  ),
+  )
 ];
 
 class MyTrips extends StatefulWidget {

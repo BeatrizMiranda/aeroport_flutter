@@ -89,7 +89,7 @@ class _TripCard extends State<TripCard> {
                   Icon(Icons.edit)
                 ]
               ),
-            ) : null
+            ) : Container(),
           ],
         ),
       ),

@@ -120,7 +120,7 @@ class _MyAccountState extends State<MyAccount> {
       children: [
         IconButton(
           onPressed: () {
-            showAlertDialog2(context);
+            showAlertDialog(context);
           },
           icon: Icon(Icons.delete, size: 30, color: Palette.darkRed)
         ),
@@ -217,7 +217,7 @@ class _MyAccountState extends State<MyAccount> {
     );
   }
 
-  showAlertDialog2(BuildContext context) {
+  showAlertDialog(BuildContext context) {
     Widget handleCancel = FlatButton(
       child: Text("Cancelar", style: TextStyle(fontSize: 20)),
       onPressed: () { Navigator.of(context).pop(); },
