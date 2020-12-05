@@ -1,3 +1,4 @@
+import 'package:airport/components/Logar.dart';
 import 'package:airport/layout/pallets.dart';
 import 'package:airport/views/FlightOfDestination.dart';
 import 'package:airport/views/MyAccount.dart';
@@ -46,6 +47,7 @@ void main() {
       '/new-airline': (context) => NewAirline(),
       '/new-flight': (context) => NewFlight(),
       '/list-flight': (context) => ListFlight(),
+      '/logar': (context) => Logar(),
     },
   ));
 }

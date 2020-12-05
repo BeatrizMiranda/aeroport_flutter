@@ -1,3 +1,4 @@
+import 'package:airport/components/Logar.dart';
 import 'package:airport/layout/pallets.dart';
 import 'package:airport/views/admin/HomeAdmin.dart';
 import 'package:airport/views/home.dart';
@@ -53,7 +54,7 @@ class _Footer extends State<Footer> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween, 
       children: List.generate(footerItems.length, (index) {
-          return FooterOption(footerIcon: footerItems[index]);
+          return FooterOption(footerIcon: footerItems[index], isLoged: false);
       })
     );
   }
@@ -103,8 +104,9 @@ class _FooterFloatingBtn extends State<FooterFloatingBtn> {
 }
 
 class FooterOption extends StatelessWidget {
-  const FooterOption({Key key, this.footerIcon}) : super(key: key);
+  const FooterOption({Key key, this.footerIcon, this.isLoged}) : super(key: key);
   final FooterIcon footerIcon;
+  final bool isLoged;
 
   @override
   Widget build(BuildContext context) {
@@ -112,7 +114,16 @@ class FooterOption extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
         IconButton(
-          onPressed: () { Navigator.pushNamed(context, footerIcon.goToComponent); },
+          onPressed: () { 
+            isLoged ? 
+              Navigator.pushNamed(context, footerIcon.goToComponent) 
+            : 
+              Navigator.pushReplacement(context, 
+                MaterialPageRoute(builder: (context) => 
+                  Logar(goTo: footerIcon.goToComponent) 
+                )
+              );
+          },
           icon: Icon(footerIcon.icon, size: 30, color: Palette.lightBlack)
         ),
         Text(footerIcon.name)
