@@ -17,7 +17,7 @@ import 'package:syncfusion_localizations/syncfusion_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
 void main() {
-  bool isLoged = false;
+  bool isLoged = true;
 
   runApp(MaterialApp(
     title: 'Time To Travel',

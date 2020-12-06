@@ -13,17 +13,28 @@ class FooterIcon {
 }
 
 const List<FooterIcon> normalUser = const <FooterIcon>[
-  const FooterIcon(name: 'Minha Conta', icon: Icons.account_circle, goToComponent: '/account'),
-  const FooterIcon(name: 'Minhas Viagens', icon: Icons.card_travel, goToComponent: '/viagens'),
+  const FooterIcon(
+      name: 'Minha Conta',
+      icon: Icons.account_circle,
+      goToComponent: '/account'),
+  const FooterIcon(
+      name: 'Minhas Viagens',
+      icon: Icons.card_travel,
+      goToComponent: '/viagens'),
 ];
 
 const List<FooterIcon> adminUser = const <FooterIcon>[
-  const FooterIcon(name: 'Usuários', icon: Icons.supervised_user_circle, goToComponent: '/new-user'),
-  const FooterIcon(name: 'Minha Conta', icon: Icons.account_circle, goToComponent: '/'),
-  const FooterIcon(name: 'Voos', icon: Icons.flight_takeoff, goToComponent: '/list-flight'),
-  const FooterIcon(name: 'Companhia', icon: Icons.flight, goToComponent: '/new-airline'),
+  const FooterIcon(
+      name: 'Usuários',
+      icon: Icons.supervised_user_circle,
+      goToComponent: '/new-user'),
+  const FooterIcon(
+      name: 'Minha Conta', icon: Icons.account_circle, goToComponent: '/'),
+  const FooterIcon(
+      name: 'Voos', icon: Icons.flight_takeoff, goToComponent: '/list-flight'),
+  const FooterIcon(
+      name: 'Companhia', icon: Icons.flight, goToComponent: '/new-airline'),
 ];
-
 
 class Footer extends StatefulWidget {
   Footer({Key key}) : super(key: key);
@@ -33,30 +44,30 @@ class Footer extends StatefulWidget {
 }
 
 class _Footer extends State<Footer> {
+  bool isAdmin = true;
+  bool isLoged = true;
 
-  bool isAdmin = false;
-  
   @override
   Widget build(BuildContext context) {
     return BottomAppBar(
       shape: const CircularNotchedRectangle(),
       child: Container(
-        height: 70.0, 
+        height: 70.0,
         child: Padding(
-          padding: EdgeInsets.fromLTRB(25, 0, 25, 5),
-          child: isAdmin ? getFooterIcons(adminUser) : getFooterIcons(normalUser)
-        ), 
+            padding: EdgeInsets.fromLTRB(25, 0, 25, 5),
+            child: isAdmin
+                ? getFooterIcons(adminUser)
+                : getFooterIcons(normalUser)),
       ),
     );
   }
 
   Widget getFooterIcons(List<FooterIcon> footerItems) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween, 
-      children: List.generate(footerItems.length, (index) {
-          return FooterOption(footerIcon: footerItems[index], isLoged: false);
-      })
-    );
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: List.generate(footerItems.length, (index) {
+          return FooterOption(footerIcon: footerItems[index], isLoged: isLoged);
+        }));
   }
 }
 
@@ -68,8 +79,7 @@ class FooterFloatingBtn extends StatefulWidget {
 }
 
 class _FooterFloatingBtn extends State<FooterFloatingBtn> {
-
-  bool isAdmin = false;
+  bool isAdmin = true;
 
   @override
   Widget build(BuildContext context) {
@@ -78,24 +88,19 @@ class _FooterFloatingBtn extends State<FooterFloatingBtn> {
       width: 70,
       child: FittedBox(
         child: FloatingActionButton(
-          onPressed: () => 
-            Navigator.pushReplacement(  
-              context, MaterialPageRoute(builder: (context) => 
-                isAdmin ? HomeAdmin() : Home()
-              )
-            ),
+          onPressed: () => Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => isAdmin ? HomeAdmin() : Home())),
           tooltip: 'Tela de Início',
           child: Container(
             width: 70,
             height: 70,
             child: Icon(Icons.flight, size: 35),
             decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              gradient: LinearGradient(colors: [
-                Palette.darkOrange, 
-                Palette.lightOrange
-              ])
-            ),
+                shape: BoxShape.circle,
+                gradient: LinearGradient(
+                    colors: [Palette.darkOrange, Palette.lightOrange])),
           ),
         ),
       ),
@@ -104,29 +109,26 @@ class _FooterFloatingBtn extends State<FooterFloatingBtn> {
 }
 
 class FooterOption extends StatelessWidget {
-  const FooterOption({Key key, this.footerIcon, this.isLoged}) : super(key: key);
+  const FooterOption({Key key, this.footerIcon, this.isLoged})
+      : super(key: key);
   final FooterIcon footerIcon;
   final bool isLoged;
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: <Widget>[
-        IconButton(
-          onPressed: () { 
-            isLoged ? 
-              Navigator.pushNamed(context, footerIcon.goToComponent) 
-            : 
-              Navigator.pushReplacement(context, 
-                MaterialPageRoute(builder: (context) => 
-                  Logar(goTo: footerIcon.goToComponent) 
-                )
-              );
+    return Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
+      IconButton(
+          onPressed: () {
+            isLoged
+                ? Navigator.pushNamed(context, footerIcon.goToComponent)
+                : Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            Logar(goTo: footerIcon.goToComponent)));
           },
-          icon: Icon(footerIcon.icon, size: 30, color: Palette.lightBlack)
-        ),
-        Text(footerIcon.name)
-      ]);
+          icon: Icon(footerIcon.icon, size: 30, color: Palette.lightBlack)),
+      Text(footerIcon.name)
+    ]);
   }
 }

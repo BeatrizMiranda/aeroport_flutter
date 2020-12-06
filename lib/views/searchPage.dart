@@ -102,7 +102,7 @@ class _SearchPageState extends State<SearchPage> {
             ),
             _shipAndDestination(),
             _dataPicker(),
-            _passangersPicker(),
+            passangersPicker(context, qtdAdults, qtdChilds, setPassangers),
             Container(
               padding: const EdgeInsets.only(top: 40),
               child: CustomButton(
@@ -185,53 +185,55 @@ class _SearchPageState extends State<SearchPage> {
     );
   }
 
-  Widget _passangersPicker() {
-    return Column(
-      mainAxisSize: MainAxisSize.max,
+
+
+}
+
+Widget iconText(text, icon, isBold) {
+  return Padding(
+    padding: const EdgeInsets.fromLTRB(0, 15, 0, 15),
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        Container(
-          alignment: Alignment.topLeft,
-          padding: const EdgeInsets.fromLTRB(0, 30, 0 , 20),
-          child: Text(
-            "Passagens: ", 
-            style: TextStyle(fontSize: 20, color: Palette.lightBlack)
+      Padding(
+        padding: const EdgeInsets.only(right: 10),
+        child: Icon(icon, size: 28, color: Palette.lightBlack),
+      ),
+      Text(
+        text, 
+        style: TextStyle(fontSize: 20, color: Palette.lightBlack, fontWeight: isBold)
+      ),
+    ])
+  );
+}
+
+Widget passangersPicker(context, qtdAdults, qtdChilds, setPassangers) {
+  return Column(
+    mainAxisSize: MainAxisSize.max,
+    children: [
+      Container(
+        alignment: Alignment.topLeft,
+        padding: const EdgeInsets.fromLTRB(0, 30, 0 , 20),
+        child: Text(
+          "Passagens: ", 
+          style: TextStyle(fontSize: 20, color: Palette.lightBlack)
+        ),
+      ),
+      RaisedButton(
+        color: Palette.grayBackground,
+        child: Container(
+          child: Column(
+            children: [
+              iconText("$qtdAdults Adulto(s)", Icons.person, FontWeight.normal),
+              iconText("$qtdChilds Criança(s)", Icons.face, FontWeight.normal),
+            ],
           ),
-        ),
-        RaisedButton(
-          color: Palette.grayBackground,
-          child: Container(
-            child: Column(
-              children: [
-                iconText("$qtdAdults Adulto(s)", Icons.person, FontWeight.normal),
-                iconText("$qtdChilds Criança(s)", Icons.face, FontWeight.normal),
-              ],
-            ),
-          ), 
-          onPressed: () async {
-            var response = await Navigator.push(context, MaterialPageRoute(builder: (context) => PassangersPicker(adults: qtdAdults, childs: qtdChilds)));
-            if (response != null) setPassangers(response["Adult"], response["Child"]);
-          }
-        ),
-      ],
-    );
-  }
-
-  Widget iconText(text, icon, isBold) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(0, 15, 0, 15),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-        Padding(
-          padding: const EdgeInsets.only(right: 10),
-          child: Icon(icon, size: 28, color: Palette.lightBlack),
-        ),
-        Text(
-          text, 
-          style: TextStyle(fontSize: 20, color: Palette.lightBlack, fontWeight: isBold)
-        ),
-      ])
-    );
-  }
-
+        ), 
+        onPressed: () async {
+          var response = await Navigator.push(context, MaterialPageRoute(builder: (context) => PassangersPicker(adults: qtdAdults, childs: qtdChilds)));
+          if (response != null) setPassangers(response["Adult"], response["Child"]);
+        }
+      ),
+    ],
+  );
 }

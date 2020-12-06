@@ -136,13 +136,13 @@ class _MyAccountState extends State<MyAccount> {
     return Column(
       children: [
         Padding(
-          padding: const EdgeInsets.only(bottom: 30),
+          padding: const EdgeInsets.only(bottom: 30, left: 20),
           child: Column(
             children: [
-              _renderInfo('Nome', userData.name),
-              _renderInfo("Email", userData.email),
-              _renderInfo("CPF", userData.cpf),
-              _renderInfo("Senha", "***********"),
+              renderInfo('Nome', userData.name, 23.0),
+              renderInfo("Email", userData.email, 23.0),
+              renderInfo("CPF", userData.cpf, 23.0),
+              renderInfo("Senha", "***********", 23.0),
             ],
           )
         ),
@@ -161,26 +161,6 @@ class _MyAccountState extends State<MyAccount> {
     );
   } 
 
-  Widget _renderInfo(label, value) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 10, bottom: 10, left: 20),
-      child: Align(
-        alignment: Alignment.centerLeft, 
-        child: Row(
-          children: [
-            Text(
-              '$label: ', 
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 23)
-            ),
-            Text(
-              '$value', 
-              style: TextStyle(fontSize: 22)
-            ),
-          ],
-        ),
-      ),
-    );
-  }
 
   Widget _renderForm(userData) {
     return  Padding(
@@ -244,4 +224,25 @@ class _MyAccountState extends State<MyAccount> {
       },
     );
   }
+}
+
+Widget renderInfo(label, value, fontSize) {
+  return Padding(
+    padding: const EdgeInsets.only(top: 15, bottom: 15),
+    child: Align(
+      alignment: Alignment.centerLeft, 
+      child: Row(
+        children: [
+          Text(
+            '$label: ', 
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: fontSize)
+          ),
+          Text(
+            '$value', 
+            style: TextStyle(fontSize: fontSize - 1)
+          ),
+        ],
+      ),
+    ),
+  );
 }

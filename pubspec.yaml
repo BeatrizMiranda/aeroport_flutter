@@ -64,6 +64,8 @@ flutter:
     - src/img/EmptyTrips.png
     - src/img/planeIcon.png
     - src/img/searchOpacity.png
+    - src/img/mercadopago.png
+    - src/img/picpay.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

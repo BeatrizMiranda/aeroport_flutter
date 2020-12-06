@@ -225,7 +225,11 @@ class _SearchResultState extends State<SearchResult> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween, 
                         children: List.generate(userFlights.length, (index) {
-                            return TripCard(userFlight: userFlights[index], isAdmin: false);
+                            return TripCard(
+                              userFlight: userFlights[index], 
+                              isAdmin: false,
+                              handleClick: () {}
+                            );
                         })
                       ),
                     )
