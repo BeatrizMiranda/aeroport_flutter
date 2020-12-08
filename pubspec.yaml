@@ -27,6 +27,7 @@ dependencies:
   flutter_localizations:
     sdk: flutter
 
+  flutter_datetime_picker: 1.2.5
   syncfusion_localizations: ^18.3.51
   syncfusion_flutter_calendar: ^18.3.35
   syncfusion_flutter_datepicker: ^18.3.35-beta

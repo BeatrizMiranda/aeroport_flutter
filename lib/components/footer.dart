@@ -44,7 +44,7 @@ class Footer extends StatefulWidget {
 }
 
 class _Footer extends State<Footer> {
-  bool isAdmin = false;
+  bool isAdmin = true;
   bool isLoged = true;
 
   @override
@@ -79,7 +79,7 @@ class FooterFloatingBtn extends StatefulWidget {
 }
 
 class _FooterFloatingBtn extends State<FooterFloatingBtn> {
-  bool isAdmin = false;
+  bool isAdmin = true;
 
   @override
   Widget build(BuildContext context) {

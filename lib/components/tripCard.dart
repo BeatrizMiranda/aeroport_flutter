@@ -1,5 +1,6 @@
 import 'package:airport/layout/pallets.dart';
 import 'package:airport/views/MyTrips.dart';
+import 'package:airport/views/admin/NewFlight.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -86,8 +87,23 @@ class _TripCard extends State<TripCard> {
                       child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Icon(Icons.delete, color: Palette.darkRed),
-                            Icon(Icons.edit)
+                            IconButton(
+                              onPressed: () {
+                                showConfirmOnRemove(context);
+                              },
+                              icon: Icon(Icons.delete, color: Palette.darkRed)
+                            ),
+                            IconButton(
+                              onPressed: () {
+                                Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => NewFlight()
+                                  )
+                                );
+                              },
+                              icon: Icon(Icons.edit)
+                            ),
                           ]),
                     )
                   : Container(),
@@ -95,6 +111,34 @@ class _TripCard extends State<TripCard> {
           ),
         ),
       ),
+    );
+  }
+
+  showConfirmOnRemove(BuildContext context) {
+    Widget handleCancel = FlatButton(
+      child: Text("Cancelar", style: TextStyle(fontSize: 20)),
+      onPressed: () { Navigator.of(context).pop(); },
+    );
+
+    Widget handleGoOn = FlatButton(
+      child: Text("Excluir", style: TextStyle(fontSize: 20, color: Palette.darkRed)),
+      onPressed: () { Navigator.of(context).pop(); },
+    );
+
+    AlertDialog alert = AlertDialog(
+      title: Text("Excluir Voo", style: TextStyle(fontSize: 22, color: Palette.darkRed)),
+      content: Text("Deseja mesmo excluir esse voo?", style: TextStyle(fontSize: 20)),
+      actions: [
+        handleCancel,
+        handleGoOn,
+      ],
+    );
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
     );
   }
 }
