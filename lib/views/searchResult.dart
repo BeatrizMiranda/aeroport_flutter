@@ -8,102 +8,106 @@ import 'package:intl/intl.dart';
 
 const List<FlightInfo> userFlights = const <FlightInfo>[
   FlightInfo(
-    destination: "São Paulo", 
-    shipment: "Rio de Janeiro", 
-    ship_date: "2020-07-02T03:00:00.000Z", 
-    ship_time: "18:00:00", 
-    estimated_time: "03:00:00", 
-    limit:46, 
-    airline_id: 1, 
-    status: "ativo", 
-    image: "https://cdn.pixabay.com/photo/2017/01/08/19/30/rio-de-janeiro-1963744_1280.jpg" 
-  ),
+      destination: "São Paulo",
+      ticket_price: 150.00,
+      shipment: "Rio de Janeiro",
+      ship_date: "2020-07-02T03:00:00.000Z",
+      ship_time: "18:00:00",
+      estimated_time: "03:00:00",
+      limit: 46,
+      airline_id: 1,
+      status: "ativo",
+      image:
+          "https://cdn.pixabay.com/photo/2017/01/08/19/30/rio-de-janeiro-1963744_1280.jpg"),
   FlightInfo(
-    shipment: "São Paulo", 
-    destination: "Rio de Janeiro", 
-    ship_date: "2020-07-02T03:00:00.000Z", 
-    ship_time: "18:00:00", 
-    estimated_time: "03:00:00", 
-    limit:46, 
-    airline_id: 1, 
-    status: "ativo", 
-    image: "https://cdn.pixabay.com/photo/2017/01/08/19/30/rio-de-janeiro-1963744_1280.jpg" 
-  ),
+      shipment: "São Paulo",
+      destination: "Rio de Janeiro",
+      ticket_price: 150.00,
+      ship_date: "2020-07-02T03:00:00.000Z",
+      ship_time: "18:00:00",
+      estimated_time: "03:00:00",
+      limit: 46,
+      airline_id: 1,
+      status: "ativo",
+      image:
+          "https://cdn.pixabay.com/photo/2017/01/08/19/30/rio-de-janeiro-1963744_1280.jpg"),
   FlightInfo(
-    shipment: "São Paulo", 
-    destination: "Rio de Janeiro", 
-    ship_date: "2020-07-02T03:00:00.000Z", 
-    ship_time: "18:00:00", 
-    estimated_time: "03:00:00", 
-    limit:46, 
-    airline_id: 1, 
-    status: "ativo", 
-    image: "https://cdn.pixabay.com/photo/2017/01/08/19/30/rio-de-janeiro-1963744_1280.jpg" 
-  ),
+      shipment: "São Paulo",
+      destination: "Rio de Janeiro",
+      ticket_price: 150.00,
+      ship_date: "2020-07-02T03:00:00.000Z",
+      ship_time: "18:00:00",
+      estimated_time: "03:00:00",
+      limit: 46,
+      airline_id: 1,
+      status: "ativo",
+      image:
+          "https://cdn.pixabay.com/photo/2017/01/08/19/30/rio-de-janeiro-1963744_1280.jpg"),
   FlightInfo(
-    shipment: "São Paulo", 
-    destination: "Rio de Janeiro", 
-    ship_date: "2020-07-02T03:00:00.000Z", 
-    ship_time: "18:00:00", 
-    estimated_time: "03:00:00", 
-    limit:46, 
-    airline_id: 1, 
-    status: "ativo", 
-    image: "https://cdn.pixabay.com/photo/2017/01/08/19/30/rio-de-janeiro-1963744_1280.jpg" 
-  ),
+      shipment: "São Paulo",
+      destination: "Rio de Janeiro",
+      ticket_price: 150.00,
+      ship_date: "2020-07-02T03:00:00.000Z",
+      ship_time: "18:00:00",
+      estimated_time: "03:00:00",
+      limit: 46,
+      airline_id: 1,
+      status: "ativo",
+      image:
+          "https://cdn.pixabay.com/photo/2017/01/08/19/30/rio-de-janeiro-1963744_1280.jpg"),
   FlightInfo(
-    shipment: "São Paulo", 
-    destination: "Rio de Janeiro", 
-    ship_date: "2020-07-02T03:00:00.000Z", 
-    ship_time: "18:00:00", 
-    estimated_time: "03:00:00", 
-    limit:46, 
-    airline_id: 1, 
-    status: "ativo", 
-    image: "https://cdn.pixabay.com/photo/2017/01/08/19/30/rio-de-janeiro-1963744_1280.jpg" 
-  ),
+      shipment: "São Paulo",
+      destination: "Rio de Janeiro",
+      ticket_price: 150.00,
+      ship_date: "2020-07-02T03:00:00.000Z",
+      ship_time: "18:00:00",
+      estimated_time: "03:00:00",
+      limit: 46,
+      airline_id: 1,
+      status: "ativo",
+      image:
+          "https://cdn.pixabay.com/photo/2017/01/08/19/30/rio-de-janeiro-1963744_1280.jpg"),
   FlightInfo(
-    shipment: "São Paulo", 
-    destination: "Rio de Janeiro", 
-    ship_date: "2020-07-02T03:00:00.000Z", 
-    ship_time: "18:00:00", 
-    estimated_time: "03:00:00", 
-    limit:46, 
-    airline_id: 1, 
-    status: "ativo", 
-    image: "https://cdn.pixabay.com/photo/2017/01/08/19/30/rio-de-janeiro-1963744_1280.jpg" 
-  ),
+      shipment: "São Paulo",
+      destination: "Rio de Janeiro",
+      ticket_price: 150.00,
+      ship_date: "2020-07-02T03:00:00.000Z",
+      ship_time: "18:00:00",
+      estimated_time: "03:00:00",
+      limit: 46,
+      airline_id: 1,
+      status: "ativo",
+      image:
+          "https://cdn.pixabay.com/photo/2017/01/08/19/30/rio-de-janeiro-1963744_1280.jpg"),
   FlightInfo(
-    shipment: "São Paulo", 
-    destination: "Rio de Janeiro", 
-    ship_date: "2020-07-02T03:00:00.000Z", 
-    ship_time: "18:00:00", 
-    estimated_time: "03:00:00", 
-    limit:46, 
-    airline_id: 1, 
-    status: "ativo", 
-    image: "https://cdn.pixabay.com/photo/2017/01/08/19/30/rio-de-janeiro-1963744_1280.jpg" 
-  ),
+      shipment: "São Paulo",
+      destination: "Rio de Janeiro",
+      ticket_price: 150.00,
+      ship_date: "2020-07-02T03:00:00.000Z",
+      ship_time: "18:00:00",
+      estimated_time: "03:00:00",
+      limit: 46,
+      airline_id: 1,
+      status: "ativo",
+      image:
+          "https://cdn.pixabay.com/photo/2017/01/08/19/30/rio-de-janeiro-1963744_1280.jpg"),
   FlightInfo(
-    shipment: "São Paulo", 
-    destination: "Rio de Janeiro", 
-    ship_date: "2020-07-02T03:00:00.000Z", 
-    ship_time: "18:00:00", 
-    estimated_time: "03:00:00", 
-    limit:46, 
-    airline_id: 1, 
-    status: "ativo", 
-    image: "https://cdn.pixabay.com/photo/2017/01/08/19/30/rio-de-janeiro-1963744_1280.jpg" 
-  ),
+      shipment: "São Paulo",
+      destination: "Rio de Janeiro",
+      ticket_price: 150.00,
+      ship_date: "2020-07-02T03:00:00.000Z",
+      ship_time: "18:00:00",
+      estimated_time: "03:00:00",
+      limit: 46,
+      airline_id: 1,
+      status: "ativo",
+      image:
+          "https://cdn.pixabay.com/photo/2017/01/08/19/30/rio-de-janeiro-1963744_1280.jpg"),
 ];
 
 class FlightSearch {
-  const FlightSearch({
-    this.destination, 
-    this.shipment, 
-    this.ship_date, 
-    this.quantity
-  });
+  const FlightSearch(
+      {this.destination, this.shipment, this.ship_date, this.quantity});
 
   final String shipment;
   final String ship_date;
@@ -111,14 +115,11 @@ class FlightSearch {
   final int quantity;
 }
 
-
 const FlightSearch flightsOptions = FlightSearch(
-  destination: "São Paulo", 
-  shipment: "Rio de Janeiro", 
-  ship_date: "2020-07-02T03:00:00.000Z", 
-  quantity: 5
-);
-
+    destination: "São Paulo",
+    shipment: "Rio de Janeiro",
+    ship_date: "2020-07-02T03:00:00.000Z",
+    quantity: 5);
 
 class SearchResult extends StatefulWidget {
   SearchResult({Key key}) : super(key: key);
@@ -126,9 +127,10 @@ class SearchResult extends StatefulWidget {
   @override
   _SearchResultState createState() => _SearchResultState();
 }
+
 class _SearchResultState extends State<SearchResult> {
-  
-  String shipDateFormated = DateFormat('dd/MM/y').format(DateTime.parse(flightsOptions.ship_date));
+  String shipDateFormated =
+      DateFormat('dd/MM/y').format(DateTime.parse(flightsOptions.ship_date));
 
   @override
   Widget build(BuildContext context) {
@@ -148,7 +150,9 @@ class _SearchResultState extends State<SearchResult> {
           Stack(
             children: [
               ClipRRect(
-                borderRadius: BorderRadius.only(bottomLeft:  Radius.circular(15), bottomRight:  Radius.circular(15)),
+                borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(15),
+                    bottomRight: Radius.circular(15)),
                 child: Image.asset(
                   "src/img/searchOpacity.png",
                   fit: BoxFit.contain,
@@ -166,31 +170,25 @@ class _SearchResultState extends State<SearchResult> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text(
-                              flightsOptions.shipment, 
-                              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22)
-                            ),
-                            Image.asset(
-                              "src/img/planeIcon.png",
-                              fit: BoxFit.contain
-                            ),
-                            Text(
-                              flightsOptions.destination, 
-                              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22)
-                            ),
+                            Text(flightsOptions.shipment,
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 22)),
+                            Image.asset("src/img/planeIcon.png",
+                                fit: BoxFit.contain),
+                            Text(flightsOptions.destination,
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 22)),
                           ],
                         ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text(
-                              shipDateFormated, 
-                              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22)
-                            ),
-                            Text(
-                              "${flightsOptions.quantity} Tickets", 
-                              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22)
-                            ),
+                            Text(shipDateFormated,
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 22)),
+                            Text("${flightsOptions.quantity} Tickets",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 22)),
                           ],
                         ),
                       ],
@@ -210,34 +208,35 @@ class _SearchResultState extends State<SearchResult> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
-                          "${userFlights.length} results found", 
-                          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22)
-                        ),
+                        Text("${userFlights.length} results found",
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 22)),
                         IconButton(
-                          onPressed: () => Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => SearchPage())),
-                          icon: Icon(Icons.settings, color: Palette.lightBlack, size: 25),
+                          onPressed: () => Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => SearchPage())),
+                          icon: Icon(Icons.settings,
+                              color: Palette.lightBlack, size: 25),
                         ),
                       ],
                     ),
                     Padding(
                       padding: const EdgeInsets.only(top: 20),
                       child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween, 
-                        children: List.generate(userFlights.length, (index) {
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: List.generate(userFlights.length, (index) {
                             return TripCard(
-                              userFlight: userFlights[index], 
-                              isAdmin: false,
-                              handleClick: () {}
-                            );
-                        })
-                      ),
+                                userFlight: userFlights[index],
+                                isAdmin: false,
+                                handleClick: () {});
+                          })),
                     )
                   ],
                 ),
               ),
             ),
-          ),           
+          ),
         ],
       ),
     );

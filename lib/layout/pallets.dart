@@ -5,6 +5,7 @@ class Palette {
   static Color darkOrange = Color(0xFFFF5929);
   static Color lightOrange = Color(0xFFFFB162);
   static Color lightText = Color(0xFFFF5D2C);
+  static Color lightBlue = Color(0xFF317DAB);
 
   static Color grayBackground = Color(0xFFEFF1F8);
 

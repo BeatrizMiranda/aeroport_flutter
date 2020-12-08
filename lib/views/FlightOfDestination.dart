@@ -1,3 +1,4 @@
+import 'package:airport/components/Cadastro.dart';
 import 'package:airport/components/footer.dart';
 import 'package:airport/components/tripCard.dart';
 import 'package:airport/layout/pallets.dart';
@@ -23,6 +24,7 @@ class _FlightOfDestinationState extends State<FlightOfDestination> {
   List<FlightInfo> userFlights = <FlightInfo>[
     FlightInfo(
         destination: "São Paulo",
+        ticket_price: 150.00,
         shipment: "Rio de Janeiro",
         ship_date: "2020-07-02T03:00:00.000Z",
         ship_time: "18:00:00",
@@ -34,6 +36,7 @@ class _FlightOfDestinationState extends State<FlightOfDestination> {
             "https://cdn.pixabay.com/photo/2017/01/08/19/30/rio-de-janeiro-1963744_1280.jpg"),
     FlightInfo(
         destination: "Rio de Janeiro",
+        ticket_price: 150.00,
         shipment: "São Paulo",
         ship_date: "2020-07-02T03:00:00.000Z",
         ship_time: "18:00:00",
@@ -45,6 +48,7 @@ class _FlightOfDestinationState extends State<FlightOfDestination> {
             "https://cdn.pixabay.com/photo/2017/01/08/19/30/rio-de-janeiro-1963744_1280.jpg"),
     FlightInfo(
         destination: "Rio de Janeiro",
+        ticket_price: 150.00,
         shipment: "São Paulo",
         ship_date: "2020-07-02T03:00:00.000Z",
         ship_time: "18:00:00",
@@ -56,6 +60,7 @@ class _FlightOfDestinationState extends State<FlightOfDestination> {
             "https://cdn.pixabay.com/photo/2017/01/08/19/30/rio-de-janeiro-1963744_1280.jpg"),
     FlightInfo(
         destination: "Rio de Janeiro",
+        ticket_price: 150.00,
         shipment: "São Paulo",
         ship_date: "2020-07-02T03:00:00.000Z",
         ship_time: "18:00:00",
@@ -67,6 +72,7 @@ class _FlightOfDestinationState extends State<FlightOfDestination> {
             "https://cdn.pixabay.com/photo/2017/01/08/19/30/rio-de-janeiro-1963744_1280.jpg"),
     FlightInfo(
         destination: "Rio de Janeiro",
+        ticket_price: 150.00,
         shipment: "São Paulo",
         ship_date: "2020-07-02T03:00:00.000Z",
         ship_time: "18:00:00",
@@ -78,20 +84,10 @@ class _FlightOfDestinationState extends State<FlightOfDestination> {
             "https://cdn.pixabay.com/photo/2017/01/08/19/30/rio-de-janeiro-1963744_1280.jpg"),
   ];
 
-  int qtdAdults = 1;
-  int qtdChilds = 0;
-
-  void setPassangers(adults, child) {
-    setState(() {
-      if (adults.isNotEmpty) {
-        int adultsFinal = int.parse(adults);
-        qtdAdults = adultsFinal;
-      }
-      if (child.isNotEmpty) {
-        int childFinal = int.parse(child);
-        qtdChilds = childFinal;
-      }
-    });
+  void handleBuy(FlightInfo flight) {
+    Navigator.pushReplacement(context,
+        MaterialPageRoute(builder: (context) => Cadastro(goTo: '/viagens')));
+    // depois do login faze a api de compra
   }
 
   @override
@@ -153,81 +149,130 @@ class _FlightOfDestinationState extends State<FlightOfDestination> {
     String shipDateFormated =
         DateFormat('dd/MM/y').format(DateTime.parse(userFlight.ship_date));
 
+    int qtdAdults = 1;
+    int qtdChilds = 0;
+    double valorTotal = userFlight.ticket_price;
+    double desconto = 0;
+    double total = valorTotal - desconto;
+
+    void setPassangers(adults, child) {
+      setState(() {
+        if (adults.isNotEmpty) {
+          int adultsFinal = int.parse(adults);
+          qtdAdults = adultsFinal;
+        }
+        if (child.isNotEmpty) {
+          int childFinal = int.parse(child);
+          qtdChilds = childFinal;
+        }
+
+        print(userFlight.ticket_price * (qtdAdults + qtdChilds));
+
+        valorTotal = userFlight.ticket_price * (qtdAdults + qtdChilds);
+        desconto = (userFlight.ticket_price * 0.3) * qtdChilds;
+        total = valorTotal - desconto;
+      });
+    }
+
     return showModalBottomSheet(
         context: context,
         isScrollControlled: true,
         builder: (BuildContext bc) {
           return Container(
             padding: EdgeInsets.fromLTRB(20, 20, 20, 20),
-            child: Column(children: [
-              GestureDetector(
-                onTap: () {
-                  Navigator.pop(context);
-                },
-                child: Container(
-                    padding: EdgeInsets.only(right: 10),
-                    alignment: Alignment.centerRight,
-                    child: Icon(Icons.close)),
-              ),
-              Center(
-                child: Padding(
-                  padding: EdgeInsets.only(bottom: 20),
-                  child: Text("Comprar Passagem",
-                      style: TextStyle(
-                          fontSize: 27,
-                          fontWeight: FontWeight.bold,
-                          color: Palette.lightBlack)),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(bottom: 20),
-                child: passangersPicker(
-                    context, qtdAdults, qtdChilds, setPassangers),
-              ),
-              renderInfo('Embarque no dia', shipDateFormated, 20.0),
-              renderInfo('Valor das Passagens', userData.name, 20.0),
-              renderInfo('Desconto', userData.name, 20.0),
-              renderInfo('Total', userData.name, 20.0),
-              Row(
+            child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  RaisedButton(
-                    onPressed: () {/* pay with mercadopago*/},
-                    color: Colors.white,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15)),
-                    padding: EdgeInsets.all(0),
-                    child: Container(
-                      alignment: Alignment.center,
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.only(
-                            topRight: Radius.circular(10),
-                            topLeft: Radius.circular(10)),
-                        child: Image.asset('src/img/mercadopago.png',
-                            fit: BoxFit.contain, width: 160),
-                      ),
+                  Column(children: [
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
+                      child: Container(
+                          padding: EdgeInsets.only(right: 10),
+                          alignment: Alignment.centerRight,
+                          child: Icon(Icons.close, size: 35)),
                     ),
-                  ),
-                  RaisedButton(
-                    onPressed: () {/* pay with mercadopago*/},
-                    color: Colors.white,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15)),
-                    padding: EdgeInsets.all(0),
-                    child: Container(
-                      alignment: Alignment.center,
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.only(
-                            topRight: Radius.circular(10),
-                            topLeft: Radius.circular(10)),
-                        child: Image.asset('src/img/picpay.png',
-                            fit: BoxFit.contain, width: 160),
-                      ),
+                    Center(
+                      child: Text("Comprar Passagem",
+                          style: TextStyle(
+                              fontSize: 27,
+                              fontWeight: FontWeight.bold,
+                              color: Palette.lightBlack)),
                     ),
+                  ]),
+                  Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 20),
+                        child: passangersPicker(
+                            context, qtdAdults, qtdChilds, setPassangers),
+                      ),
+                      renderInfo('Embarque no dia', shipDateFormated, 22.0,
+                          Palette.lightBlue),
+                      renderInfo('Valor unitário', userFlight.ticket_price,
+                          22.0, Palette.lightBlue),
+                      renderInfo('Valor total de Passagens', valorTotal, 22.0,
+                          Palette.lightBlue),
+                      (desconto != 0.0)
+                          ? Column(
+                              children: [
+                                renderInfo('Desconto', desconto, 22.0,
+                                    Palette.lightBlue),
+                                Divider(
+                                  thickness: 2,
+                                )
+                              ],
+                            )
+                          : Divider(
+                              thickness: 2,
+                            ),
+                      renderInfo('Total', total, 22.0, Palette.lightBlue),
+                    ],
                   ),
-                ],
-              )
-            ]),
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 20),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        RaisedButton(
+                          onPressed: () => handleBuy(userFlight),
+                          color: Colors.white,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(15)),
+                          padding: EdgeInsets.all(0),
+                          child: Container(
+                            alignment: Alignment.center,
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.only(
+                                  topRight: Radius.circular(10),
+                                  topLeft: Radius.circular(10)),
+                              child: Image.asset('src/img/mercadopago.png',
+                                  fit: BoxFit.contain, width: 160),
+                            ),
+                          ),
+                        ),
+                        RaisedButton(
+                          onPressed: () => handleBuy(userFlight),
+                          color: Colors.white,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(15)),
+                          padding: EdgeInsets.all(0),
+                          child: Container(
+                            alignment: Alignment.center,
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.only(
+                                  topRight: Radius.circular(10),
+                                  topLeft: Radius.circular(10)),
+                              child: Image.asset('src/img/picpay.png',
+                                  fit: BoxFit.contain, width: 160),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  )
+                ]),
           );
         });
   }

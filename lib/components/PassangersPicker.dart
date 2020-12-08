@@ -10,18 +10,17 @@ class PassangersPicker extends StatefulWidget {
 
   _PassangersPicker createState() => _PassangersPicker();
 }
-class _PassangersPicker extends State<PassangersPicker> {
 
-  TextEditingController _adultsController; 
-  TextEditingController _childController; 
+class _PassangersPicker extends State<PassangersPicker> {
+  TextEditingController _adultsController;
+  TextEditingController _childController;
 
   @override
   void initState() {
     super.initState();
-    _adultsController = TextEditingController(text: '${widget.adults}'); 
-    _childController = TextEditingController(text: '${widget.childs}'); 
+    _adultsController = TextEditingController(text: '${widget.adults}');
+    _childController = TextEditingController(text: '${widget.childs}');
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -31,34 +30,30 @@ class _PassangersPicker extends State<PassangersPicker> {
     );
   }
 
-  Widget _body() { 
-    return Stack(
-      children: <Widget>[
-        ClipRRect(
-          borderRadius: BorderRadius.only(bottomLeft:  Radius.circular(15), bottomRight:  Radius.circular(15)),
-          child: Image.asset(
-            "src/img/SearchImg.png",
-            fit: BoxFit.cover,
-            height: 325
-          ),
-        ),
-        Center(
-          child: SingleChildScrollView(
-                    child: Positioned(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  _card(),
-                ],
-              ),
+  Widget _body() {
+    return Stack(children: <Widget>[
+      ClipRRect(
+        borderRadius: BorderRadius.only(
+            bottomLeft: Radius.circular(15), bottomRight: Radius.circular(15)),
+        child: Image.asset("src/img/SearchImg.png",
+            fit: BoxFit.cover, height: 325),
+      ),
+      Center(
+        child: SingleChildScrollView(
+          child: Positioned(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                _card(),
+              ],
             ),
           ),
         ),
-      ]
-    );
+      ),
+    ]);
   }
 
-  Widget _card() { 
+  Widget _card() {
     return Card(
       margin: EdgeInsets.fromLTRB(15, 10, 20, 20),
       elevation: 10,
@@ -71,25 +66,27 @@ class _PassangersPicker extends State<PassangersPicker> {
               Align(
                 alignment: Alignment.topRight,
                 child: IconButton(
-                  onPressed: () => Navigator.pop(context, {
-                    "Adult": _adultsController.text, 
-                    "Child": _childController.text
-                  }),
-                  icon: Icon(Icons.close, size: 30)
-                ),
+                    onPressed: () => Navigator.pop(context, {
+                          "Adult": _adultsController.text,
+                          "Child": _childController.text
+                        }),
+                    icon: Icon(Icons.close, size: 30)),
               ),
-              Text("Opções de Voo", style: TextStyle(fontSize: 27, fontWeight: FontWeight.bold, color: Palette.lightBlack)),
+              Text("Opções de Voo",
+                  style: TextStyle(
+                      fontSize: 27,
+                      fontWeight: FontWeight.bold,
+                      color: Palette.lightBlack)),
               Padding(
                 padding: EdgeInsets.only(top: 40),
                 child: TextField(
                   controller: _adultsController,
                   decoration: InputDecoration(
                     labelText: "Adultos",
-                    labelStyle: TextStyle(
-                      color: Palette.lightBlack
-                    ),
+                    labelStyle: TextStyle(color: Palette.lightBlack),
                     focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: Palette.lightOrange, width: 2.0),
+                      borderSide:
+                          BorderSide(color: Palette.lightOrange, width: 2.0),
                     ),
                   ),
                   style: TextStyle(fontSize: 22),
@@ -102,11 +99,10 @@ class _PassangersPicker extends State<PassangersPicker> {
                   controller: _childController,
                   decoration: InputDecoration(
                     labelText: "Crianças",
-                    labelStyle: TextStyle(
-                      color: Palette.lightBlack
-                    ),
+                    labelStyle: TextStyle(color: Palette.lightBlack),
                     focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: Palette.lightOrange, width: 2.0),
+                      borderSide:
+                          BorderSide(color: Palette.lightOrange, width: 2.0),
                     ),
                   ),
                   style: TextStyle(fontSize: 22),
@@ -116,16 +112,15 @@ class _PassangersPicker extends State<PassangersPicker> {
               Padding(
                 padding: EdgeInsets.only(top: 50, bottom: 90),
                 child: CustomButton(
-                  height: 60, 
-                  text: "Salvar", 
-                  onClick: () => Navigator.pop(context, {
-                    "Adult": _adultsController.text, 
-                    "Child": _childController.text
-                  })
-                ),
+                    height: 60,
+                    text: "Salvar",
+                    onClick: () => Navigator.pop(context, {
+                          "Adult": _adultsController.text,
+                          "Child": _childController.text
+                        })),
               ),
             ],
-          ) ,
+          ),
         ),
       ),
     );
