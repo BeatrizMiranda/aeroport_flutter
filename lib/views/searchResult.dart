@@ -208,7 +208,7 @@ class _SearchResultState extends State<SearchResult> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text("${userFlights.length} results found",
+                        Text("${userFlights.length} resultados encontrados",
                             style: TextStyle(
                                 fontWeight: FontWeight.bold, fontSize: 22)),
                         IconButton(
@@ -221,17 +221,35 @@ class _SearchResultState extends State<SearchResult> {
                         ),
                       ],
                     ),
-                    Padding(
+                    userFlights.length > 0 ? Padding(
                       padding: const EdgeInsets.only(top: 20),
                       child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: List.generate(userFlights.length, (index) {
                             return TripCard(
-                                userFlight: userFlights[index],
-                                isAdmin: false,
-                                handleClick: () {});
-                          })),
-                    )
+                              userFlight: userFlights[index],
+                              isAdmin: false,
+                              handleClick: () {});
+                          }) 
+                        ),
+                      )
+                      : 
+                      Padding(
+                        padding: const EdgeInsets.only(top: 50),
+                        child: Column(
+                          children: [
+                            Text("Não encontramos nenhum voo que atende os seus parâmetros",
+                              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22)
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 30),
+                              child: Text("Tente novamente",
+                                style: TextStyle(fontSize: 20)
+                              ),
+                            ),
+                        ],
+                    ),
+                      ),
                   ],
                 ),
               ),
