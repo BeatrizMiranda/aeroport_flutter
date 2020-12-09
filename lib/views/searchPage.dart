@@ -23,14 +23,8 @@ class _SearchPageState extends State<SearchPage> {
 
   void setPassangers(adults, child) {
     setState(() {
-      if (adults.isNotEmpty) {
-        int adultsFinal = int.parse(adults);
-        qtdAdults = adultsFinal;
-      }
-      if (child.isNotEmpty) {
-        int childFinal = int.parse(child);
-        qtdChilds = childFinal;
-      }
+      qtdAdults = adults;
+      qtdChilds = child;
     });
   }
 

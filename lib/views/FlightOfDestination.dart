@@ -157,14 +157,8 @@ class _FlightOfDestinationState extends State<FlightOfDestination> {
 
     void setPassangers(adults, child) {
       setState(() {
-        if (adults.isNotEmpty) {
-          int adultsFinal = int.parse(adults);
-          qtdAdults = adultsFinal;
-        }
-        if (child.isNotEmpty) {
-          int childFinal = int.parse(child);
-          qtdChilds = childFinal;
-        }
+        qtdAdults = adults;
+        qtdChilds = child;
 
         print(userFlight.ticket_price * (qtdAdults + qtdChilds));
 
