@@ -29,7 +29,7 @@ const List<FooterIcon> adminUser = const <FooterIcon>[
       icon: Icons.supervised_user_circle,
       goToComponent: '/new-user'),
   const FooterIcon(
-      name: 'Minha Conta', icon: Icons.account_circle, goToComponent: '/'),
+      name: 'Minha Conta', icon: Icons.account_circle, goToComponent: '/account'),
   const FooterIcon(
       name: 'Voos', icon: Icons.flight_takeoff, goToComponent: '/list-flight'),
   const FooterIcon(
