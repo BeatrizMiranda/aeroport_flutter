@@ -1,4 +1,4 @@
-import 'package:airport/layout/pallets.dart';
+import 'package:airport/globals/pallets.dart';
 import 'package:airport/views/FlightOfDestination.dart';
 import 'package:airport/views/home.dart';
 import 'package:flutter/material.dart';

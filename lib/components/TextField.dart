@@ -1,13 +1,12 @@
-import 'package:airport/layout/pallets.dart';
+import 'package:airport/globals/pallets.dart';
 import 'package:flutter/material.dart';
 
 class CustomTextField extends StatelessWidget {
-  CustomTextField({this.icon, this.label, this.controller, this.handleChange});
+  CustomTextField({this.icon, this.label, this.controller});
 
   final IconData icon;
   final String label;
   final TextEditingController controller;
-  final Function handleChange;
 
   @override
   Widget build(BuildContext context) {  
@@ -26,7 +25,6 @@ class CustomTextField extends StatelessWidget {
           prefixIcon: Icon(icon, color: Palette.lightBlack),
         ),
         style: TextStyle(fontSize: 22),
-        onChanged: handleChange,
       ),
     );
   }

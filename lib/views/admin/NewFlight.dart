@@ -1,7 +1,7 @@
 import 'package:airport/components/TextField.dart';
 import 'package:airport/components/button.dart';
 import 'package:airport/components/footer.dart';
-import 'package:airport/layout/pallets.dart';
+import 'package:airport/globals/pallets.dart';
 import 'package:airport/views/searchPage.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -16,12 +16,12 @@ class NewFlight extends StatefulWidget {
 }
 
 class _NewFlightState extends State<NewFlight> {
-  TextEditingController embarqueController;
-  TextEditingController destinoController;
-  TextEditingController horarioController;
-  TextEditingController tempoEstimadoController;
-  TextEditingController limiteController;
-  TextEditingController companhiaController;
+  TextEditingController embarqueController = TextEditingController();
+  TextEditingController destinoController = TextEditingController();
+  TextEditingController horarioController = TextEditingController();
+  TextEditingController tempoEstimadoController = TextEditingController();
+  TextEditingController limiteController = TextEditingController();
+  TextEditingController companhiaController = TextEditingController();
 
   String ship_time = "";
   String estimated_time = "";
@@ -37,15 +37,6 @@ class _NewFlightState extends State<NewFlight> {
         chosedDateFormated = DateFormat('dd/MM/y').format(chosedDate);
       }
     });
-  }
-
-  void _nameChange(String text) {
-    if (text.isEmpty) return _throwError();
-    // nameController.text = text;
-  }
-
-  void _throwError() {
-    print('empty input');
   }
 
   void _sendForm() {}
@@ -112,13 +103,11 @@ class _NewFlightState extends State<NewFlight> {
           CustomTextField(
               icon: Icons.flight_takeoff,
               label: "Emparque: ",
-              controller: embarqueController,
-              handleChange: _nameChange),
+              controller: embarqueController),
           CustomTextField(
               icon: Icons.flight_land,
               label: "Destino: ",
-              controller: destinoController,
-              handleChange: _nameChange),
+              controller: destinoController),
           Padding(
             padding: EdgeInsets.only(top: 10),
             child: TextField(
@@ -134,7 +123,6 @@ class _NewFlightState extends State<NewFlight> {
                 prefixIcon: Icon(Icons.supervisor_account, color: Palette.lightBlack),
               ),
               style: TextStyle(fontSize: 22),
-              onChanged: _nameChange,
               keyboardType: TextInputType.numberWithOptions(decimal: true)
             ),
           ),
@@ -142,7 +130,6 @@ class _NewFlightState extends State<NewFlight> {
             icon: Icons.flight,
             label: "Companhia Aérea: ",
             controller: companhiaController,
-            handleChange: _nameChange
           ),
           Container(
             padding: EdgeInsets.only(top: 20), 

@@ -3,7 +3,7 @@ import 'package:airport/components/button.dart';
 import 'package:airport/components/dataPicker.dart';
 import 'package:airport/components/dropDown.dart';
 import 'package:airport/components/footer.dart';
-import 'package:airport/layout/pallets.dart';
+import 'package:airport/globals/pallets.dart';
 import 'package:airport/views/searchResult.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';

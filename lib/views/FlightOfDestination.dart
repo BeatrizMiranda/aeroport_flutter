@@ -1,13 +1,15 @@
+import 'package:airport/globals/globals.dart' as globals;
 import 'package:airport/components/Cadastro.dart';
 import 'package:airport/components/footer.dart';
 import 'package:airport/components/tripCard.dart';
-import 'package:airport/layout/pallets.dart';
+import 'package:airport/globals/pallets.dart';
 import 'package:airport/views/MyAccount.dart';
 import 'package:airport/views/MyTrips.dart';
 import 'package:airport/views/home.dart';
 import 'package:airport/views/searchPage.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+
 
 class FlightOfDestination extends StatefulWidget {
   FlightOfDestination({Key key, this.flightSuggestion}) : super(key: key);
@@ -19,7 +21,6 @@ class FlightOfDestination extends StatefulWidget {
 }
 
 class _FlightOfDestinationState extends State<FlightOfDestination> {
-  ///TODO: get flight by destination
 
   List<FlightInfo> userFlights = <FlightInfo>[
     FlightInfo(
@@ -139,7 +140,7 @@ class _FlightOfDestinationState extends State<FlightOfDestination> {
               handleClick: () {
                 showAlertDialog(context, userFlights[index]);
               },
-              isAdmin: false);
+              isAdmin: globals.isAdmin);
         }),
       ),
     );

@@ -1,8 +1,9 @@
 import 'package:airport/components/footer.dart';
 import 'package:airport/components/tripCard.dart';
-import 'package:airport/layout/pallets.dart';
+import 'package:airport/globals/pallets.dart';
 import 'package:airport/views/searchPage.dart';
 import 'package:flutter/material.dart';
+import 'package:airport/globals/globals.dart' as globals;
 
 class FlightInfo {
   const FlightInfo(
@@ -143,10 +144,11 @@ class _MyTripsState extends State<MyTrips> {
         children: List.generate(userFlights.length, (index) {
           return TripCard(
               userFlight: userFlights[index],
-              isAdmin: false,
+              isAdmin: globals.isAdmin,
               handleClick: () {});
         }),
       ),
     );
   }
 }
+

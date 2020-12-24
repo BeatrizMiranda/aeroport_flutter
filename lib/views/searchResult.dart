@@ -1,10 +1,12 @@
 import 'package:airport/components/footer.dart';
 import 'package:airport/components/tripCard.dart';
-import 'package:airport/layout/pallets.dart';
+import 'package:airport/globals/pallets.dart';
 import 'package:airport/views/MyTrips.dart';
 import 'package:airport/views/searchPage.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:airport/globals/globals.dart' as globals;
+
 
 const List<FlightInfo> userFlights = const <FlightInfo>[
   FlightInfo(
@@ -228,7 +230,7 @@ class _SearchResultState extends State<SearchResult> {
                           children: List.generate(userFlights.length, (index) {
                             return TripCard(
                               userFlight: userFlights[index],
-                              isAdmin: false,
+                              isAdmin: globals.isAdmin,
                               handleClick: () {});
                           }) 
                         ),

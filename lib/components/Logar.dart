@@ -1,10 +1,30 @@
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:airport/components/Cadastro.dart';
 import 'package:airport/components/TextField.dart';
 import 'package:airport/components/button.dart';
-import 'package:airport/layout/pallets.dart';
+import 'package:airport/globals/pallets.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 
+class User {
+  const User({ this.name, this.email, this.token, this.type });
+
+  final String name;
+  final String email;
+  final String token;
+  final String type;
+
+  factory User.fromJson(Map<String, dynamic> json) {
+    return User(
+      name: json['name'],
+      email: json['email'],
+      token: json['token'],
+      type: json['type'],
+    );
+  }
+}
 
 class Logar extends StatefulWidget {
   Logar({Key key, this.goTo }) : super(key: key);
@@ -14,14 +34,42 @@ class Logar extends StatefulWidget {
   _Logar createState() => _Logar();
 }
 
+Future<User> fetchUser(String email, String password) async {
+  final String signInUrl = "http://192.168.0.105:5000/signIn";
+
+  var response = await http.post(
+      signInUrl, 
+      body: {"email": email.trim(), "password": password}
+    );
+
+  print({"email": email, "password": password});
+
+  if (response.statusCode == 200) {
+    return User.fromJson(jsonDecode(response.body));
+  } else {
+    throw Exception('Failed to load user ${response.body}');
+  }
+}
+
 class _Logar extends State<Logar> {
 
-  TextEditingController emailController; 
-  TextEditingController senhaController;
+  Future<User> futureUser;
+  TextEditingController emailController = TextEditingController();
+  TextEditingController senhaController = TextEditingController();
 
-  void _inputChange(String text) {
-    if(text.isEmpty) return;
-    // nameController.text = text;
+  void _handleSignIn() async {
+    SharedPreferences localStorage = await SharedPreferences.getInstance();
+    futureUser = fetchUser(emailController.text, senhaController.text);
+
+    futureUser.then((user) {
+      localStorage.setString('userToken', user.token);
+      localStorage.setString('userType', user.type);
+      _handleRedirect();
+    });
+  }
+
+  void _handleRedirect() {
+    Navigator.pushNamed(context, widget.goTo);
   }
 
   @override
@@ -56,26 +104,33 @@ class _Logar extends State<Logar> {
                     ),
                     Column(
                       children: [
-                        CustomTextField(icon: Icons.alternate_email,label: "Insira seu e-mail: ", controller: emailController, handleChange: _inputChange),
-                        CustomTextField(icon: Icons.lock,label: "Insira sua senha: ", controller: senhaController, handleChange: _inputChange),
+                        CustomTextField(
+                          icon: Icons.alternate_email,
+                          label: "Insira seu e-mail: ", 
+                          controller: emailController, 
+                        ),
+                        CustomTextField(icon: Icons.lock,label: "Insira sua senha: ", controller: senhaController),
                         Padding(
                           padding: const EdgeInsets.only(top: 30, bottom: 30),
                           child: CustomButton(
                             height: 60, 
                             text: "Entre", 
-                            onClick: () => Navigator.pushNamed(context, widget.goTo) 
+                            onClick: _handleSignIn
                           ),
                         ),
                          Padding(
                            padding: const EdgeInsets.only(bottom: 20),
                            child: GestureDetector(
-                              onTap: () { 
-                                Navigator.pushReplacement(context, 
-                                  MaterialPageRoute(builder: (context) => 
-                                    Cadastro(goTo: widget.goTo)
-                                  )
-                                );
-                              },
+                              onTap: 
+                              () => {
+
+                              Navigator.pushReplacement(context, 
+                                MaterialPageRoute(builder: (context) => 
+                                  Cadastro(goTo: widget.goTo)
+                                )
+                              )
+                              }
+                              ,
                               child: Text(
                                 "Não tem cadastro?", 
                                 style: TextStyle(fontSize: 20, color: Palette.darkOrange, decoration: TextDecoration.underline))

@@ -1,8 +1,9 @@
 import 'package:airport/components/footer.dart';
 import 'package:airport/components/tripCard.dart';
-import 'package:airport/layout/pallets.dart';
+import 'package:airport/globals/pallets.dart';
 import 'package:airport/views/MyTrips.dart';
 import 'package:flutter/material.dart';
+import 'package:airport/globals/globals.dart' as globals;
 
 class ListFlight extends StatefulWidget {
   ListFlight({Key key}) : super(key: key);
@@ -12,7 +13,7 @@ class ListFlight extends StatefulWidget {
 }
 
 class _ListFlightState extends State<ListFlight> {
-  TextEditingController flightNameController;
+  TextEditingController flightNameController = TextEditingController();
 
   void _flightNameChange(String text) {}
 
@@ -85,7 +86,7 @@ class _ListFlightState extends State<ListFlight> {
                       status: "ativo",
                       image:
                           "https://cdn.pixabay.com/photo/2017/01/08/19/30/rio-de-janeiro-1963744_1280.jpg"),
-                  isAdmin: true,
+                  isAdmin: globals.isAdmin,
                   handleClick: () {})
             ]),
           ],

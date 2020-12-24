@@ -1,7 +1,7 @@
 import 'package:airport/components/TextField.dart';
 import 'package:airport/components/button.dart';
 import 'package:airport/components/footer.dart';
-import 'package:airport/layout/pallets.dart';
+import 'package:airport/globals/pallets.dart';
 import 'package:airport/views/home.dart';
 import 'package:flutter/material.dart';
 
@@ -17,15 +17,6 @@ class _NewUserState extends State<NewUser> {
   TextEditingController nameController;
   TextEditingController emailController; 
   TextEditingController senhaController;
-
-  void _nameChange(String text) {
-    if(text.isEmpty) return _throwError();
-    // nameController.text = text;
-  }
-
-  void _throwError() {
-    print('empty input');
-  }
 
   void _sendForm() {
 
@@ -97,10 +88,10 @@ class _NewUserState extends State<NewUser> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
-          CustomTextField(icon: Icons.account_circle, label: "Nome: ", controller: nameController, handleChange: _nameChange),
-          CustomTextField(icon: Icons.fingerprint, label: "CPF: ", controller: cpfController, handleChange: _nameChange),
-          CustomTextField(icon: Icons.alternate_email,label: "Email: ", controller: emailController, handleChange: _nameChange),
-          CustomTextField(icon: Icons.lock,label: "Senha: ", controller: senhaController, handleChange: _nameChange),
+          CustomTextField(icon: Icons.account_circle, label: "Nome: ", controller: nameController),
+          CustomTextField(icon: Icons.fingerprint, label: "CPF: ", controller: cpfController),
+          CustomTextField(icon: Icons.alternate_email,label: "Email: ", controller: emailController),
+          CustomTextField(icon: Icons.lock,label: "Senha: ", controller: senhaController),
         ],
       ),
     );

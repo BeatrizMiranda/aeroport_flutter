@@ -1,8 +1,12 @@
 import 'package:airport/components/Logar.dart';
-import 'package:airport/layout/pallets.dart';
+import 'package:airport/globals/pallets.dart';
 import 'package:airport/views/admin/HomeAdmin.dart';
 import 'package:airport/views/home.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:airport/globals/globals.dart' as globals;
+import 'dart:convert';
+
 
 class FooterIcon {
   const FooterIcon({this.name, this.icon, this.goToComponent});
@@ -44,8 +48,29 @@ class Footer extends StatefulWidget {
 }
 
 class _Footer extends State<Footer> {
-  bool isAdmin = false;
-  bool isLoged = true;
+  bool isAdmin = globals.isAdmin;
+  bool isLoged;
+
+  @override
+  void initState() {
+    super.initState();
+    verifyIfLogged();
+  }
+
+  Future<bool> verifyIfLogged() async {
+    SharedPreferences localStorage = await SharedPreferences.getInstance();
+    bool hasToken = localStorage.containsKey('userToken');
+    String type = localStorage.getString('userType');
+
+    setState(() {
+      isLoged = hasToken;
+    });
+
+    globals.isLoged = hasToken;
+    globals.isAdmin = type == "admin";
+
+    return hasToken;
+  }  
 
   @override
   Widget build(BuildContext context) {
@@ -79,7 +104,7 @@ class FooterFloatingBtn extends StatefulWidget {
 }
 
 class _FooterFloatingBtn extends State<FooterFloatingBtn> {
-  bool isAdmin = false;
+  bool isAdmin = globals.isAdmin;
 
   @override
   Widget build(BuildContext context) {

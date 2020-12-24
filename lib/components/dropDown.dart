@@ -1,4 +1,4 @@
-import 'package:airport/layout/pallets.dart';
+import 'package:airport/globals/pallets.dart';
 import 'package:flutter/material.dart';
 
 class DropDown extends StatefulWidget {

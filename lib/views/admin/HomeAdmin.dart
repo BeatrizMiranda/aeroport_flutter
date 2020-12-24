@@ -1,6 +1,6 @@
 import 'package:airport/components/button.dart';
 import 'package:airport/components/footer.dart';
-import 'package:airport/layout/pallets.dart';
+import 'package:airport/globals/pallets.dart';
 import 'package:airport/views/MyAccount.dart';
 import 'package:airport/views/admin/ListFlight.dart';
 import 'package:airport/views/admin/NewAirline.dart';

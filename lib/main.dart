@@ -1,5 +1,5 @@
 import 'package:airport/components/Logar.dart';
-import 'package:airport/layout/pallets.dart';
+import 'package:airport/globals/pallets.dart';
 import 'package:airport/views/FlightOfDestination.dart';
 import 'package:airport/views/MyAccount.dart';
 import 'package:airport/views/MyTrips.dart';
@@ -12,12 +12,13 @@ import 'package:airport/views/initialScreen.dart';
 import 'package:airport/views/searchPage.dart';
 import 'package:airport/views/searchResult.dart';
 import 'package:flutter/material.dart';
+import 'package:airport/globals/globals.dart' as globals;
 
 import 'package:syncfusion_localizations/syncfusion_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
 void main() {
-  bool isLoged = true;
+  bool isLoged = globals.isLoged;
 
   runApp(MaterialApp(
     title: 'Time To Travel',

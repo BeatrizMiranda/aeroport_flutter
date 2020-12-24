@@ -1,7 +1,7 @@
 import 'package:airport/components/TextField.dart';
 import 'package:airport/components/button.dart';
 import 'package:airport/components/footer.dart';
-import 'package:airport/layout/pallets.dart';
+import 'package:airport/globals/pallets.dart';
 import 'package:flutter/material.dart';
 
 class NewAirline extends StatefulWidget {
@@ -12,18 +12,9 @@ class NewAirline extends StatefulWidget {
 }
 class _NewAirlineState extends State<NewAirline> {
 
-  TextEditingController nameController;
-  TextEditingController imgController;
-
-  void _nameChange(String text) {
-    if(text.isEmpty) return _throwError();
-    // nameController.text = text;
-  }
-
-  void _throwError() {
-    print('empty input');
-  }
-
+  TextEditingController nameController = TextEditingController();
+  TextEditingController imgController = TextEditingController();
+  
   void _sendForm() {
 
   }
@@ -94,8 +85,8 @@ class _NewAirlineState extends State<NewAirline> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
-          CustomTextField(icon: Icons.flight_takeoff, label: "Nome: ", controller: nameController, handleChange: _nameChange),
-          CustomTextField(icon: Icons.cloud_download, label: "Link pra imagem: ", controller: imgController, handleChange: _nameChange),
+          CustomTextField(icon: Icons.flight_takeoff, label: "Nome: ", controller: nameController),
+          CustomTextField(icon: Icons.cloud_download, label: "Link pra imagem: ", controller: imgController),
         ],
       ),
     );

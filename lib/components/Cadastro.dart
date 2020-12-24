@@ -1,7 +1,7 @@
 import 'package:airport/components/Logar.dart';
 import 'package:airport/components/TextField.dart';
 import 'package:airport/components/button.dart';
-import 'package:airport/layout/pallets.dart';
+import 'package:airport/globals/pallets.dart';
 import 'package:flutter/material.dart';
 
 
@@ -16,15 +16,10 @@ class Cadastro extends StatefulWidget {
 
 class _Cadastro extends State<Cadastro> {
 
-  TextEditingController cpfController;
-  TextEditingController nameController;
-  TextEditingController emailController; 
-  TextEditingController senhaController;
-
-  void _inputChange(String text) {
-    if(text.isEmpty) return;
-    // nameController.text = text;
-  }
+  TextEditingController cpfController = TextEditingController();
+  TextEditingController nameController = TextEditingController();
+  TextEditingController emailController = TextEditingController(); 
+  TextEditingController senhaController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -58,10 +53,10 @@ class _Cadastro extends State<Cadastro> {
                     ),
                     Column(
                       children: [
-                        CustomTextField(icon: Icons.account_circle, label: "Nome: ", controller: nameController, handleChange: _inputChange),
-                        CustomTextField(icon: Icons.fingerprint, label: "CPF: ", controller: cpfController, handleChange: _inputChange),
-                        CustomTextField(icon: Icons.alternate_email,label: "Email: ", controller: emailController, handleChange: _inputChange),
-                        CustomTextField(icon: Icons.lock,label: "Senha: ", controller: senhaController, handleChange: _inputChange),
+                        CustomTextField(icon: Icons.account_circle, label: "Nome: ", controller: nameController),
+                        CustomTextField(icon: Icons.fingerprint, label: "CPF: ", controller: cpfController),
+                        CustomTextField(icon: Icons.alternate_email,label: "Email: ", controller: emailController),
+                        CustomTextField(icon: Icons.lock,label: "Senha: ", controller: senhaController),
                         Padding(
                           padding: const EdgeInsets.only(top: 30, bottom: 30),
                           child: CustomButton(

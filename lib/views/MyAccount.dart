@@ -1,6 +1,6 @@
 import 'package:airport/components/button.dart';
 import 'package:airport/components/footer.dart';
-import 'package:airport/layout/pallets.dart';
+import 'package:airport/globals/pallets.dart';
 import 'package:airport/views/home.dart';
 import 'package:flutter/material.dart';
 
