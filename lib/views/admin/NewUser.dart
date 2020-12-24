@@ -91,7 +91,7 @@ class _NewUserState extends State<NewUser> {
           CustomTextField(icon: Icons.account_circle, label: "Nome: ", controller: nameController),
           CustomTextField(icon: Icons.fingerprint, label: "CPF: ", controller: cpfController),
           CustomTextField(icon: Icons.alternate_email,label: "Email: ", controller: emailController),
-          CustomTextField(icon: Icons.lock,label: "Senha: ", controller: senhaController),
+          CustomTextField(icon: Icons.lock,label: "Senha: ", controller: senhaController, isPassword: true),
         ],
       ),
     );

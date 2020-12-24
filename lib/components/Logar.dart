@@ -34,15 +34,13 @@ class Logar extends StatefulWidget {
   _Logar createState() => _Logar();
 }
 
-Future<User> fetchUser(String email, String password) async {
+Future<User> signInUser(String email, String password) async {
   final String signInUrl = "http://192.168.0.105:5000/signIn";
 
   var response = await http.post(
       signInUrl, 
-      body: {"email": email.trim(), "password": password}
+      body: { "email": email, "password": password }
     );
-
-  print({"email": email, "password": password});
 
   if (response.statusCode == 200) {
     return User.fromJson(jsonDecode(response.body));
@@ -51,24 +49,23 @@ Future<User> fetchUser(String email, String password) async {
   }
 }
 
+Future<bool> signInRequest(String email, String password) async {
+  SharedPreferences localStorage = await SharedPreferences.getInstance();
+  User user = await signInUser(email, password);
+
+  localStorage.setString('userToken', user.token);
+  localStorage.setString('userType', user.type);
+
+  return true;
+}
 class _Logar extends State<Logar> {
 
-  Future<User> futureUser;
   TextEditingController emailController = TextEditingController();
   TextEditingController senhaController = TextEditingController();
 
+
   void _handleSignIn() async {
-    SharedPreferences localStorage = await SharedPreferences.getInstance();
-    futureUser = fetchUser(emailController.text, senhaController.text);
-
-    futureUser.then((user) {
-      localStorage.setString('userToken', user.token);
-      localStorage.setString('userType', user.type);
-      _handleRedirect();
-    });
-  }
-
-  void _handleRedirect() {
+    await signInRequest(emailController.text.trim(), senhaController.text.trim());
     Navigator.pushNamed(context, widget.goTo);
   }
 
@@ -109,7 +106,7 @@ class _Logar extends State<Logar> {
                           label: "Insira seu e-mail: ", 
                           controller: emailController, 
                         ),
-                        CustomTextField(icon: Icons.lock,label: "Insira sua senha: ", controller: senhaController),
+                        CustomTextField(icon: Icons.lock,label: "Insira sua senha: ", controller: senhaController, isPassword: true),
                         Padding(
                           padding: const EdgeInsets.only(top: 30, bottom: 30),
                           child: CustomButton(

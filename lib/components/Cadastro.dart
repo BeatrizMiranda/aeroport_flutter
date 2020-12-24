@@ -3,7 +3,27 @@ import 'package:airport/components/TextField.dart';
 import 'package:airport/components/button.dart';
 import 'package:airport/globals/pallets.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
+import 'package:shared_preferences/shared_preferences.dart';
+
+
+class NewUser {
+  const NewUser({ this.name, this.email, this.id });
+
+  final int id;
+  final String name;
+  final String email;
+
+  factory NewUser.fromJson(Map<String, dynamic> json) {
+    return NewUser(
+      name: json['name'],
+      email: json['email'],
+      id: json['id'],
+    );
+  }
+}
 
 
 class Cadastro extends StatefulWidget {
@@ -14,12 +34,35 @@ class Cadastro extends StatefulWidget {
   _Cadastro createState() => _Cadastro();
 }
 
+Future<NewUser> logInRequest(String email, String password, String name, String cpf) async {
+  final String logInUrl = "http://192.168.0.105:5000/user";
+
+  var response = await http.post(
+      logInUrl, 
+      body: { 
+        "name": name, 
+        "email": email,
+        "cpf": cpf,
+        "password": password
+      }
+    );
+
+  print({"email": email, "password": password});
+
+  if (response.statusCode == 200) {
+    return NewUser.fromJson(jsonDecode(response.body));
+  } else {
+    throw Exception('Failed to load user ${response.body}');
+  }
+}
+
 class _Cadastro extends State<Cadastro> {
 
-  TextEditingController cpfController = TextEditingController();
-  TextEditingController nameController = TextEditingController();
+  Future<NewUser> futureUser;
   TextEditingController emailController = TextEditingController(); 
   TextEditingController senhaController = TextEditingController();
+  TextEditingController nameController = TextEditingController();
+  TextEditingController cpfController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -28,6 +71,21 @@ class _Cadastro extends State<Cadastro> {
       backgroundColor: Palette.background,
     );
   }
+
+
+  void _handleLogIn() async {
+    await logInRequest(
+      emailController.text.trim(),
+      senhaController.text.trim(),
+      nameController.text.trim(),
+      cpfController.text.trim()
+    );
+
+    await signInRequest(emailController.text.trim(), senhaController.text.trim());
+
+    Navigator.pushNamed(context, widget.goTo);
+  }
+
 
   Widget _body() { 
    return Center(
@@ -56,13 +114,13 @@ class _Cadastro extends State<Cadastro> {
                         CustomTextField(icon: Icons.account_circle, label: "Nome: ", controller: nameController),
                         CustomTextField(icon: Icons.fingerprint, label: "CPF: ", controller: cpfController),
                         CustomTextField(icon: Icons.alternate_email,label: "Email: ", controller: emailController),
-                        CustomTextField(icon: Icons.lock,label: "Senha: ", controller: senhaController),
+                        CustomTextField(icon: Icons.lock,label: "Senha: ", controller: senhaController, isPassword: true),
                         Padding(
                           padding: const EdgeInsets.only(top: 30, bottom: 30),
                           child: CustomButton(
                             height: 60, 
                             text: "Entre", 
-                            onClick: () => Navigator.pushNamed(context, widget.goTo) 
+                            onClick: _handleLogIn
                           ),
                         ),
                          GestureDetector(

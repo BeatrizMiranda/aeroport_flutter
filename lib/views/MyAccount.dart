@@ -3,6 +3,7 @@ import 'package:airport/components/footer.dart';
 import 'package:airport/globals/pallets.dart';
 import 'package:airport/views/home.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class UserInfo {
   const UserInfo({
@@ -41,6 +42,15 @@ class _MyAccountState extends State<MyAccount> {
     nameController = TextEditingController(text: userData.name);
     emailController = TextEditingController(text: userData.email);
     cpfController = TextEditingController(text: userData.cpf);
+  }
+
+  void _handleLogOut() async {
+    SharedPreferences localStorage = await SharedPreferences.getInstance();
+
+    localStorage.remove('userToken');
+    localStorage.remove('userType');
+
+    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Home()));
   }
 
   bool _isEditing = false;
@@ -90,8 +100,8 @@ class _MyAccountState extends State<MyAccount> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Center(
-                    child: Padding(
-                  padding: const EdgeInsets.only(bottom: 20),
+                  child: Padding(
+                  padding: const EdgeInsets.only(bottom: 30),
                   child: Text("Meus Dados",
                       style: TextStyle(
                           fontSize: 27,
@@ -101,7 +111,16 @@ class _MyAccountState extends State<MyAccount> {
                 Column(children: [
                   _isEditing ? _renderForm(userData) : _renderUserData()
                 ]),
-                _isEditing ? _sendFormBtn() : _editAndDeleteBtn()
+                _isEditing ? _sendFormBtn() : _editAndDeleteBtn(),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 5, top: 20),
+                  child: GestureDetector(
+                    onTap: _handleLogOut,
+                    child: Text(
+                      "Deslogar", 
+                      style: TextStyle(fontSize: 20, color: Palette.darkOrange, decoration: TextDecoration.underline))
+                  ),
+                ),
               ],
             ),
           ),
@@ -161,17 +180,17 @@ class _MyAccountState extends State<MyAccount> {
           buildTextField("Nome: ", nameController, _nameChange),
           buildTextField("Email: ", emailController, _nameChange),
           buildTextField("CPF: ", cpfController, _nameChange),
-          buildTextField("Senha: ", senhaController, _nameChange),
+          buildTextField("Senha: ", senhaController, _nameChange, isPassword: true),
         ],
       ),
     );
   }
 
-  Widget buildTextField(
-      String label, TextEditingController controller, Function handleChange) {
+  Widget buildTextField(String label, TextEditingController controller, Function handleChange, { bool isPassword = false }) {
     return Padding(
       padding: const EdgeInsets.only(top: 10, bottom: 8),
       child: TextField(
+        obscureText: isPassword,
         controller: controller,
         decoration: InputDecoration(
           labelText: label,

@@ -5,8 +5,6 @@ import 'package:airport/views/home.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:airport/globals/globals.dart' as globals;
-import 'dart:convert';
-
 
 class FooterIcon {
   const FooterIcon({this.name, this.icon, this.goToComponent});

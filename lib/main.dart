@@ -1,24 +1,25 @@
-import 'package:airport/components/Logar.dart';
-import 'package:airport/globals/pallets.dart';
 import 'package:airport/views/FlightOfDestination.dart';
-import 'package:airport/views/MyAccount.dart';
-import 'package:airport/views/MyTrips.dart';
+import 'package:airport/globals/globals.dart' as globals;
+import 'package:airport/views/admin/HomeAdmin.dart';
 import 'package:airport/views/admin/ListFlight.dart';
 import 'package:airport/views/admin/NewAirline.dart';
 import 'package:airport/views/admin/NewFlight.dart';
 import 'package:airport/views/admin/NewUser.dart';
-import 'package:airport/views/home.dart';
 import 'package:airport/views/initialScreen.dart';
-import 'package:airport/views/searchPage.dart';
 import 'package:airport/views/searchResult.dart';
+import 'package:airport/views/searchPage.dart';
+import 'package:airport/components/Logar.dart';
+import 'package:airport/globals/pallets.dart';
+import 'package:airport/views/MyAccount.dart';
+import 'package:airport/views/MyTrips.dart';
+import 'package:airport/views/home.dart';
 import 'package:flutter/material.dart';
-import 'package:airport/globals/globals.dart' as globals;
 
 import 'package:syncfusion_localizations/syncfusion_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
 void main() {
-  bool isLoged = globals.isLoged;
+  bool isAdmin = globals.isAdmin;
 
   runApp(MaterialApp(
     title: 'Time To Travel',
@@ -37,7 +38,7 @@ void main() {
     locale: Locale('pt', 'BR'),
     initialRoute: '/',
     routes: {
-      '/': (context) => isLoged ? Home() : InitialScreen(),
+      '/': (context) => isAdmin ? HomeAdmin() : InitialScreen(),
       '/home': (context) => Home(),
       '/search': (context) => SearchPage(),
       '/search-result': (context) => SearchResult(),
