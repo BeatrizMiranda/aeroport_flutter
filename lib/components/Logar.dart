@@ -1,4 +1,5 @@
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:airport/globals/globals.dart' as globals;
 import 'package:airport/components/Cadastro.dart';
 import 'package:airport/components/TextField.dart';
 import 'package:airport/components/button.dart';
@@ -35,7 +36,7 @@ class Logar extends StatefulWidget {
 }
 
 Future<User> signInUser(String email, String password) async {
-  final String signInUrl = "http://192.168.0.105:5000/signIn";
+  final String signInUrl = "http://192.168.1.100:5000/signIn";
 
   var response = await http.post(
       signInUrl, 
@@ -55,6 +56,9 @@ Future<bool> signInRequest(String email, String password) async {
 
   localStorage.setString('userToken', user.token);
   localStorage.setString('userType', user.type);
+
+
+  globals.token = user.token;
 
   return true;
 }

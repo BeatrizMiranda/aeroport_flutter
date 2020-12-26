@@ -86,7 +86,6 @@ class _DatePicker extends State<DatePicker> {
   }
 
   Widget calendar() {
-    print(widget.initialDate);
     return SfDateRangePicker(
       controller: _chosedData,
       enablePastDates : false,

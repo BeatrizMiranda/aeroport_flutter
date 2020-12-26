@@ -1,9 +1,12 @@
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:airport/globals/globals.dart' as globals;
 import 'package:airport/components/button.dart';
 import 'package:airport/components/footer.dart';
 import 'package:airport/globals/pallets.dart';
 import 'package:airport/views/home.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class UserInfo {
   const UserInfo({
@@ -17,10 +20,70 @@ class UserInfo {
   final String name;
   final String email;
   final String cpf;
+
+  factory UserInfo.fromJson(Map<String, dynamic> json) {
+    return UserInfo(
+      id: json['id'],
+      name: json['name'],
+      email: json['email'],
+      cpf: json['cpf'],
+    );
+  }
 }
 
-const UserInfo userData = UserInfo(
-    id: 1, name: "João Carlos", email: "teste@teste.com", cpf: "12333212");
+Future<UserInfo> userRequest(String token) async {
+  var response = await http.get(globals.userApi, 
+    headers: <String, String> {
+      'Authorization': 'bearer $token',
+    }
+  );
+
+  if (response.statusCode == 200) {
+    return UserInfo.fromJson(jsonDecode(response.body));
+  } else {
+    throw Exception('Failed to load user ${response.body}');
+  }
+}
+
+Future<UserInfo> userDelete(String token) async {
+  var response = await http.delete(globals.userApi, 
+    headers: <String, String>{
+      'Authorization': 'bearer $token',
+    }
+  );
+
+  if (response.statusCode == 200) {
+    return UserInfo.fromJson(jsonDecode(response.body));
+  } else {
+    throw Exception('Failed to load user ${response.body}');
+  }
+}
+
+Future<UserInfo> updateUserRequest(String name, String email, String cpf, String password, String token) async {
+  Map<String, String> pwd = password.isNotEmpty ? { "password": password } : {};
+  
+  Map<String, String> body = {
+      "name": name, 
+      "email": email,
+      "cpf": cpf,
+      ...pwd
+    };
+
+  var response = await http.put(globals.userApi, 
+    headers: <String, String>{
+      'Authorization': 'bearer $token',
+    },
+    body: body
+  );
+
+
+  if (response.statusCode == 200) {
+    return UserInfo.fromJson(jsonDecode(response.body));
+  } else {
+    throw Exception('Failed to load user ${response.body}');
+  }
+}
+
 
 class MyAccount extends StatefulWidget {
   MyAccount({Key key}) : super(key: key);
@@ -30,25 +93,49 @@ class MyAccount extends StatefulWidget {
 }
 
 class _MyAccountState extends State<MyAccount> {
+  UserInfo userInfo = UserInfo();
   TextEditingController nameController;
   TextEditingController emailController;
   TextEditingController cpfController;
-
-  final senhaController = TextEditingController();
+  TextEditingController senhaController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    nameController = TextEditingController(text: userData.name);
-    emailController = TextEditingController(text: userData.email);
-    cpfController = TextEditingController(text: userData.cpf);
+    _getUserData();
   }
 
-  void _handleLogOut() async {
+  Future<String> getToken() async {
+    SharedPreferences localStorage = await SharedPreferences.getInstance();
+    String token = localStorage.getString('userToken');
+    globals.token = token;
+    return token;
+  }
+
+  void _getUserData() async {
+    String token = await getToken(); 
+    UserInfo user = await userRequest(token);
+    setUserData(user);
+  }
+
+  void setUserData(UserInfo user) {
+    setState(() {
+      userInfo = user;
+      nameController = TextEditingController(text: user.name);
+      emailController = TextEditingController(text: user.email);
+      cpfController = TextEditingController(text: user.cpf);
+    });
+  }
+
+  void handleLogOut() async {
     SharedPreferences localStorage = await SharedPreferences.getInstance();
 
     localStorage.remove('userToken');
     localStorage.remove('userType');
+
+    globals.isLoged = false;
+    globals.isAdmin = false;
+    globals.token = '';
 
     Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Home()));
   }
@@ -61,19 +148,30 @@ class _MyAccountState extends State<MyAccount> {
     });
   }
 
-  void _sendForm() {
+  void _sendForm() async {
+    String token = await getToken();
+
+    UserInfo user = await updateUserRequest(
+      nameController.text,
+      emailController.text,
+      cpfController.text,
+      senhaController.text,
+      token
+    );
+
+    setUserData(user);
     setState(() {
       _isEditing = false;
     });
   }
 
-  void _nameChange(String text) {
-    if (text.isEmpty) return _throwError();
-    // nameController.text = text;
-  }
+  void _handleDeleteUser() async {
+    await userDelete(globals.token);
+    handleLogOut();
 
-  void _throwError() {
-    print('empty input');
+    Navigator.pushReplacement(
+      context, MaterialPageRoute(builder: (context) => Home())
+    );
   }
 
   @override
@@ -109,18 +207,10 @@ class _MyAccountState extends State<MyAccount> {
                           color: Palette.lightBlack)),
                 )),
                 Column(children: [
-                  _isEditing ? _renderForm(userData) : _renderUserData()
+                  _isEditing ? _renderForm(userInfo) : _renderUserData()
                 ]),
                 _isEditing ? _sendFormBtn() : _editAndDeleteBtn(),
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 5, top: 20),
-                  child: GestureDetector(
-                    onTap: _handleLogOut,
-                    child: Text(
-                      "Deslogar", 
-                      style: TextStyle(fontSize: 20, color: Palette.darkOrange, decoration: TextDecoration.underline))
-                  ),
-                ),
+               
               ],
             ),
           ),
@@ -130,17 +220,30 @@ class _MyAccountState extends State<MyAccount> {
   }
 
   Widget _editAndDeleteBtn() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return Column(
       children: [
-        IconButton(
-            onPressed: () {
-              showAlertDialog(context);
-            },
-            icon: Icon(Icons.delete, size: 30, color: Palette.darkRed)),
-        IconButton(
-            onPressed: _changeToForm,
-            icon: Icon(Icons.edit, size: 30, color: Palette.lightBlack)),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            IconButton(
+                onPressed: () {
+                  showAlertDialog(context);
+                },
+                icon: Icon(Icons.delete, size: 30, color: Palette.darkRed)),
+            IconButton(
+                onPressed: _changeToForm,
+                icon: Icon(Icons.edit, size: 30, color: Palette.lightBlack)),
+          ],
+        ),
+        Padding(
+          padding: const EdgeInsets.only(bottom: 5, top: 20),
+          child: GestureDetector(
+            onTap: handleLogOut,
+            child: Text(
+              "Deslogar", 
+              style: TextStyle(fontSize: 20, color: Palette.darkOrange, decoration: TextDecoration.underline))
+          ),
+        ),
       ],
     );
   }
@@ -151,9 +254,9 @@ class _MyAccountState extends State<MyAccount> {
           padding: const EdgeInsets.only(bottom: 30, left: 20),
           child: Column(
             children: [
-              renderInfo('Nome', userData.name, 23.0, Palette.lightBlack),
-              renderInfo("Email", userData.email, 23.0, Palette.lightBlack),
-              renderInfo("CPF", userData.cpf, 23.0, Palette.lightBlack),
+              renderInfo('Nome', userInfo.name, 23.0, Palette.lightBlack),
+              renderInfo("Email", userInfo.email, 23.0, Palette.lightBlack),
+              renderInfo("CPF", userInfo.cpf, 23.0, Palette.lightBlack),
               renderInfo("Senha", "***********", 23.0, Palette.lightBlack),
             ],
           )),
@@ -177,16 +280,16 @@ class _MyAccountState extends State<MyAccount> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
-          buildTextField("Nome: ", nameController, _nameChange),
-          buildTextField("Email: ", emailController, _nameChange),
-          buildTextField("CPF: ", cpfController, _nameChange),
-          buildTextField("Senha: ", senhaController, _nameChange, isPassword: true),
+          buildTextField("Nome: ", nameController),
+          buildTextField("Email: ", emailController),
+          buildTextField("CPF: ", cpfController),
+          buildTextField("Senha: ", senhaController, isPassword: true),
         ],
       ),
     );
   }
 
-  Widget buildTextField(String label, TextEditingController controller, Function handleChange, { bool isPassword = false }) {
+  Widget buildTextField(String label, TextEditingController controller, { bool isPassword = false }) {
     return Padding(
       padding: const EdgeInsets.only(top: 10, bottom: 8),
       child: TextField(
@@ -200,7 +303,6 @@ class _MyAccountState extends State<MyAccount> {
           ),
         ),
         style: TextStyle(fontSize: 22),
-        onChanged: handleChange,
       ),
     );
   }
@@ -208,18 +310,13 @@ class _MyAccountState extends State<MyAccount> {
   showAlertDialog(BuildContext context) {
     Widget handleCancel = FlatButton(
       child: Text("Cancelar", style: TextStyle(fontSize: 20)),
-      onPressed: () {
-        Navigator.of(context).pop();
-      },
+      onPressed: () { Navigator.of(context).pop(); },
     );
 
     Widget handleGoOn = FlatButton(
       child: Text("Excluir",
           style: TextStyle(fontSize: 20, color: Palette.darkRed)),
-      onPressed: () {
-        Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (context) => Home()));
-      },
+      onPressed: _handleDeleteUser,
     );
 
     AlertDialog alert = AlertDialog(

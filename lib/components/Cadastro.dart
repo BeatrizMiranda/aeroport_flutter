@@ -1,13 +1,11 @@
-import 'package:airport/components/Logar.dart';
+import 'package:airport/globals/globals.dart' as globals;
 import 'package:airport/components/TextField.dart';
 import 'package:airport/components/button.dart';
+import 'package:airport/components/Logar.dart';
 import 'package:airport/globals/pallets.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-
-import 'package:shared_preferences/shared_preferences.dart';
-
 
 class NewUser {
   const NewUser({ this.name, this.email, this.id });
@@ -25,7 +23,6 @@ class NewUser {
   }
 }
 
-
 class Cadastro extends StatefulWidget {
   Cadastro({Key key, this.goTo }) : super(key: key);
 
@@ -35,10 +32,8 @@ class Cadastro extends StatefulWidget {
 }
 
 Future<NewUser> logInRequest(String email, String password, String name, String cpf) async {
-  final String logInUrl = "http://192.168.0.105:5000/user";
-
   var response = await http.post(
-      logInUrl, 
+      globals.userApi, 
       body: { 
         "name": name, 
         "email": email,
@@ -46,8 +41,6 @@ Future<NewUser> logInRequest(String email, String password, String name, String 
         "password": password
       }
     );
-
-  print({"email": email, "password": password});
 
   if (response.statusCode == 200) {
     return NewUser.fromJson(jsonDecode(response.body));

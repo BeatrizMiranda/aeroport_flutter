@@ -1,9 +1,9 @@
-import 'package:airport/views/FlightOfDestination.dart';
 import 'package:airport/globals/globals.dart' as globals;
-import 'package:airport/views/admin/HomeAdmin.dart';
+import 'package:airport/views/FlightOfDestination.dart';
 import 'package:airport/views/admin/ListFlight.dart';
 import 'package:airport/views/admin/NewAirline.dart';
 import 'package:airport/views/admin/NewFlight.dart';
+import 'package:airport/views/admin/HomeAdmin.dart';
 import 'package:airport/views/admin/NewUser.dart';
 import 'package:airport/views/initialScreen.dart';
 import 'package:airport/views/searchResult.dart';
