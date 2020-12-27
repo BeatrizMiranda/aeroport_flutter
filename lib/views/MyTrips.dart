@@ -188,7 +188,7 @@ class _MyTripsState extends State<MyTrips> {
   Widget _listOfTrips() {
     return Expanded(
         child: SizedBox(
-          height: 700,
+          height: 630,
           child: ListView.builder(
             scrollDirection: Axis.vertical,
             itemCount: userFlights.length,
