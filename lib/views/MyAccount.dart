@@ -93,6 +93,8 @@ class MyAccount extends StatefulWidget {
 }
 
 class _MyAccountState extends State<MyAccount> {
+  
+  bool _isEditing = false;
   UserInfo userInfo = UserInfo();
   TextEditingController nameController;
   TextEditingController emailController;
@@ -140,7 +142,12 @@ class _MyAccountState extends State<MyAccount> {
     Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Home()));
   }
 
-  bool _isEditing = false;
+
+  void _changeToUserData() {
+    setState(() {
+      _isEditing = false;
+    });
+  }
 
   void _changeToForm() {
     setState(() {
@@ -160,9 +167,7 @@ class _MyAccountState extends State<MyAccount> {
     );
 
     setUserData(user);
-    setState(() {
-      _isEditing = false;
-    });
+    _changeToUserData();
   }
 
   void _handleDeleteUser() async {
@@ -248,6 +253,8 @@ class _MyAccountState extends State<MyAccount> {
     );
   }
 
+
+
   Widget _renderUserData() {
     return Column(children: [
       Padding(
@@ -262,15 +269,22 @@ class _MyAccountState extends State<MyAccount> {
           )),
     ]);
   }
-
   Widget _sendFormBtn() {
-    return Padding(
-      padding: const EdgeInsets.only(top: 10, bottom: 20),
-      child: CustomButton(
-        text: "Enviar",
-        onClick: _sendForm,
-        height: 50,
-      ),
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(top: 10, bottom: 20),
+          child: CustomButton(
+            text: "Enviar",
+            onClick: _sendForm,
+            height: 50,
+          ),
+        ),
+        FlatButton(
+          child: Text("Cancelar", style: TextStyle(fontSize: 20)),
+          onPressed: _changeToUserData,
+        )
+      ],
     );
   }
 

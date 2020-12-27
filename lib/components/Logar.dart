@@ -36,10 +36,8 @@ class Logar extends StatefulWidget {
 }
 
 Future<User> signInUser(String email, String password) async {
-  final String signInUrl = "http://192.168.1.100:5000/signIn";
-
   var response = await http.post(
-      signInUrl, 
+      globals.signInApi, 
       body: { "email": email, "password": password }
     );
 
@@ -57,7 +55,9 @@ Future<bool> signInRequest(String email, String password) async {
   localStorage.setString('userToken', user.token);
   localStorage.setString('userType', user.type);
 
+  String userType = localStorage.getString('userType');  
 
+  globals.isAdmin = userType == 'admin';
   globals.token = user.token;
 
   return true;

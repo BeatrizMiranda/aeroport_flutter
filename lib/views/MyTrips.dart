@@ -66,6 +66,54 @@ const List<FlightInfo> userFlights = const <FlightInfo>[
       airline_id: 1,
       status: "ativo",
       image:
+          "https://cdn.pixabay.com/photo/2017/01/08/19/30/rio-de-janeiro-1963744_1280.jpg"),
+  FlightInfo(
+      shipment: "São Paulo",
+      destination: "Rio de Janeiro",
+      ticket_price: 150.00,
+      ship_date: "2020-07-02T03:00:00.000Z",
+      ship_time: "18:00:00",
+      estimated_time: "03:00:00",
+      limit: 46,
+      airline_id: 1,
+      status: "ativo",
+      image:
+          "https://cdn.pixabay.com/photo/2017/01/08/19/30/rio-de-janeiro-1963744_1280.jpg"),
+  FlightInfo(
+      shipment: "São Paulo",
+      destination: "Rio de Janeiro",
+      ticket_price: 150.00,
+      ship_date: "2020-07-02T03:00:00.000Z",
+      ship_time: "18:00:00",
+      estimated_time: "03:00:00",
+      limit: 46,
+      airline_id: 1,
+      status: "ativo",
+      image:
+          "https://cdn.pixabay.com/photo/2017/01/08/19/30/rio-de-janeiro-1963744_1280.jpg"),
+  FlightInfo(
+      shipment: "São Paulo",
+      destination: "Rio de Janeiro",
+      ticket_price: 150.00,
+      ship_date: "2020-07-02T03:00:00.000Z",
+      ship_time: "18:00:00",
+      estimated_time: "03:00:00",
+      limit: 46,
+      airline_id: 1,
+      status: "ativo",
+      image:
+          "https://cdn.pixabay.com/photo/2017/01/08/19/30/rio-de-janeiro-1963744_1280.jpg"),
+  FlightInfo(
+      shipment: "São Paulo",
+      destination: "Rio de Janeiro",
+      ticket_price: 150.00,
+      ship_date: "2020-07-02T03:00:00.000Z",
+      ship_time: "18:00:00",
+      estimated_time: "03:00:00",
+      limit: 46,
+      airline_id: 1,
+      status: "ativo",
+      image:
           "https://cdn.pixabay.com/photo/2017/01/08/19/30/rio-de-janeiro-1963744_1280.jpg")
 ];
 
@@ -138,17 +186,22 @@ class _MyTripsState extends State<MyTrips> {
   }
 
   Widget _listOfTrips() {
-    return Container(
-      padding: const EdgeInsets.fromLTRB(0, 60, 0, 0),
-      child: Column(
-        children: List.generate(userFlights.length, (index) {
-          return TripCard(
-              userFlight: userFlights[index],
-              isAdmin: globals.isAdmin,
-              handleClick: () {});
-        }),
-      ),
-    );
+    return Expanded(
+        child: SizedBox(
+          height: 700,
+          child: ListView.builder(
+            scrollDirection: Axis.vertical,
+            itemCount: userFlights.length,
+            itemBuilder: (BuildContext ctxt, int index) {
+              return TripCard(
+                userFlight: userFlights[index],
+                isAdmin: globals.isAdmin,
+                handleClick: () {}
+              );
+            },
+          ),
+        ),
+      );
   }
 }
 

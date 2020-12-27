@@ -67,6 +67,8 @@ class _Footer extends State<Footer> {
     globals.isLoged = hasToken;
     globals.isAdmin = type == "admin";
 
+    print(type);
+
     return hasToken;
   }  
 
@@ -103,6 +105,7 @@ class FooterFloatingBtn extends StatefulWidget {
 
 class _FooterFloatingBtn extends State<FooterFloatingBtn> {
   bool isAdmin = globals.isAdmin;
+
 
   @override
   Widget build(BuildContext context) {
