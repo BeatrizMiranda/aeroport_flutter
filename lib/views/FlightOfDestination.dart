@@ -1,15 +1,12 @@
+import 'package:airport/components/BuyTicket.dart';
 import 'package:airport/globals/globals.dart' as globals;
 import 'package:airport/components/Cadastro.dart';
 import 'package:airport/components/footer.dart';
 import 'package:airport/components/tripCard.dart';
 import 'package:airport/globals/pallets.dart';
-import 'package:airport/views/MyAccount.dart';
 import 'package:airport/views/MyTrips.dart';
 import 'package:airport/views/home.dart';
-import 'package:airport/views/searchPage.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-
 
 class FlightOfDestination extends StatefulWidget {
   FlightOfDestination({Key key, this.flightSuggestion}) : super(key: key);
@@ -137,138 +134,17 @@ class _FlightOfDestinationState extends State<FlightOfDestination> {
         children: List.generate(userFlights.length, (index) {
           return TripCard(
               userFlight: userFlights[index],
-              handleClick: () {
-                showAlertDialog(context, userFlights[index]);
+              handleClick: 
+                () async {
+                await Navigator.push(context, 
+                  MaterialPageRoute(builder: (context) => 
+                    BuyTicket(userFlight: userFlights[index])
+                  )
+                );
               },
               isAdmin: globals.isAdmin);
         }),
       ),
     );
-  }
-
-  showAlertDialog(BuildContext context, FlightInfo userFlight) {
-    String shipDateFormated =
-        DateFormat('dd/MM/y').format(DateTime.parse(userFlight.ship_date));
-
-    int qtdAdults = 1;
-    int qtdChilds = 0;
-    double valorTotal = userFlight.ticket_price;
-    double desconto = 0;
-    double total = valorTotal - desconto;
-
-    void setPassangers(adults, child) {
-      setState(() {
-        qtdAdults = adults;
-        qtdChilds = child;
-
-        print(userFlight.ticket_price * (qtdAdults + qtdChilds));
-
-        valorTotal = userFlight.ticket_price * (qtdAdults + qtdChilds);
-        desconto = (userFlight.ticket_price * 0.3) * qtdChilds;
-        total = valorTotal - desconto;
-      });
-    }
-
-    return showModalBottomSheet(
-        context: context,
-        isScrollControlled: true,
-        builder: (BuildContext bc) {
-          return Container(
-            padding: EdgeInsets.fromLTRB(20, 20, 20, 20),
-            child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Column(children: [
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.pop(context);
-                      },
-                      child: Container(
-                          padding: EdgeInsets.only(right: 10),
-                          alignment: Alignment.centerRight,
-                          child: Icon(Icons.close, size: 35)),
-                    ),
-                    Center(
-                      child: Text("Comprar Passagem",
-                          style: TextStyle(
-                              fontSize: 27,
-                              fontWeight: FontWeight.bold,
-                              color: Palette.lightBlack)),
-                    ),
-                  ]),
-                  Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 20),
-                        child: passangersPicker(
-                            context, qtdAdults, qtdChilds, setPassangers),
-                      ),
-                      renderInfo('Embarque no dia', shipDateFormated, 22.0,
-                          Palette.lightBlue),
-                      renderInfo('Valor unitário', userFlight.ticket_price,
-                          22.0, Palette.lightBlue),
-                      renderInfo('Valor total de Passagens', valorTotal, 22.0,
-                          Palette.lightBlue),
-                      (desconto != 0.0)
-                          ? Column(
-                              children: [
-                                renderInfo('Desconto', desconto, 22.0,
-                                    Palette.lightBlue),
-                                Divider(
-                                  thickness: 2,
-                                )
-                              ],
-                            )
-                          : Divider(
-                              thickness: 2,
-                            ),
-                      renderInfo('Total', total, 22.0, Palette.lightBlue),
-                    ],
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 20),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        RaisedButton(
-                          onPressed: () => handleBuy(userFlight),
-                          color: Colors.white,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(15)),
-                          padding: EdgeInsets.all(0),
-                          child: Container(
-                            alignment: Alignment.center,
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.only(
-                                  topRight: Radius.circular(10),
-                                  topLeft: Radius.circular(10)),
-                              child: Image.asset('src/img/mercadopago.png',
-                                  fit: BoxFit.contain, width: 160),
-                            ),
-                          ),
-                        ),
-                        RaisedButton(
-                          onPressed: () => handleBuy(userFlight),
-                          color: Colors.white,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(15)),
-                          padding: EdgeInsets.all(0),
-                          child: Container(
-                            alignment: Alignment.center,
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.only(
-                                  topRight: Radius.circular(10),
-                                  topLeft: Radius.circular(10)),
-                              child: Image.asset('src/img/picpay.png',
-                                  fit: BoxFit.contain, width: 160),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  )
-                ]),
-          );
-        });
   }
 }

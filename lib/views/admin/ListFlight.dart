@@ -28,6 +28,20 @@ class _ListFlightState extends State<ListFlight> {
     );
   }
 
+  FlightInfo userFlight = FlightInfo(
+    destination: "Rio de Janeiro",
+    ticket_price: 150.00,
+    shipment: "São Paulo",
+    ship_date: "2020-07-02T03:00:00.000Z",
+    ship_time: "18:00:00",
+    estimated_time: "03:00:00",
+    limit: 46,
+    airline_id: 1,
+    status: "ativo",
+    image:
+        "https://cdn.pixabay.com/photo/2017/01/08/19/30/rio-de-janeiro-1963744_1280.jpg"
+  );
+
   Widget _body() {
     return SingleChildScrollView(
       child: Container(
@@ -74,20 +88,10 @@ class _ListFlightState extends State<ListFlight> {
                 ),
               ),
               TripCard(
-                  userFlight: FlightInfo(
-                      destination: "Rio de Janeiro",
-                      ticket_price: 150.00,
-                      shipment: "São Paulo",
-                      ship_date: "2020-07-02T03:00:00.000Z",
-                      ship_time: "18:00:00",
-                      estimated_time: "03:00:00",
-                      limit: 46,
-                      airline_id: 1,
-                      status: "ativo",
-                      image:
-                          "https://cdn.pixabay.com/photo/2017/01/08/19/30/rio-de-janeiro-1963744_1280.jpg"),
+                  userFlight: userFlight,
                   isAdmin: globals.isAdmin,
-                  handleClick: () {})
+                  handleClick: ()  {}
+                )
             ]),
           ],
         ),

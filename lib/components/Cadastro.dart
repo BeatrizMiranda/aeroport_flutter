@@ -1,3 +1,4 @@
+import 'package:airport/components/footer.dart';
 import 'package:airport/globals/globals.dart' as globals;
 import 'package:airport/components/TextField.dart';
 import 'package:airport/components/button.dart';
@@ -62,6 +63,9 @@ class _Cadastro extends State<Cadastro> {
     return Scaffold(
       body: _body(),
       backgroundColor: Palette.background,
+      bottomNavigationBar: Footer(),
+      floatingActionButton: FooterFloatingBtn(),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
 

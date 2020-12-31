@@ -1,3 +1,4 @@
+import 'package:airport/components/footer.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:airport/globals/globals.dart' as globals;
 import 'package:airport/components/Cadastro.dart';
@@ -78,6 +79,9 @@ class _Logar extends State<Logar> {
     return Scaffold(
       body: _body(),
       backgroundColor: Palette.background,
+      bottomNavigationBar: Footer(),
+      floatingActionButton: FooterFloatingBtn(),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
 

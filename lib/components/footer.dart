@@ -67,8 +67,6 @@ class _Footer extends State<Footer> {
     globals.isLoged = hasToken;
     globals.isAdmin = type == "admin";
 
-    print(type);
-
     return hasToken;
   }  
 

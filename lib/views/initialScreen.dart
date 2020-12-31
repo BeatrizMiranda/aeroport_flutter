@@ -20,6 +20,12 @@ class _InitialScreenState extends State<InitialScreen> {
     );
   }
 
+  void handleContinue() {
+    Navigator.pushReplacement(context, 
+      MaterialPageRoute(builder: (context) => SearchPage()
+    ));
+  }
+
   Widget _body() {
     return 
       Stack(
@@ -63,7 +69,7 @@ class _InitialScreenState extends State<InitialScreen> {
                   margin: EdgeInsets.only(top: 50),
                   child: CustomButton(
                     text : "Agende sua viagem!",
-                    onClick: () => Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => SearchPage())),
+                    onClick: handleContinue,
                     height: 70,
                   )
                 ),

@@ -1,3 +1,4 @@
+import 'package:airport/views/admin/NewUser.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:airport/globals/globals.dart' as globals;
 import 'package:airport/components/button.dart';
@@ -59,7 +60,7 @@ Future<UserInfo> userDelete(String token) async {
   }
 }
 
-Future<UserInfo> updateUserRequest(String name, String email, String cpf, String password, String token) async {
+Future<UserInfo> updateUserRequest(BuildContext context, String name, String email, String cpf, String password, String token) async {
   Map<String, String> pwd = password.isNotEmpty ? { "password": password } : {};
   
   Map<String, String> body = {
@@ -80,6 +81,8 @@ Future<UserInfo> updateUserRequest(String name, String email, String cpf, String
   if (response.statusCode == 200) {
     return UserInfo.fromJson(jsonDecode(response.body));
   } else {
+    
+    showFailMessage(context, 'Não foi possivel atualizar o usuario, ${response.body}');
     throw Exception('Failed to load user ${response.body}');
   }
 }
@@ -159,6 +162,7 @@ class _MyAccountState extends State<MyAccount> {
     String token = await getToken();
 
     UserInfo user = await updateUserRequest(
+      context,
       nameController.text,
       emailController.text,
       cpfController.text,

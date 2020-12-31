@@ -68,7 +68,7 @@ class _HomeAdminState extends State<HomeAdmin> {
                 ),
                 CustomButton(text: "Cadastre um usuário", height: 70, 
                   onClick: () => Navigator.pushReplacement(  
-                    context, MaterialPageRoute(builder: (context) => NewUser())
+                    context, MaterialPageRoute(builder: (context) => NewUserForm())
                   )
                 ),
               ],

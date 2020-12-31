@@ -1,9 +1,7 @@
-import 'package:airport/globals/globals.dart' as globals;
 import 'package:airport/views/FlightOfDestination.dart';
 import 'package:airport/views/admin/ListFlight.dart';
 import 'package:airport/views/admin/NewAirline.dart';
 import 'package:airport/views/admin/NewFlight.dart';
-import 'package:airport/views/admin/HomeAdmin.dart';
 import 'package:airport/views/admin/NewUser.dart';
 import 'package:airport/views/initialScreen.dart';
 import 'package:airport/views/searchResult.dart';
@@ -19,8 +17,6 @@ import 'package:syncfusion_localizations/syncfusion_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
 void main() {
-  bool isAdmin = globals.isAdmin;
-
   runApp(MaterialApp(
     title: 'Time To Travel',
     theme: ThemeData(
@@ -38,14 +34,14 @@ void main() {
     locale: Locale('pt', 'BR'),
     initialRoute: '/',
     routes: {
-      '/': (context) => isAdmin ? HomeAdmin() : InitialScreen(),
+      '/': (context) => InitialScreen(),
       '/home': (context) => Home(),
       '/search': (context) => SearchPage(),
       '/search-result': (context) => SearchResult(),
       '/viagens': (context) => MyTrips(),
       '/account': (context) => MyAccount(),
       '/flight-destination': (context) => FlightOfDestination(),
-      '/new-user': (context) => NewUser(),
+      '/new-user': (context) => NewUserForm(),
       '/new-airline': (context) => NewAirline(),
       '/new-flight': (context) => NewFlight(),
       '/list-flight': (context) => ListFlight(),
