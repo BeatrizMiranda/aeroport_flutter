@@ -1,3 +1,4 @@
+import 'package:airport/components/Cadastro.dart';
 import 'package:airport/components/TextField.dart';
 import 'package:airport/components/button.dart';
 import 'package:airport/components/footer.dart';
@@ -5,27 +6,80 @@ import 'package:airport/globals/pallets.dart';
 import 'package:airport/views/home.dart';
 import 'package:flutter/material.dart';
 
-class NewUser extends StatefulWidget {
-  NewUser({Key key}) : super(key: key);
+import 'package:airport/globals/globals.dart' as globals;
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+
+import 'package:shared_preferences/shared_preferences.dart';
+
+class NewUserForm extends StatefulWidget {
+  NewUserForm({Key key}) : super(key: key);
 
   @override
-  _NewUserState createState() => _NewUserState();
+  _NewUserFormState createState() => _NewUserFormState();
 }
-class _NewUserState extends State<NewUser> {
 
-  TextEditingController cpfController;
-  TextEditingController nameController;
-  TextEditingController emailController; 
-  TextEditingController senhaController;
+Future<NewUser> createAdminUser(BuildContext context, String email, String password, String name, String cpf) async {
+  bool isAdmin = globals.isAdmin;
 
-  void _sendForm() {
+  if(!isAdmin) {
+    String errorMessage = 'User not allowed to do this request';
+    
+    showFailMessage(context, errorMessage);
+    throw Exception(errorMessage);
+  };
 
+  SharedPreferences localStorage = await SharedPreferences.getInstance();
+  String token = localStorage.getString('userToken');
+  globals.token = token;
+
+  var response = await http.post(
+      globals.createAdminApi, 
+      headers: <String, String>{
+        'Authorization': 'bearer $token',
+      },
+      body: { 
+        "name": name, 
+        "email": email,
+        "cpf": cpf,
+        "password": password
+      }
+    );
+
+  if (response.statusCode == 200) {
+    showSuccessMessage(context, 'Usuário criado com sucesso!');
+    return NewUser.fromJson(jsonDecode(response.body));
+  } else {
+    String errorMessage = response.body.replaceAll(new RegExp("\""), "");
+    
+    showFailMessage(context, 'Não foi possivel criar o usuario, $errorMessage');
+    throw Exception('Failed to load user $errorMessage');
+  }
+}
+class _NewUserFormState extends State<NewUserForm> {
+
+  TextEditingController cpfController = TextEditingController();
+  TextEditingController nameController = TextEditingController();
+  TextEditingController emailController = TextEditingController(); 
+  TextEditingController senhaController = TextEditingController();
+    
+
+  void _sendForm() async {
+    await createAdminUser(
+      context,
+      emailController.text.trim(),
+      senhaController.text.trim(),
+      nameController.text.trim(),
+      cpfController.text.trim()
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _body(),
+      body: Builder(
+        builder: (context) => _body()
+      ),
       bottomNavigationBar: Footer(),
       floatingActionButton: FooterFloatingBtn(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
@@ -124,4 +178,35 @@ class _NewUserState extends State<NewUser> {
       },
     );
   }
+
+}
+
+void showSuccessMessage(BuildContext context, String message) async {
+  await showDialog(
+    context: context,
+    builder: (ctx) => AlertDialog(
+      title: Text(message),
+      actions: <Widget>[
+        FlatButton(onPressed: () => Navigator.pop(ctx), child: Text("Ok"))
+      ],
+    ),
+  );
+  Navigator.pop(context);
+}
+
+void showFailMessage(BuildContext context, String message) async {
+  await showDialog(
+    context: context,
+    builder: (ctx) => AlertDialog(
+      title: Text(message),
+      actions: <Widget>[
+        FlatButton(
+          onPressed: () => 
+            Navigator.of(context, rootNavigator: true).pop('dialog'), 
+            child: Text("Ok")
+          )
+      ],
+    ),
+  );
+  Navigator.of(context, rootNavigator: true).pop('dialog');
 }
