@@ -1,12 +1,17 @@
 import 'package:airport/components/TextField.dart';
 import 'package:airport/components/button.dart';
 import 'package:airport/components/footer.dart';
+import 'package:airport/globals/globals.dart';
 import 'package:airport/globals/pallets.dart';
+import 'package:airport/views/MyTrips.dart';
 import 'package:airport/views/searchPage.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+import 'package:airport/globals/globals.dart' as globals;
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class NewFlight extends StatefulWidget {
   NewFlight({Key key}) : super(key: key);
@@ -15,19 +20,71 @@ class NewFlight extends StatefulWidget {
   _NewFlightState createState() => _NewFlightState();
 }
 
+Future<FlightInfo> createFlight(
+  BuildContext context, 
+  String image,
+  String destination,
+  String shipment,
+  String ship_date,
+  String ship_time,
+  String estimated_time,
+  String status,
+  String limit,
+  String airline_id,
+  String ticket_price,
+) async {
+  
+  Map<String, dynamic> body = {
+    "image": image,
+    "destination": destination,
+    "shipment": shipment,
+    "ship_date": ship_date,
+    "ship_time": ship_time,
+    "estimated_time": estimated_time,
+    "limit": limit,
+    "airline_id": airline_id,
+		"ticket_price": ticket_price,
+    "status": status
+  };
+
+  var response = await http.post(globals.flightApi, 
+    headers: <String, String>{
+      'Authorization': 'bearer ${globals.token}',
+    },
+    body: body
+  );
+
+  if (response.statusCode == 200) {
+    showSuccessMessage(context, 'Voo criado com sucesso');
+    return FlightInfo.fromJson(jsonDecode(response.body));
+  } else {
+    
+    showFailMessage(context, 'Não foi possivel criar um voo, ${response.body}');
+    throw Exception('Failed ${response.body}');
+  }
+}
+
 class _NewFlightState extends State<NewFlight> {
+  TextEditingController imgController = TextEditingController();
   TextEditingController embarqueController = TextEditingController();
   TextEditingController destinoController = TextEditingController();
   TextEditingController horarioController = TextEditingController();
   TextEditingController tempoEstimadoController = TextEditingController();
   TextEditingController limiteController = TextEditingController();
+  TextEditingController priceController = TextEditingController();
   TextEditingController companhiaController = TextEditingController();
 
-  String ship_time = "";
-  String estimated_time = "";
+  DateTime ship_time;
+  DateTime estimated_time;
 
   DateTime chosedDate = DateTime.now();
   String chosedDateFormated = DateFormat('dd/MM/y').format(DateTime.now());
+
+  String getFormattedTime(DateTime time) {
+    if(time == null) return '';
+
+    return '${time.hour}h ${time.minute}min';
+  }
 
   void setDate(newDate) {
     setState(() {
@@ -39,7 +96,25 @@ class _NewFlightState extends State<NewFlight> {
     });
   }
 
-  void _sendForm() {}
+  void _sendForm() async {
+    String formattedDate = DateFormat('y-MM-dd').format(chosedDate);
+    String formattedShipTime = "${ship_time.hour}:${ship_time.minute}";
+    String formattedEstTime = "${estimated_time.hour}:${estimated_time.minute}";
+
+
+    await createFlight(context, 
+      imgController.text.trim(),
+      embarqueController.text.trim(),
+      destinoController.text.trim(),
+      '$formattedDate',
+      formattedShipTime,
+      formattedEstTime,
+      "ativo",
+      limiteController.text.trim(),
+      companhiaController.text.trim(),
+      priceController.text.trim(),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -85,7 +160,7 @@ class _NewFlightState extends State<NewFlight> {
 
   Widget _sendFormBtn() {
     return Padding(
-      padding: EdgeInsets.only(top: 10, bottom: 20),
+      padding: EdgeInsets.only(top: 5, bottom: 20),
       child: CustomButton(
         text: "Enviar",
         onClick: _sendForm,
@@ -102,38 +177,81 @@ class _NewFlightState extends State<NewFlight> {
         children: <Widget>[
           CustomTextField(
               icon: Icons.flight_takeoff,
-              label: "Emparque: ",
-              controller: embarqueController),
+              label: "Embarque: ",
+              controller: embarqueController,
+              fontSize: 19,
+              padding: 0
+          ),
           CustomTextField(
               icon: Icons.flight_land,
               label: "Destino: ",
-              controller: destinoController),
-          Padding(
-            padding: EdgeInsets.only(top: 10),
-            child: TextField(
-              controller: limiteController,
+              controller: destinoController,
+              fontSize: 19,
+              padding: 0
+          ),
+          TextField(
+            controller: limiteController,
+            decoration: InputDecoration(
+              labelText: "Limite de passageiros: ",
+              labelStyle: TextStyle(
+                color: Palette.lightBlack
+              ),
+              focusedBorder: UnderlineInputBorder(
+                borderSide: BorderSide(color: Palette.lightOrange, width: 2.0),
+              ),
+              prefixIcon: Icon(Icons.supervisor_account, color: Palette.lightBlack),
+            ),
+            style: TextStyle(fontSize: 19),
+            keyboardType: TextInputType.numberWithOptions(decimal: true)
+          ),
+          TextField(
+            controller: companhiaController,
+            decoration: InputDecoration(
+              labelText: "Companhia Aérea: ",
+              labelStyle: TextStyle(
+                color: Palette.lightBlack
+              ),
+              focusedBorder: UnderlineInputBorder(
+                borderSide: BorderSide(color: Palette.lightOrange, width: 2.0),
+              ),
+              prefixIcon: Icon(Icons.flight, color: Palette.lightBlack),
+            ),
+            style: TextStyle(fontSize: 19),
+            keyboardType: TextInputType.numberWithOptions(decimal: true)
+          ),
+          TextField(
+              controller: priceController,
               decoration: InputDecoration(
-                labelText: "Limite de passageiros: ",
+                labelText: "Preço da passagem: ",
                 labelStyle: TextStyle(
                   color: Palette.lightBlack
                 ),
                 focusedBorder: UnderlineInputBorder(
                   borderSide: BorderSide(color: Palette.lightOrange, width: 2.0),
                 ),
-                prefixIcon: Icon(Icons.supervisor_account, color: Palette.lightBlack),
+                prefixIcon: Icon(Icons.attach_money, color: Palette.lightBlack),
               ),
-              style: TextStyle(fontSize: 22),
+              style: TextStyle(fontSize: 19),
               keyboardType: TextInputType.numberWithOptions(decimal: true)
-            ),
           ),
-          CustomTextField(
-            icon: Icons.flight,
-            label: "Companhia Aérea: ",
-            controller: companhiaController,
+          TextField(
+            controller: imgController,
+            decoration: InputDecoration(
+              labelText: "Imagem: ",
+              labelStyle: TextStyle(
+                color: Palette.lightBlack
+              ),
+              focusedBorder: UnderlineInputBorder(
+                borderSide: BorderSide(color: Palette.lightOrange, width: 2.0),
+              ),
+              prefixIcon: Icon(Icons.image, color: Palette.lightBlack),
+            ),
+            style: TextStyle(fontSize: 19),
+            keyboardType: TextInputType.numberWithOptions(decimal: true)
           ),
           Container(
-            padding: EdgeInsets.only(top: 20), 
-            child: dataPicker(context, chosedDate, setDate, chosedDateFormated, 22.0)
+            padding: EdgeInsets.only(top: 5), 
+            child: dataPicker(context, chosedDate, setDate, chosedDateFormated, 19.0)
           ),
           _shipTime(),
           _estimatedTime(),
@@ -144,7 +262,7 @@ class _NewFlightState extends State<NewFlight> {
 
   Widget _estimatedTime() {
     return Container(
-      padding: EdgeInsets.only(top: 10),
+      padding: EdgeInsets.only(top: 5),
       decoration: BoxDecoration(
         border: Border(
           bottom: BorderSide(width: 1, color: Palette.lightBlack),
@@ -156,9 +274,9 @@ class _NewFlightState extends State<NewFlight> {
           DatePicker.showTimePicker(context, 
             showTitleActions: true,
             onConfirm: (time) {
-              print('$time');
-              estimated_time = '${time.hour}h ${time.minute}min';
-              setState(() {});
+              setState(() {
+                estimated_time = time;
+              });
             }, 
             locale: LocaleType.en
           );
@@ -171,9 +289,9 @@ class _NewFlightState extends State<NewFlight> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               Text(
-                "Tempo estimado: $estimated_time",
+                "Tempo estimado: ${getFormattedTime(estimated_time)}",
                 style:
-                    TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
+                    TextStyle(fontWeight: FontWeight.bold, fontSize: 19),
               ),
               Icon(
                 Icons.access_time,
@@ -187,7 +305,7 @@ class _NewFlightState extends State<NewFlight> {
   }
   Widget _shipTime() {
     return Container(
-      padding: EdgeInsets.only(top: 10),
+      padding: EdgeInsets.only(top: 5),
       decoration: BoxDecoration(
         border: Border(
           bottom: BorderSide(width: 1, color: Palette.lightBlack),
@@ -199,9 +317,9 @@ class _NewFlightState extends State<NewFlight> {
           DatePicker.showTimePicker(context, 
             showTitleActions: true,
             onConfirm: (time) {
-              print('$time');
-              ship_time = '${time.hour}h ${time.minute}min';
-              setState(() {});
+              setState(() {
+                ship_time = time;
+              });
             }, 
             locale: LocaleType.en
           );
@@ -214,9 +332,9 @@ class _NewFlightState extends State<NewFlight> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               Text(
-                "Horário: $ship_time",
+                "Horário: ${getFormattedTime(ship_time)}",
                 style:
-                    TextStyle(fontWeight: FontWeight.bold, fontSize: 23),
+                    TextStyle(fontWeight: FontWeight.bold, fontSize: 19),
               ),
               Icon(
                 Icons.access_time,

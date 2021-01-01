@@ -55,19 +55,22 @@ class _Footer extends State<Footer> {
     verifyIfLogged();
   }
 
-  Future<bool> verifyIfLogged() async {
+  void verifyIfLogged() async {
     SharedPreferences localStorage = await SharedPreferences.getInstance();
-    bool hasToken = localStorage.containsKey('userToken');
+    String token = localStorage.getString('userToken');
     String type = localStorage.getString('userType');
 
     setState(() {
-      isLoged = hasToken;
+      bool isNotLogged = token == null ||  token.isEmpty;
+      isLoged = !isNotLogged;
     });
 
-    globals.isLoged = hasToken;
-    globals.isAdmin = type == "admin";
+    globals.token = token;
 
-    return hasToken;
+    bool isNotLogged = token == null ||  token.isEmpty;
+    globals.isLoged = !isNotLogged;
+
+    globals.isAdmin = type == "admin";
   }  
 
   @override

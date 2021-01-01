@@ -1,3 +1,4 @@
+import 'package:airport/components/BuyTicket.dart';
 import 'package:airport/components/footer.dart';
 import 'package:airport/components/tripCard.dart';
 import 'package:airport/globals/pallets.dart';
@@ -109,30 +110,33 @@ const List<FlightInfo> userFlights = const <FlightInfo>[
 
 class FlightSearch {
   const FlightSearch(
-      {this.destination, this.shipment, this.ship_date, this.quantity});
+      { this.destination, this.shipment, this.ship_date, this.quantity });
 
   final String shipment;
-  final String ship_date;
+  final DateTime ship_date;
   final String destination;
   final int quantity;
 }
-
-const FlightSearch flightsOptions = FlightSearch(
-    destination: "São Paulo",
-    shipment: "Rio de Janeiro",
-    ship_date: "2020-07-02T03:00:00.000Z",
-    quantity: 5);
-
 class SearchResult extends StatefulWidget {
-  SearchResult({Key key}) : super(key: key);
+  SearchResult({Key key, this.flightsOptions}) : super(key: key);
+
+  final FlightSearch flightsOptions;
 
   @override
   _SearchResultState createState() => _SearchResultState();
 }
 
 class _SearchResultState extends State<SearchResult> {
-  String shipDateFormated =
-      DateFormat('dd/MM/y').format(DateTime.parse(flightsOptions.ship_date));
+
+  String shipDateFormated;
+  FlightSearch flightsOptions;
+
+  @override 
+  void initState() {
+    super.initState();
+    flightsOptions = widget.flightsOptions;
+    shipDateFormated = DateFormat('dd/MM/y').format(flightsOptions.ship_date);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -231,7 +235,15 @@ class _SearchResultState extends State<SearchResult> {
                             return TripCard(
                               userFlight: userFlights[index],
                               isAdmin: globals.isAdmin,
-                              handleClick: () {});
+                              handleClick: 
+                                 () async {
+                                  await Navigator.push(context, 
+                                    MaterialPageRoute(builder: (context) => 
+                                      BuyTicket(userFlight: userFlights[index])
+                                    )
+                                  );
+                                }
+                              );
                           }) 
                         ),
                       )

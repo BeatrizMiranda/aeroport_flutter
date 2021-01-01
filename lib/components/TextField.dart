@@ -2,17 +2,27 @@ import 'package:airport/globals/pallets.dart';
 import 'package:flutter/material.dart';
 
 class CustomTextField extends StatelessWidget {
-  CustomTextField({Key key, @required this.icon,  this.label,  this.controller, this.isPassword = false}) : super(key: key);
+  CustomTextField({
+    Key key, 
+    @required this.icon,  
+    this.label,  
+    this.controller, 
+    this.isPassword = false, 
+    this.fontSize = 22, 
+    this.padding = 10, 
+  }) : super(key: key);
 
   final bool isPassword;
   final IconData icon;
   final String label;
+  final double fontSize;
+  final double padding;
   final TextEditingController controller;
 
   @override
   Widget build(BuildContext context) {  
     return Padding(
-      padding: const EdgeInsets.only(top: 10),
+      padding: EdgeInsets.only(top: padding),
       child: TextField(
         obscureText: isPassword,
         controller: controller,
@@ -26,7 +36,7 @@ class CustomTextField extends StatelessWidget {
           ),
           prefixIcon: Icon(icon, color: Palette.lightBlack),
         ),
-        style: TextStyle(fontSize: 22),
+        style: TextStyle(fontSize: fontSize),
       ),
     );
   }

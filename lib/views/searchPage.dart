@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:airport/components/PassangersPicker.dart';
 import 'package:airport/components/button.dart';
 import 'package:airport/components/dataPicker.dart';
@@ -8,6 +10,10 @@ import 'package:airport/views/searchResult.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+import 'package:airport/globals/globals.dart' as globals;
+import 'package:http/http.dart' as http;
+
+
 class SearchPage extends StatefulWidget {
   SearchPage({Key key}) : super(key: key);
 
@@ -15,11 +21,36 @@ class SearchPage extends StatefulWidget {
   _SearchPageState createState() => _SearchPageState();
 }
 
+Future<String> getAvailableCities() async {
+  var response = await http.get(globals.getAvailableCities);
+
+  if (response.statusCode == 200) {
+    return response.body;
+  } else {
+    throw Exception('Failed to load user ${response.body}');
+  }
+}
+
 class _SearchPageState extends State<SearchPage> {
   int qtdAdults = 1;
   int qtdChilds = 0;
   DateTime chosedDate = DateTime.now();
+  List<String> listOfCities = [];
   String chosedDateFormated = DateFormat('dd/MM/y').format(DateTime.now());
+
+  @override
+  void initState() {
+    super.initState();
+    getCities();
+  }
+
+  void getCities() async {
+    List<String> newList = List<String>.from(jsonDecode(await getAvailableCities()));
+    
+    setState(() {
+      listOfCities = newList;
+    });
+  }
 
   void setPassangers(adults, child) {
     setState(() {
@@ -36,6 +67,22 @@ class _SearchPageState extends State<SearchPage> {
         chosedDateFormated = DateFormat('dd/MM/y').format(chosedDate);
       }
     });
+  }
+
+  void handleSearchFight() {
+    print('chegou aqui');
+    int qtd = qtdAdults + qtdChilds;
+
+    FlightSearch flightsOptions = FlightSearch(
+      destination: "São Paulo",
+      shipment: "Rio de Janeiro",
+      ship_date: chosedDate,
+      quantity: qtd
+    );
+
+    Navigator.pushReplacement(context,
+      MaterialPageRoute(builder: (context) => SearchResult(flightsOptions: flightsOptions))
+    );
   }
 
   @override
@@ -85,15 +132,14 @@ class _SearchPageState extends State<SearchPage> {
                     color: Palette.lightBlack),
               ),
               _shipAndDestination(),
-              dataPicker(context, chosedDate, setDate, chosedDateFormated, 27.0),
               passangersPicker(context, qtdAdults, qtdChilds, setPassangers),
+              dataPicker(context, chosedDate, setDate, chosedDateFormated, 27.0),
               Container(
                 padding: const EdgeInsets.only(top: 40),
                 child: CustomButton(
                   height: 50,
                   text: "Buscar",
-                  onClick: () => Navigator.pushReplacement(context,
-                      MaterialPageRoute(builder: (context) => SearchResult())),
+                  onClick: () => handleSearchFight(),
                 ),
               ),
             ]),
@@ -104,22 +150,18 @@ class _SearchPageState extends State<SearchPage> {
   Widget _shipAndDestination() {
     return Container(
         color: Palette.grayBackground,
-        margin: EdgeInsets.only(bottom: 30, top: 30),
+        margin: EdgeInsets.only(top: 30),
         child: Column(
           children: [
             Padding(
               padding: EdgeInsets.only(left: 15, top: 5),
-              child: DropDown(dropdownList: [
-                'São Paulo',
-                'Rio de Janeiro',
-                'Santa Catarina'
-              ], icon: Icons.flight_takeoff, placeholder: "Local de partida"),
+              child: DropDown(dropdownList: listOfCities, icon: Icons.flight_takeoff, placeholder: "Local de partida"),
             ),
             Divider(color: Colors.white, thickness: 3),
             Padding(
               padding: EdgeInsets.only(left: 15, bottom: 5),
               child: DropDown(
-                  dropdownList: ['Rio de Janeiro', 'São Paulo', 'Bahia'],
+                  dropdownList: listOfCities,
                   icon: Icons.flight_land,
                   placeholder: "Local de chegada"),
             ),
@@ -130,7 +172,7 @@ class _SearchPageState extends State<SearchPage> {
 
 Widget dataPicker(context, chosedDate, setDate, chosedDateFormated, dataLabelSize) {
   return Container(
-      padding: EdgeInsets.only(top: 10),
+      padding: EdgeInsets.only(top: 30),
       decoration: BoxDecoration(
         border: Border(
           bottom: BorderSide(width: 1, color: Palette.lightBlack),
@@ -163,7 +205,7 @@ Widget dataPicker(context, chosedDate, setDate, chosedDateFormated, dataLabelSiz
                     child: Text(
                       chosedDateFormated,
                       style: TextStyle(
-                          fontSize: 21,
+                          fontSize: dataLabelSize,
                           fontWeight: FontWeight.bold,
                           color: Palette.lightBlack),
                     ),
@@ -197,7 +239,7 @@ Widget passangersPicker(context, qtdAdults, qtdChilds, setPassangers) {
     children: [
       Container(
         alignment: Alignment.topLeft,
-        padding: const EdgeInsets.fromLTRB(0, 30, 0, 20),
+        padding: const EdgeInsets.fromLTRB(0, 20, 0, 20),
         child: Text("Passagens: ",
             style: TextStyle(fontSize: 20, color: Palette.lightBlack)),
       ),

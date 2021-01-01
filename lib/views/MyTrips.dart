@@ -7,7 +7,9 @@ import 'package:airport/globals/globals.dart' as globals;
 
 class FlightInfo {
   const FlightInfo(
-      {this.destination,
+      {
+        this.id,
+        this.destination,
       this.shipment,
       this.ship_date,
       this.ship_time,
@@ -18,6 +20,7 @@ class FlightInfo {
       this.ticket_price,
       this.image});
 
+  final int id;
   final int limit;
   final int airline_id;
   final String image;
@@ -26,8 +29,24 @@ class FlightInfo {
   final String ship_date;
   final String ship_time;
   final String destination;
-  final double ticket_price;
+  final dynamic ticket_price;
   final String estimated_time;
+
+  factory FlightInfo.fromJson(Map<String, dynamic> json) {
+    return FlightInfo(
+      id: json['id'],
+      image: json['image'],
+      destination: json['destination'],
+      shipment: json['shipment'],
+      ship_date: json['ship_date'],
+      ship_time: json['ship_time'],
+      estimated_time: json['estimated_time'],
+      limit: json['limit'],
+      airline_id: json['airline_id'],
+      status: json['status'],
+      ticket_price: json['ticket_price'],
+    );
+  }
 }
 
 const List<FlightInfo> userFlights = const <FlightInfo>[

@@ -1,4 +1,4 @@
-import 'package:airport/views/admin/NewUser.dart';
+import 'package:airport/globals/globals.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:airport/globals/globals.dart' as globals;
 import 'package:airport/components/button.dart';

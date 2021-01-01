@@ -1,8 +1,27 @@
 import 'package:airport/components/TextField.dart';
 import 'package:airport/components/button.dart';
 import 'package:airport/components/footer.dart';
+import 'package:airport/globals/globals.dart';
 import 'package:airport/globals/pallets.dart';
 import 'package:flutter/material.dart';
+
+import 'package:airport/globals/globals.dart' as globals;
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+
+class Company {
+  const Company({ this.name, this.logo });
+
+  final String name;
+  final String logo;
+
+  factory Company.fromJson(Map<String, dynamic> json) {
+    return Company(
+      name: json['name'],
+      logo: json['logo'],
+    );
+  }
+}
 
 class NewAirline extends StatefulWidget {
   NewAirline({Key key}) : super(key: key);
@@ -10,13 +29,35 @@ class NewAirline extends StatefulWidget {
   @override
   _NewAirlineState createState() => _NewAirlineState();
 }
+
+
+Future<Company> createCompany(BuildContext context, String name, String image) async {
+  var response = await http.post(
+      globals.createCompany, 
+      headers: <String, String> {
+        'Authorization': 'bearer ${globals.token}',
+      },
+      body: { "name": name, "logo": '$image' }
+    );
+
+  if (response.statusCode == 200) {
+    showSuccessMessage(context, 'Airline criado com sucesso!');
+    return Company.fromJson(jsonDecode(response.body));
+  } else {   
+    String errorMessage = response.body.replaceAll(new RegExp("\""), "");
+    
+    showFailMessage(context, 'Não foi possivel criar a airline, $errorMessage');
+    throw Exception('Failed ${response.body}');
+  }
+}
+
 class _NewAirlineState extends State<NewAirline> {
 
   TextEditingController nameController = TextEditingController();
   TextEditingController imgController = TextEditingController();
   
-  void _sendForm() {
-
+  void _sendForm() async {
+    await createCompany(context, nameController.text, imgController.text);
   }
 
   @override
@@ -73,7 +114,7 @@ class _NewAirlineState extends State<NewAirline> {
       padding: const EdgeInsets.only(top: 10, bottom: 20),
       child: CustomButton(
         text : "Enviar",
-        onClick: _sendForm,
+        onClick: () => _sendForm(),
         height: 50,
       ),
     );

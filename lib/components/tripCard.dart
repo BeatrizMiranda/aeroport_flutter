@@ -1,8 +1,12 @@
+import 'package:airport/globals/globals.dart';
 import 'package:airport/globals/pallets.dart';
 import 'package:airport/views/MyTrips.dart';
 import 'package:airport/views/admin/NewFlight.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+
+import 'package:airport/globals/globals.dart' as globals;
+import 'package:http/http.dart' as http;
 
 class TripCard extends StatefulWidget {
   TripCard({Key key, this.userFlight, this.isAdmin, this.handleClick})
@@ -16,24 +20,40 @@ class TripCard extends StatefulWidget {
   _TripCard createState() => _TripCard();
 }
 
+void flightDelete(BuildContext context, int id) async {
+  var response = await http.delete(
+    '${globals.flightApi}/$id', 
+    headers: <String, String>{
+      'Authorization': 'bearer ${globals.token}',
+    }
+  );
+
+  if (response.statusCode == 200) {
+    showSuccessMessage(context, 'Voo deletado com sucesso');
+  } else {
+    showFailMessage(context, 'Não foi possivel deletar o voo, ${response.body}');
+    throw Exception('Failed ${response.body}');
+  }
+}
+
 class _TripCard extends State<TripCard> {
   @override
   Widget build(BuildContext context) {
-    String flightDate = widget.userFlight.ship_date.split('T')[0];
 
-    DateTime parseShipDate =
-        DateTime.parse("${flightDate}T${widget.userFlight.ship_time}");
-    DateTime parsedEstimatedHours =
-        DateTime.parse("${flightDate}T${widget.userFlight.estimated_time}");
+    void handleDelete() async {
+      flightDelete(context, widget.userFlight.id);
+      Navigator.of(context).pop();
+    }
+
+    DateTime estimatedHours = DateTime.parse("2020-01-01 ${widget.userFlight.estimated_time}");
+    DateTime parseShipDate = DateTime.parse("2020-01-01 ${widget.userFlight.ship_time}");
     DateTime deliveryTime = parseShipDate.add(Duration(
-        minutes:
-            (parsedEstimatedHours.hour * 60) + parsedEstimatedHours.minute));
+      minutes: (estimatedHours.hour * 60) + estimatedHours.minute)
+    );
 
     String deliveryTimeFormated = DateFormat.Hm().format(deliveryTime);
     String shipTimeFormated = DateFormat.Hm().format(parseShipDate);
-    String shipDateFormated = DateFormat('dd/MM/y').format(parseShipDate);
-    String estimatedHoursFormated =
-        "${DateFormat('hh').format(parsedEstimatedHours)}h${DateFormat('mm').format(parsedEstimatedHours)}min de voo";
+    String estimatedHoursFormated = "${DateFormat('hh').format(estimatedHours)}h${DateFormat('mm').format(estimatedHours)}min de voo";
 
     return GestureDetector(
       onTap: widget.handleClick,
@@ -72,7 +92,7 @@ class _TripCard extends State<TripCard> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(shipDateFormated,
+                    Text(widget.userFlight.ship_date,
                         style: TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 15)),
                     Text(estimatedHoursFormated,
@@ -83,13 +103,13 @@ class _TripCard extends State<TripCard> {
               ),
               widget.isAdmin
                   ? Padding(
-                      padding: const EdgeInsets.only(top: 20),
+                      padding: const EdgeInsets.only(top: 10),
                       child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             IconButton(
                               onPressed: () {
-                                showConfirmOnRemove(context);
+                                showConfirmOnRemove(context, handleDelete);
                               },
                               icon: Icon(Icons.delete, color: Palette.darkRed)
                             ),
@@ -114,7 +134,7 @@ class _TripCard extends State<TripCard> {
     );
   }
 
-  showConfirmOnRemove(BuildContext context) {
+  showConfirmOnRemove(BuildContext context, Function handleDelete) {
     Widget handleCancel = FlatButton(
       child: Text("Cancelar", style: TextStyle(fontSize: 20)),
       onPressed: () { Navigator.of(context).pop(); },
@@ -122,7 +142,7 @@ class _TripCard extends State<TripCard> {
 
     Widget handleGoOn = FlatButton(
       child: Text("Excluir", style: TextStyle(fontSize: 20, color: Palette.darkRed)),
-      onPressed: () { Navigator.of(context).pop(); },
+      onPressed: () => handleDelete(),
     );
 
     AlertDialog alert = AlertDialog(

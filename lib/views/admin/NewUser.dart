@@ -2,6 +2,7 @@ import 'package:airport/components/Cadastro.dart';
 import 'package:airport/components/TextField.dart';
 import 'package:airport/components/button.dart';
 import 'package:airport/components/footer.dart';
+import 'package:airport/globals/globals.dart';
 import 'package:airport/globals/pallets.dart';
 import 'package:airport/views/home.dart';
 import 'package:flutter/material.dart';
@@ -179,34 +180,4 @@ class _NewUserFormState extends State<NewUserForm> {
     );
   }
 
-}
-
-void showSuccessMessage(BuildContext context, String message) async {
-  await showDialog(
-    context: context,
-    builder: (ctx) => AlertDialog(
-      title: Text(message),
-      actions: <Widget>[
-        FlatButton(onPressed: () => Navigator.pop(ctx), child: Text("Ok"))
-      ],
-    ),
-  );
-  Navigator.pop(context);
-}
-
-void showFailMessage(BuildContext context, String message) async {
-  await showDialog(
-    context: context,
-    builder: (ctx) => AlertDialog(
-      title: Text(message),
-      actions: <Widget>[
-        FlatButton(
-          onPressed: () => 
-            Navigator.of(context, rootNavigator: true).pop('dialog'), 
-            child: Text("Ok")
-          )
-      ],
-    ),
-  );
-  Navigator.of(context, rootNavigator: true).pop('dialog');
 }

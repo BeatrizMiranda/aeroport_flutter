@@ -1,9 +1,14 @@
 import 'package:airport/components/footer.dart';
 import 'package:airport/components/tripCard.dart';
+import 'package:airport/globals/globals.dart';
 import 'package:airport/globals/pallets.dart';
 import 'package:airport/views/MyTrips.dart';
 import 'package:flutter/material.dart';
 import 'package:airport/globals/globals.dart' as globals;
+
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+
 
 class ListFlight extends StatefulWidget {
   ListFlight({Key key}) : super(key: key);
@@ -12,10 +17,44 @@ class ListFlight extends StatefulWidget {
   _ListFlightState createState() => _ListFlightState();
 }
 
+Future<List<FlightInfo>> getFlights(BuildContext context) async {
+
+
+  var response = await http.get(globals.flightApi);
+
+  if (response.statusCode == 200) {
+    Iterable list = json.decode(response.body);
+    List<FlightInfo> voos = list.map((model) => FlightInfo.fromJson(model)).toList();
+
+    return voos;
+  } else {
+    
+    showFailMessage(context, 'Não foi possivel listar os voos, ${response.body}');
+    throw Exception('Failed ${response.body}');
+  }
+}
+
 class _ListFlightState extends State<ListFlight> {
   TextEditingController flightNameController = TextEditingController();
 
+  List<FlightInfo> voos = [];
   void _flightNameChange(String text) {}
+
+  @override
+  void initState() {
+    super.initState();
+
+    getFlightsRequest();
+  }
+
+  void getFlightsRequest() async {
+    List<FlightInfo> newflights = await getFlights(context);
+    setState(() {
+      voos = newflights;
+    });
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -27,20 +66,6 @@ class _ListFlightState extends State<ListFlight> {
       backgroundColor: Palette.background,
     );
   }
-
-  FlightInfo userFlight = FlightInfo(
-    destination: "Rio de Janeiro",
-    ticket_price: 150.00,
-    shipment: "São Paulo",
-    ship_date: "2020-07-02T03:00:00.000Z",
-    ship_time: "18:00:00",
-    estimated_time: "03:00:00",
-    limit: 46,
-    airline_id: 1,
-    status: "ativo",
-    image:
-        "https://cdn.pixabay.com/photo/2017/01/08/19/30/rio-de-janeiro-1963744_1280.jpg"
-  );
 
   Widget _body() {
     return SingleChildScrollView(
@@ -72,26 +97,32 @@ class _ListFlightState extends State<ListFlight> {
                             color: Palette.darkOrange,
                             decoration: TextDecoration.underline))),
               ),
+              // Container(
+              //   padding: const EdgeInsets.fromLTRB(15, 20, 15, 20),
+              //   child: TextField(
+              //     controller: flightNameController,
+              //     decoration: InputDecoration(
+              //       filled: true,
+              //       fillColor: Colors.white,
+              //       hintText: "Encontre um voo",
+              //       hintStyle: TextStyle(color: Palette.lightBlack),
+              //       prefixIcon: Icon(Icons.search, color: Palette.lightBlack),
+              //     ),
+              //     style: TextStyle(fontSize: 22),
+              //     onChanged: _flightNameChange,
+              //   ),
+              // ),
               Container(
-                padding: const EdgeInsets.fromLTRB(15, 20, 15, 20),
-                child: TextField(
-                  controller: flightNameController,
-                  decoration: InputDecoration(
-                    filled: true,
-                    fillColor: Colors.white,
-                    hintText: "Encontre um voo",
-                    hintStyle: TextStyle(color: Palette.lightBlack),
-                    prefixIcon: Icon(Icons.search, color: Palette.lightBlack),
-                  ),
-                  style: TextStyle(fontSize: 22),
-                  onChanged: _flightNameChange,
+                padding: const EdgeInsets.only(left: 15, right: 15, top: 30),
+                child: Column(
+                  children: List.generate(voos.length, (index) {
+                    return TripCard(
+                        userFlight: voos[index],
+                        handleClick: () {},
+                        isAdmin: globals.isAdmin);
+                  }),
                 ),
-              ),
-              TripCard(
-                  userFlight: userFlight,
-                  isAdmin: globals.isAdmin,
-                  handleClick: ()  {}
-                )
+              )
             ]),
           ],
         ),
