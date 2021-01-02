@@ -78,7 +78,7 @@ class _Cadastro extends State<Cadastro> {
       cpfController.text.trim()
     );
 
-    await signInRequest(emailController.text.trim(), senhaController.text.trim());
+    await signInRequest(context, emailController.text.trim(), senhaController.text.trim());
 
     Navigator.pushNamed(context, widget.goTo);
   }

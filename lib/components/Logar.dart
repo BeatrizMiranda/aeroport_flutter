@@ -1,4 +1,5 @@
 import 'package:airport/components/footer.dart';
+import 'package:airport/globals/globals.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:airport/globals/globals.dart' as globals;
 import 'package:airport/components/Cadastro.dart';
@@ -36,7 +37,7 @@ class Logar extends StatefulWidget {
   _Logar createState() => _Logar();
 }
 
-Future<User> signInUser(String email, String password) async {
+Future<User> signInUser(BuildContext context, String email, String password) async {
   var response = await http.post(
       globals.signInApi, 
       body: { "email": email, "password": password }
@@ -45,13 +46,15 @@ Future<User> signInUser(String email, String password) async {
   if (response.statusCode == 200) {
     return User.fromJson(jsonDecode(response.body));
   } else {
+    
+    showFailMessage(context, 'Failed to login ${response.body}');
     throw Exception('Failed to load user ${response.body}');
   }
 }
 
-Future<bool> signInRequest(String email, String password) async {
+Future<bool> signInRequest(BuildContext context, String email, String password) async {
   SharedPreferences localStorage = await SharedPreferences.getInstance();
-  User user = await signInUser(email, password);
+  User user = await signInUser(context, email, password);
 
   localStorage.setString('userToken', user.token);
   localStorage.setString('userType', user.type);
@@ -70,7 +73,7 @@ class _Logar extends State<Logar> {
 
 
   void _handleSignIn() async {
-    await signInRequest(emailController.text.trim(), senhaController.text.trim());
+    await signInRequest(context, emailController.text.trim(), senhaController.text.trim());
     Navigator.pushNamed(context, widget.goTo);
   }
 

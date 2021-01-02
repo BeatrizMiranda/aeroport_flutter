@@ -1,16 +1,13 @@
 import 'package:airport/components/Cadastro.dart';
 import 'package:airport/components/footer.dart';
 import 'package:airport/globals/globals.dart' as globals;
+import 'package:airport/globals/globals.dart';
 import 'package:airport/globals/pallets.dart';
 import 'package:airport/views/MyAccount.dart';
 import 'package:airport/views/MyTrips.dart';
 import 'package:airport/views/searchPage.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'dart:convert';
-
-import 'package:intl/intl.dart';
-
 
 class BuyTicket extends StatefulWidget {
   BuyTicket({Key key, this.userFlight }) : super(key: key);
@@ -18,6 +15,35 @@ class BuyTicket extends StatefulWidget {
   final FlightInfo userFlight;
   
   _BuyTicket createState() => _BuyTicket();
+}
+
+void createTicket(BuildContext context, String id, String priceTicket, String amount, String childAmount) async {
+
+  var body = {
+    "flight_id": id,
+    "price_ticket": priceTicket,
+    "amount": amount,
+    "child_amount": childAmount,
+  };
+
+  var response = await http.post(
+      globals.ticketAPI, 
+      body: body,
+      headers: <String, String> {
+        'Authorization': 'bearer ${globals.token}',
+      }
+    );
+
+  if (response.statusCode == 200) {
+    Navigator.pushReplacement(context,
+      MaterialPageRoute(
+        builder: (context) => MyTrips()
+      )
+    );
+  } else {
+    showFailMessage(context, 'Não foi possivel realizar a compra, ${response.body}');
+    throw Exception('Failed ${response.body}');
+  }
 }
 
 class _BuyTicket extends State<BuyTicket> {
@@ -29,15 +55,26 @@ class _BuyTicket extends State<BuyTicket> {
   double desconto = 0;
   double total;
 
-   @override
+  @override
   void initState() {
-      print('entrou aqui');
     super.initState();
     setState(() {
-      shipDateFormated = DateFormat('dd/MM/y').format(DateTime.parse(widget.userFlight.ship_date));
+      shipDateFormated = widget.userFlight.ship_date;
       valorTotal = widget.userFlight.ticket_price;
       total = valorTotal - desconto;
     });
+  }
+
+  void handleBuy(FlightInfo flight) async {
+    int qtd = qtdAdults + qtdChilds;
+
+    createTicket(
+      context,
+      '${widget.userFlight.id}', 
+      '${widget.userFlight.ticket_price}', 
+      '$qtd', 
+      '$qtdChilds',      
+    );
   }
 
   void setPassangers(adults, child) {
@@ -53,12 +90,6 @@ class _BuyTicket extends State<BuyTicket> {
     });
   }
 
-  void handleBuy(FlightInfo flight) {
-    Navigator.pushReplacement(context,
-        MaterialPageRoute(builder: (context) => Cadastro(goTo: '/viagens')));
-    // depois do login faze a api de compra
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -69,7 +100,6 @@ class _BuyTicket extends State<BuyTicket> {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
-
 
   Widget _body() { 
    return Container(

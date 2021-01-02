@@ -14,7 +14,9 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class NewFlight extends StatefulWidget {
-  NewFlight({Key key}) : super(key: key);
+  final FlightInfo flight;
+
+  NewFlight({ Key key, this.flight }) : super(key: key);
 
   @override
   _NewFlightState createState() => _NewFlightState();
@@ -64,6 +66,51 @@ Future<FlightInfo> createFlight(
   }
 }
 
+Future<FlightInfo> updateFlight(
+  BuildContext context, 
+  String id,
+  String image,
+  String destination,
+  String shipment,
+  String ship_date,
+  String ship_time,
+  String estimated_time,
+  String status,
+  String limit,
+  String airline_id,
+  String ticket_price,
+) async {
+  
+  Map<String, dynamic> body = {
+    "image": image,
+    "destination": destination,
+    "shipment": shipment,
+    "ship_date": ship_date,
+    "ship_time": ship_time,
+    "estimated_time": estimated_time,
+    "limit": limit,
+    "airline_id": airline_id,
+		"ticket_price": ticket_price,
+    "status": status
+  };
+
+  var response = await http.put('${globals.flightApi}/$id', 
+    headers: <String, String>{
+      'Authorization': 'bearer ${globals.token}',
+    },
+    body: body
+  );
+
+  if (response.statusCode == 200) {
+    Navigator.pushNamed(context, '/list-flight');
+    return FlightInfo.fromJson(jsonDecode(response.body));
+  } else {
+    
+    showFailMessage(context, 'Não foi possivel editar o voo, ${response.body}');
+    throw Exception('Failed ${response.body}');
+  }
+}
+
 class _NewFlightState extends State<NewFlight> {
   TextEditingController imgController = TextEditingController();
   TextEditingController embarqueController = TextEditingController();
@@ -86,6 +133,26 @@ class _NewFlightState extends State<NewFlight> {
     return '${time.hour}h ${time.minute}min';
   }
 
+  @override
+  void initState() {
+    super.initState();
+    if(widget.flight != null) {
+      DateTime horario = DateTime.parse("2020-01-01 ${widget.flight.ship_time}");
+      DateTime estTime = DateTime.parse("2020-01-01 ${widget.flight.estimated_time}");
+      ship_time = horario;
+      estimated_time = estTime;
+
+      imgController = TextEditingController(text: widget.flight.image);
+      embarqueController = TextEditingController(text: widget.flight.shipment);
+      destinoController = TextEditingController(text: widget.flight.destination);
+      horarioController = TextEditingController(text: '$horario');
+      tempoEstimadoController = TextEditingController(text: widget.flight.estimated_time);
+      limiteController = TextEditingController(text: '${widget.flight.limit}');
+      priceController = TextEditingController(text: '${widget.flight.ticket_price}');
+      companhiaController = TextEditingController(text: '${widget.flight.airline_id}');
+    }
+  }
+
   void setDate(newDate) {
     setState(() {
       print(newDate);
@@ -101,19 +168,35 @@ class _NewFlightState extends State<NewFlight> {
     String formattedShipTime = "${ship_time.hour}:${ship_time.minute}";
     String formattedEstTime = "${estimated_time.hour}:${estimated_time.minute}";
 
+    if(widget.flight == null) {
+      await createFlight(context, 
+        imgController.text.trim(),
+        embarqueController.text.trim(),
+        destinoController.text.trim(),
+        '$formattedDate',
+        formattedShipTime,
+        formattedEstTime,
+        "ativo",
+        limiteController.text.trim(),
+        companhiaController.text.trim(),
+        priceController.text.trim(),
+      );
+    } else {
+      await updateFlight(context, 
+        "${widget.flight.id}",
+        imgController.text.trim(),
+        embarqueController.text.trim(),
+        destinoController.text.trim(),
+        '$formattedDate',
+        formattedShipTime,
+        formattedEstTime,
+        "ativo",
+        limiteController.text.trim(),
+        companhiaController.text.trim(),
+        priceController.text.trim(),
+      );
 
-    await createFlight(context, 
-      imgController.text.trim(),
-      embarqueController.text.trim(),
-      destinoController.text.trim(),
-      '$formattedDate',
-      formattedShipTime,
-      formattedEstTime,
-      "ativo",
-      limiteController.text.trim(),
-      companhiaController.text.trim(),
-      priceController.text.trim(),
-    );
+    }
   }
 
   @override
@@ -247,7 +330,6 @@ class _NewFlightState extends State<NewFlight> {
               prefixIcon: Icon(Icons.image, color: Palette.lightBlack),
             ),
             style: TextStyle(fontSize: 19),
-            keyboardType: TextInputType.numberWithOptions(decimal: true)
           ),
           Container(
             padding: EdgeInsets.only(top: 5), 

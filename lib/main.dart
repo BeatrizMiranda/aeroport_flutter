@@ -1,4 +1,5 @@
 import 'package:airport/views/FlightOfDestination.dart';
+import 'package:airport/views/admin/HomeAdmin.dart';
 import 'package:airport/views/admin/ListFlight.dart';
 import 'package:airport/views/admin/NewAirline.dart';
 import 'package:airport/views/admin/NewFlight.dart';
@@ -36,6 +37,7 @@ void main() {
     routes: {
       '/': (context) => InitialScreen(),
       '/home': (context) => Home(),
+      '/admin': (context) => HomeAdmin(),
       '/search': (context) => SearchPage(),
       '/search-result': (context) => SearchResult(),
       '/viagens': (context) => MyTrips(),

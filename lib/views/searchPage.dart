@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:airport/components/PassangersPicker.dart';
 import 'package:airport/components/button.dart';
 import 'package:airport/components/dataPicker.dart';
@@ -12,6 +10,7 @@ import 'package:intl/intl.dart';
 
 import 'package:airport/globals/globals.dart' as globals;
 import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 
 class SearchPage extends StatefulWidget {
@@ -38,10 +37,26 @@ class _SearchPageState extends State<SearchPage> {
   List<String> listOfCities = [];
   String chosedDateFormated = DateFormat('dd/MM/y').format(DateTime.now());
 
+  String dropdownShip = '';
+  String dropdownDest = '';
+
+
   @override
   void initState() {
     super.initState();
     getCities();
+  }
+
+  void changeShip (String newValue) {
+    setState(() {
+      dropdownShip = newValue;
+    });
+  }
+  
+  void changeDest (String newValue) {
+    setState(() {
+      dropdownDest = newValue;
+    });
   }
 
   void getCities() async {
@@ -61,23 +76,21 @@ class _SearchPageState extends State<SearchPage> {
 
   void setDate(newDate) {
     setState(() {
-      print(newDate);
       if (newDate != null) {
         chosedDate = newDate;
         chosedDateFormated = DateFormat('dd/MM/y').format(chosedDate);
+        print(chosedDateFormated);
       }
     });
   }
 
   void handleSearchFight() {
-    print('chegou aqui');
-    int qtd = qtdAdults + qtdChilds;
-
     FlightSearch flightsOptions = FlightSearch(
-      destination: "São Paulo",
-      shipment: "Rio de Janeiro",
-      ship_date: chosedDate,
-      quantity: qtd
+      shipment: dropdownShip,
+      destination: dropdownDest,
+      ship_date: chosedDateFormated,
+      qtdAdults: qtdAdults,
+      qtdChilds: qtdChilds
     );
 
     Navigator.pushReplacement(context,
@@ -155,7 +168,13 @@ class _SearchPageState extends State<SearchPage> {
           children: [
             Padding(
               padding: EdgeInsets.only(left: 15, top: 5),
-              child: DropDown(dropdownList: listOfCities, icon: Icons.flight_takeoff, placeholder: "Local de partida"),
+              child: DropDown(
+                dropdownList: listOfCities, 
+                icon: Icons.flight_takeoff, 
+                placeholder: "Local de partida",
+                dropdownValue: dropdownShip,
+                handleChange: changeShip,
+              ),
             ),
             Divider(color: Colors.white, thickness: 3),
             Padding(
@@ -163,7 +182,10 @@ class _SearchPageState extends State<SearchPage> {
               child: DropDown(
                   dropdownList: listOfCities,
                   icon: Icons.flight_land,
-                  placeholder: "Local de chegada"),
+                  placeholder: "Local de chegada",
+                  dropdownValue: dropdownDest,
+                  handleChange: changeDest,
+                ),
             ),
           ],
         ));

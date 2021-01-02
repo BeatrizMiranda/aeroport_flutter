@@ -10,11 +10,13 @@ final String ip = "http://192.168.0.106:5000";
 final String userApi = "$ip/user";
 final String signInApi = "$ip/signIn";
 final String flightApi = "$ip/flight";
+final String companyAPI = "$ip/airline";
+final String ticketAPI = "$ip/ticket";
 
 final String createAdminApi = "$ip/admin/user";
-final String createCompany = "$ip/airline";
 final String getAvailableCities = "$ip/flight/available";
-
+final String getUserTickets = "$ip/user/tickets";
+final String cancelTicket = "$ip/ticket/cancel";
 
 void showSuccessMessage(BuildContext context, String message) async {
   await showDialog(
@@ -37,11 +39,11 @@ void showFailMessage(BuildContext context, String message) async {
       actions: <Widget>[
         FlatButton(
           onPressed: () => 
-            Navigator.of(context, rootNavigator: true).pop('dialog'), 
+            Navigator.pop(context), 
             child: Text("Ok")
           )
       ],
     ),
   );
-  Navigator.of(context, rootNavigator: true).pop('dialog');
+  Navigator.pop(context);
 }

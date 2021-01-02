@@ -1,24 +1,28 @@
+import 'package:airport/components/TicketCard.dart';
 import 'package:airport/components/footer.dart';
-import 'package:airport/components/tripCard.dart';
+import 'package:airport/globals/globals.dart';
 import 'package:airport/globals/pallets.dart';
 import 'package:airport/views/searchPage.dart';
 import 'package:flutter/material.dart';
+
+import 'package:http/http.dart' as http;
 import 'package:airport/globals/globals.dart' as globals;
+import 'dart:convert';
 
 class FlightInfo {
-  const FlightInfo(
-      {
-        this.id,
-        this.destination,
-      this.shipment,
-      this.ship_date,
-      this.ship_time,
-      this.estimated_time,
-      this.limit,
-      this.airline_id,
-      this.status,
-      this.ticket_price,
-      this.image});
+  const FlightInfo({
+    this.id,
+    this.destination,
+    this.shipment,
+    this.ship_date,
+    this.ship_time,
+    this.estimated_time,
+    this.limit,
+    this.airline_id,
+    this.status,
+    this.ticket_price,
+    this.image
+  });
 
   final int id;
   final int limit;
@@ -49,101 +53,117 @@ class FlightInfo {
   }
 }
 
-const List<FlightInfo> userFlights = const <FlightInfo>[
-  FlightInfo(
-      destination: "São Paulo",
-      ticket_price: 150.00,
-      shipment: "Rio de Janeiro",
-      ship_date: "2020-07-02T03:00:00.000Z",
-      ship_time: "18:00:00",
-      estimated_time: "03:00:00",
-      limit: 46,
-      airline_id: 1,
-      status: "ativo",
-      image:
-          "https://cdn.pixabay.com/photo/2017/01/08/19/30/rio-de-janeiro-1963744_1280.jpg"),
-  FlightInfo(
-      shipment: "São Paulo",
-      destination: "Rio de Janeiro",
-      ticket_price: 150.00,
-      ship_date: "2020-07-02T03:00:00.000Z",
-      ship_time: "18:00:00",
-      estimated_time: "03:00:00",
-      limit: 46,
-      airline_id: 1,
-      status: "ativo",
-      image:
-          "https://cdn.pixabay.com/photo/2017/01/08/19/30/rio-de-janeiro-1963744_1280.jpg"),
-  FlightInfo(
-      shipment: "São Paulo",
-      destination: "Rio de Janeiro",
-      ticket_price: 150.00,
-      ship_date: "2020-07-02T03:00:00.000Z",
-      ship_time: "18:00:00",
-      estimated_time: "03:00:00",
-      limit: 46,
-      airline_id: 1,
-      status: "ativo",
-      image:
-          "https://cdn.pixabay.com/photo/2017/01/08/19/30/rio-de-janeiro-1963744_1280.jpg"),
-  FlightInfo(
-      shipment: "São Paulo",
-      destination: "Rio de Janeiro",
-      ticket_price: 150.00,
-      ship_date: "2020-07-02T03:00:00.000Z",
-      ship_time: "18:00:00",
-      estimated_time: "03:00:00",
-      limit: 46,
-      airline_id: 1,
-      status: "ativo",
-      image:
-          "https://cdn.pixabay.com/photo/2017/01/08/19/30/rio-de-janeiro-1963744_1280.jpg"),
-  FlightInfo(
-      shipment: "São Paulo",
-      destination: "Rio de Janeiro",
-      ticket_price: 150.00,
-      ship_date: "2020-07-02T03:00:00.000Z",
-      ship_time: "18:00:00",
-      estimated_time: "03:00:00",
-      limit: 46,
-      airline_id: 1,
-      status: "ativo",
-      image:
-          "https://cdn.pixabay.com/photo/2017/01/08/19/30/rio-de-janeiro-1963744_1280.jpg"),
-  FlightInfo(
-      shipment: "São Paulo",
-      destination: "Rio de Janeiro",
-      ticket_price: 150.00,
-      ship_date: "2020-07-02T03:00:00.000Z",
-      ship_time: "18:00:00",
-      estimated_time: "03:00:00",
-      limit: 46,
-      airline_id: 1,
-      status: "ativo",
-      image:
-          "https://cdn.pixabay.com/photo/2017/01/08/19/30/rio-de-janeiro-1963744_1280.jpg"),
-  FlightInfo(
-      shipment: "São Paulo",
-      destination: "Rio de Janeiro",
-      ticket_price: 150.00,
-      ship_date: "2020-07-02T03:00:00.000Z",
-      ship_time: "18:00:00",
-      estimated_time: "03:00:00",
-      limit: 46,
-      airline_id: 1,
-      status: "ativo",
-      image:
-          "https://cdn.pixabay.com/photo/2017/01/08/19/30/rio-de-janeiro-1963744_1280.jpg")
-];
+class TicketInfo {
+  const TicketInfo({
+    this.id,
+    this.destination,
+    this.shipment,
+    this.ship_date,
+    this.ship_time,
+    this.estimated_time,
+    this.limit,
+    this.airline_id,
+    this.status,
+    this.ticket_price,
+    this.image,
+    this.airline,
+    this.airline_logo,
+    this.amount_ticket,
+    this.price_ticket,
+    this.child_amount,
+    this.total_paid,
+    this.ticket_id,
+  });
+
+  final int ticket_id;
+  final int id;
+  final int limit;
+  final int airline_id;
+  final String image;
+  final String status;
+  final String shipment;
+  final String ship_date;
+  final String ship_time;
+  final String destination;
+  final dynamic ticket_price;
+  final String estimated_time;
+  final String airline;
+  final String airline_logo;
+  final int amount_ticket;
+  final dynamic price_ticket;
+  final int child_amount;
+  final dynamic total_paid;
+
+  factory TicketInfo.fromJson(Map<String, dynamic> json) {
+    return TicketInfo(
+      ticket_id: json['ticket_id'],
+      id: json['id'],
+      destination: json['destination'],
+      shipment: json['shipment'],
+      ship_date: json['ship_date'],
+      ship_time: json['ship_time'],
+      estimated_time: json['estimated_time'],
+      image: json['image'],
+      limit: json['limit'],
+      airline_id: json['airline_id'],
+      status: json['status'],
+
+      airline: json['airline'],
+      airline_logo: json['airline_logo'],
+      amount_ticket: json['amount_ticket'],
+      price_ticket: json['price_ticket'],
+      child_amount: json['child_amount'],
+      total_paid: json['total_paid'],
+    );
+  }
+}
+
+Future<List<TicketInfo>> getUserTickets(BuildContext context) async {
+  var response = await http.get(
+    globals.getUserTickets,
+    headers: <String, String>{
+      'Authorization': 'bearer ${globals.token}',
+    }
+  );
+
+  if (response.statusCode == 200) {
+    print(response.body);
+    Iterable list = json.decode(response.body);
+    List<TicketInfo> voos = list.map((model) => TicketInfo.fromJson(model)).toList();
+    
+    return voos;
+  } else {
+    
+    showFailMessage(context, 'Não foi possivel listar seus tickets, ${response.body}');
+    throw Exception('Failed ${response.body}');
+  }
+}
 
 class MyTrips extends StatefulWidget {
-  MyTrips({Key key}) : super(key: key);
+  MyTrips({ Key key }) : super(key: key);
 
   @override
   _MyTripsState createState() => _MyTripsState();
 }
 
 class _MyTripsState extends State<MyTrips> {
+  
+  List<TicketInfo> userTickets = [];
+
+  @override 
+  void initState() {
+    super.initState();
+    getFlights();
+  }
+
+  void getFlights() async {
+    List<TicketInfo> newTickets = await getUserTickets(context);
+    
+    setState(() {
+      userTickets = newTickets;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -169,7 +189,7 @@ class _MyTripsState extends State<MyTrips> {
                       color: Palette.lightBlack))),
           Container(
               padding: EdgeInsets.only(top: 5),
-              child: userFlights.length > 0 ? _listOfTrips() : _emptyTrips()),
+              child: userTickets.length > 0 ? _listOfTrips() : _emptyTrips()),
         ],
       ),
     ));
@@ -210,12 +230,11 @@ class _MyTripsState extends State<MyTrips> {
           height: 630,
           child: ListView.builder(
             scrollDirection: Axis.vertical,
-            itemCount: userFlights.length,
+            itemCount: userTickets.length,
             itemBuilder: (BuildContext ctxt, int index) {
-              return TripCard(
-                userFlight: userFlights[index],
-                isAdmin: globals.isAdmin,
-                handleClick: () {}
+              return TicketCard(
+                userFlight: userTickets[index],
+                isAdmin: globals.isAdmin
               );
             },
           ),

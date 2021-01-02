@@ -6,6 +6,7 @@ import 'package:airport/components/tripCard.dart';
 import 'package:airport/globals/pallets.dart';
 import 'package:airport/views/MyTrips.dart';
 import 'package:airport/views/home.dart';
+import 'package:airport/views/searchResult.dart';
 import 'package:flutter/material.dart';
 
 class FlightOfDestination extends StatefulWidget {
@@ -19,68 +20,24 @@ class FlightOfDestination extends StatefulWidget {
 
 class _FlightOfDestinationState extends State<FlightOfDestination> {
 
-  List<FlightInfo> userFlights = <FlightInfo>[
-    FlightInfo(
-        destination: "São Paulo",
-        ticket_price: 150.00,
-        shipment: "Rio de Janeiro",
-        ship_date: "2020-07-02T03:00:00.000Z",
-        ship_time: "18:00:00",
-        estimated_time: "03:00:00",
-        limit: 46,
-        airline_id: 1,
-        status: "ativo",
-        image:
-            "https://cdn.pixabay.com/photo/2017/01/08/19/30/rio-de-janeiro-1963744_1280.jpg"),
-    FlightInfo(
-        destination: "Rio de Janeiro",
-        ticket_price: 150.00,
-        shipment: "São Paulo",
-        ship_date: "2020-07-02T03:00:00.000Z",
-        ship_time: "18:00:00",
-        estimated_time: "03:00:00",
-        limit: 46,
-        airline_id: 1,
-        status: "ativo",
-        image:
-            "https://cdn.pixabay.com/photo/2017/01/08/19/30/rio-de-janeiro-1963744_1280.jpg"),
-    FlightInfo(
-        destination: "Rio de Janeiro",
-        ticket_price: 150.00,
-        shipment: "São Paulo",
-        ship_date: "2020-07-02T03:00:00.000Z",
-        ship_time: "18:00:00",
-        estimated_time: "03:00:00",
-        limit: 46,
-        airline_id: 1,
-        status: "ativo",
-        image:
-            "https://cdn.pixabay.com/photo/2017/01/08/19/30/rio-de-janeiro-1963744_1280.jpg"),
-    FlightInfo(
-        destination: "Rio de Janeiro",
-        ticket_price: 150.00,
-        shipment: "São Paulo",
-        ship_date: "2020-07-02T03:00:00.000Z",
-        ship_time: "18:00:00",
-        estimated_time: "03:00:00",
-        limit: 46,
-        airline_id: 1,
-        status: "ativo",
-        image:
-            "https://cdn.pixabay.com/photo/2017/01/08/19/30/rio-de-janeiro-1963744_1280.jpg"),
-    FlightInfo(
-        destination: "Rio de Janeiro",
-        ticket_price: 150.00,
-        shipment: "São Paulo",
-        ship_date: "2020-07-02T03:00:00.000Z",
-        ship_time: "18:00:00",
-        estimated_time: "03:00:00",
-        limit: 46,
-        airline_id: 1,
-        status: "ativo",
-        image:
-            "https://cdn.pixabay.com/photo/2017/01/08/19/30/rio-de-janeiro-1963744_1280.jpg"),
-  ];
+  List<FlightInfo> userFlights = [];
+
+  @override 
+  void initState() {
+    super.initState();
+    getFlights();
+  }
+
+  void getFlights() async {
+    List<FlightInfo> newFlightList = await getFlightsList(
+      widget.flightSuggestion.title, '', '', context
+    );
+    
+    setState(() {
+      userFlights = newFlightList;
+    });
+  }
+
 
   void handleBuy(FlightInfo flight) {
     Navigator.pushReplacement(context,

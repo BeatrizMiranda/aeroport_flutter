@@ -1,121 +1,25 @@
 import 'package:airport/components/BuyTicket.dart';
 import 'package:airport/components/footer.dart';
 import 'package:airport/components/tripCard.dart';
+import 'package:airport/globals/globals.dart';
 import 'package:airport/globals/pallets.dart';
 import 'package:airport/views/MyTrips.dart';
 import 'package:airport/views/searchPage.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:airport/globals/globals.dart' as globals;
 
-
-const List<FlightInfo> userFlights = const <FlightInfo>[
-  FlightInfo(
-      destination: "São Paulo",
-      ticket_price: 150.00,
-      shipment: "Rio de Janeiro",
-      ship_date: "2020-07-02T03:00:00.000Z",
-      ship_time: "18:00:00",
-      estimated_time: "03:00:00",
-      limit: 46,
-      airline_id: 1,
-      status: "ativo",
-      image:
-          "https://cdn.pixabay.com/photo/2017/01/08/19/30/rio-de-janeiro-1963744_1280.jpg"),
-  FlightInfo(
-      shipment: "São Paulo",
-      destination: "Rio de Janeiro",
-      ticket_price: 150.00,
-      ship_date: "2020-07-02T03:00:00.000Z",
-      ship_time: "18:00:00",
-      estimated_time: "03:00:00",
-      limit: 46,
-      airline_id: 1,
-      status: "ativo",
-      image:
-          "https://cdn.pixabay.com/photo/2017/01/08/19/30/rio-de-janeiro-1963744_1280.jpg"),
-  FlightInfo(
-      shipment: "São Paulo",
-      destination: "Rio de Janeiro",
-      ticket_price: 150.00,
-      ship_date: "2020-07-02T03:00:00.000Z",
-      ship_time: "18:00:00",
-      estimated_time: "03:00:00",
-      limit: 46,
-      airline_id: 1,
-      status: "ativo",
-      image:
-          "https://cdn.pixabay.com/photo/2017/01/08/19/30/rio-de-janeiro-1963744_1280.jpg"),
-  FlightInfo(
-      shipment: "São Paulo",
-      destination: "Rio de Janeiro",
-      ticket_price: 150.00,
-      ship_date: "2020-07-02T03:00:00.000Z",
-      ship_time: "18:00:00",
-      estimated_time: "03:00:00",
-      limit: 46,
-      airline_id: 1,
-      status: "ativo",
-      image:
-          "https://cdn.pixabay.com/photo/2017/01/08/19/30/rio-de-janeiro-1963744_1280.jpg"),
-  FlightInfo(
-      shipment: "São Paulo",
-      destination: "Rio de Janeiro",
-      ticket_price: 150.00,
-      ship_date: "2020-07-02T03:00:00.000Z",
-      ship_time: "18:00:00",
-      estimated_time: "03:00:00",
-      limit: 46,
-      airline_id: 1,
-      status: "ativo",
-      image:
-          "https://cdn.pixabay.com/photo/2017/01/08/19/30/rio-de-janeiro-1963744_1280.jpg"),
-  FlightInfo(
-      shipment: "São Paulo",
-      destination: "Rio de Janeiro",
-      ticket_price: 150.00,
-      ship_date: "2020-07-02T03:00:00.000Z",
-      ship_time: "18:00:00",
-      estimated_time: "03:00:00",
-      limit: 46,
-      airline_id: 1,
-      status: "ativo",
-      image:
-          "https://cdn.pixabay.com/photo/2017/01/08/19/30/rio-de-janeiro-1963744_1280.jpg"),
-  FlightInfo(
-      shipment: "São Paulo",
-      destination: "Rio de Janeiro",
-      ticket_price: 150.00,
-      ship_date: "2020-07-02T03:00:00.000Z",
-      ship_time: "18:00:00",
-      estimated_time: "03:00:00",
-      limit: 46,
-      airline_id: 1,
-      status: "ativo",
-      image:
-          "https://cdn.pixabay.com/photo/2017/01/08/19/30/rio-de-janeiro-1963744_1280.jpg"),
-  FlightInfo(
-      shipment: "São Paulo",
-      destination: "Rio de Janeiro",
-      ticket_price: 150.00,
-      ship_date: "2020-07-02T03:00:00.000Z",
-      ship_time: "18:00:00",
-      estimated_time: "03:00:00",
-      limit: 46,
-      airline_id: 1,
-      status: "ativo",
-      image:
-          "https://cdn.pixabay.com/photo/2017/01/08/19/30/rio-de-janeiro-1963744_1280.jpg"),
-];
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class FlightSearch {
   const FlightSearch(
-      { this.destination, this.shipment, this.ship_date, this.quantity });
+      { this.destination, this.shipment, this.ship_date, this.qtdAdults, this.qtdChilds });
 
   final String shipment;
-  final DateTime ship_date;
+  final String ship_date;
   final String destination;
-  final int quantity;
+  final int qtdAdults;
+  final int qtdChilds;
 }
 class SearchResult extends StatefulWidget {
   SearchResult({Key key, this.flightsOptions}) : super(key: key);
@@ -126,16 +30,51 @@ class SearchResult extends StatefulWidget {
   _SearchResultState createState() => _SearchResultState();
 }
 
+Future<List<FlightInfo>> getFlightsList(String destination, String shipement, String date, BuildContext context) async {
+  var queryShip = shipement.isNotEmpty ? '&ship=${shipement}' : '';
+  var queryDate = date.isNotEmpty ? '&date=${date}' : '';
+
+  var query = '?dest=${destination}${queryShip}${queryDate}';
+
+  var response = await http.get('${globals.flightApi}${query}');
+
+  if (response.statusCode == 200) {
+    Iterable list = json.decode(response.body);
+    List<FlightInfo> voos = list.map((model) => FlightInfo.fromJson(model)).toList();
+    
+    return voos;
+  } else {
+    
+    showFailMessage(context, 'Não foi possivel listar os voos, ${response.body}');
+    throw Exception('Failed ${response.body}');
+  }
+}
+
 class _SearchResultState extends State<SearchResult> {
 
-  String shipDateFormated;
+  int quantity;
   FlightSearch flightsOptions;
+  List<FlightInfo> listOfFlights = [];
 
   @override 
   void initState() {
     super.initState();
     flightsOptions = widget.flightsOptions;
-    shipDateFormated = DateFormat('dd/MM/y').format(flightsOptions.ship_date);
+    quantity = widget.flightsOptions.qtdAdults + widget.flightsOptions.qtdChilds;
+    getFlights();
+  }
+
+  void getFlights() async {
+    List<FlightInfo> newFlightList = await getFlightsList(
+      flightsOptions.destination,
+      flightsOptions.shipment,
+      flightsOptions.ship_date,
+      context
+    );
+    
+    setState(() {
+      listOfFlights = newFlightList;
+    });
   }
 
   @override
@@ -189,12 +128,18 @@ class _SearchResultState extends State<SearchResult> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text(shipDateFormated,
+                            Text(flightsOptions.ship_date,
                                 style: TextStyle(
                                     fontWeight: FontWeight.bold, fontSize: 22)),
-                            Text("${flightsOptions.quantity} Tickets",
+                            Column(children: [
+                              Text("$quantity Ticket(s)",
                                 style: TextStyle(
                                     fontWeight: FontWeight.bold, fontSize: 22)),
+                              Text("${flightsOptions.qtdAdults} Adulto(s) ${flightsOptions.qtdChilds > 0 ? '- ${flightsOptions.qtdChilds} Criança(s)': ''}",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 13)),
+
+                            ],)
                           ],
                         ),
                       ],
@@ -214,7 +159,7 @@ class _SearchResultState extends State<SearchResult> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text("${userFlights.length} resultados encontrados",
+                        Text("${listOfFlights.length} resultados encontrados",
                             style: TextStyle(
                                 fontWeight: FontWeight.bold, fontSize: 22)),
                         IconButton(
@@ -227,19 +172,19 @@ class _SearchResultState extends State<SearchResult> {
                         ),
                       ],
                     ),
-                    userFlights.length > 0 ? Padding(
+                    listOfFlights.length > 0 ? Padding(
                       padding: const EdgeInsets.only(top: 20),
                       child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: List.generate(userFlights.length, (index) {
+                          children: List.generate(listOfFlights.length, (index) {
                             return TripCard(
-                              userFlight: userFlights[index],
+                              userFlight: listOfFlights[index],
                               isAdmin: globals.isAdmin,
                               handleClick: 
                                  () async {
                                   await Navigator.push(context, 
                                     MaterialPageRoute(builder: (context) => 
-                                      BuyTicket(userFlight: userFlights[index])
+                                      BuyTicket(userFlight: listOfFlights[index])
                                     )
                                   );
                                 }

@@ -17,7 +17,7 @@ const List<FlightSuggestion> flightSuggestion = const <FlightSuggestion>[
   const FlightSuggestion(title: 'Huaraz - Peru', img: "https://cdn.pixabay.com/photo/2017/08/14/05/49/landscape-2639472_960_720.jpg"),
   const FlightSuggestion(title: 'Sardenha - Itália', img: "https://cdn.pixabay.com/photo/2018/07/09/21/05/sardinia-3527270_960_720.jpg"),
   const FlightSuggestion(title: 'Alberta - Canadá', img: "https://cdn.pixabay.com/photo/2017/05/09/03/46/alberta-2297204_960_720.jpg"),
-  const FlightSuggestion(title: 'Tokyo - Japão', img: "https://cdn.pixabay.com/photo/2015/06/29/04/41/tokyo-tower-825196_960_720.jpg"),
+  const FlightSuggestion(title: 'Japao', img: "https://cdn.pixabay.com/photo/2015/06/29/04/41/tokyo-tower-825196_960_720.jpg"),
 ];
 
 class Home extends StatefulWidget {

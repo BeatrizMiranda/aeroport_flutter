@@ -1,48 +1,47 @@
 import 'package:airport/globals/globals.dart';
 import 'package:airport/globals/pallets.dart';
 import 'package:airport/views/MyTrips.dart';
-import 'package:airport/views/admin/NewFlight.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import 'package:airport/globals/globals.dart' as globals;
 import 'package:http/http.dart' as http;
 
-class TripCard extends StatefulWidget {
-  TripCard({Key key, this.userFlight, this.isAdmin, this.handleClick})
-      : super(key: key);
+class TicketCard extends StatefulWidget {
+  TicketCard({ Key key, this.userFlight, this.isAdmin }) : super(key: key);
 
-  final FlightInfo userFlight;
+  final TicketInfo userFlight;
   final bool isAdmin;
-  final Function handleClick;
 
   @override
-  _TripCard createState() => _TripCard();
+  _TicketCard createState() => _TicketCard();
 }
 
-void flightDelete(BuildContext context, int id) async {
-  var response = await http.delete(
-    '${globals.flightApi}/$id', 
+void flightCancel(BuildContext context, int id) async {
+  var response = await http.put(
+    '${globals.cancelTicket}/$id', 
     headers: <String, String>{
       'Authorization': 'bearer ${globals.token}',
     }
   );
 
   if (response.statusCode == 200) {
-    showSuccessMessage(context, 'Voo deletado com sucesso');
+    showSuccessMessage(context, 'Passagem cancelada com sucesso');
   } else {
-    showFailMessage(context, 'Não foi possivel deletar o voo, ${response.body}');
+    showFailMessage(context, 'Não foi possivel cancelar a passagem, ${response.body}');
     throw Exception('Failed ${response.body}');
   }
 }
 
-class _TripCard extends State<TripCard> {
+class _TicketCard extends State<TicketCard> {
   @override
   Widget build(BuildContext context) {
 
-    void handleDelete() async {
-      flightDelete(context, widget.userFlight.id);
-      Navigator.of(context).pop();
+    int amountAdults = widget.userFlight.amount_ticket - widget.userFlight.child_amount;
+    String amountChilds = widget.userFlight.child_amount != 0 ? '${widget.userFlight.child_amount} criança(s)': '';
+
+    void handleTripCancel() async {
+      flightCancel(context, widget.userFlight.ticket_id);
     }
 
     DateTime estimatedHours = DateTime.parse("2020-01-01 ${widget.userFlight.estimated_time}");
@@ -56,7 +55,6 @@ class _TripCard extends State<TripCard> {
     String estimatedHoursFormated = "${DateFormat('hh').format(estimatedHours)}h${DateFormat('mm').format(estimatedHours)}min de voo";
 
     return GestureDetector(
-      onTap: widget.handleClick,
       child: Card(
         margin: EdgeInsets.only(bottom: 25),
         elevation: 5,
@@ -70,7 +68,7 @@ class _TripCard extends State<TripCard> {
                   Text(widget.userFlight.shipment,
                       style:
                           TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
-                  Image.asset("src/img/planeIcon.png", fit: BoxFit.cover),
+                  Image.asset("src/img/planeIcon.png", fit: BoxFit.contain),
                   Text(widget.userFlight.destination,
                       style:
                           TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
@@ -88,7 +86,7 @@ class _TripCard extends State<TripCard> {
                 ],
               ),
               Container(
-                padding: EdgeInsets.only(top: 25),
+                padding: EdgeInsets.only(top: 15, bottom: 20),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -101,32 +99,42 @@ class _TripCard extends State<TripCard> {
                   ],
                 ),
               ),
-              widget.isAdmin
-                  ? Padding(
-                      padding: const EdgeInsets.only(top: 10),
-                      child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            IconButton(
-                              onPressed: () {
-                                showConfirmOnRemove(context, handleDelete);
-                              },
-                              icon: Icon(Icons.delete, color: Palette.darkRed)
-                            ),
-                            IconButton(
-                              onPressed: () {
-                                Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => NewFlight(flight: widget.userFlight)
-                                  )
-                                );
-                              },
-                              icon: Icon(Icons.edit)
-                            ),
-                          ]),
-                    )
-                  : Container(),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text('${widget.userFlight.amount_ticket} Tickets',
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                  Text('$amountAdults Adulto(s) $amountChilds',
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 19)),
+                ],
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 20),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      children: [
+                        Image.network(widget.userFlight.airline_logo, fit: BoxFit.fill,  width: 70),
+                      ],
+                    ),
+                    Text('R\$ ${widget.userFlight.total_paid}',
+                      style: TextStyle(fontSize: 20, color: Palette.darkOrange)
+                    ),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 20),
+                child: GestureDetector(
+                  onTap: () => handleTripCancel(),
+                  child: Text(
+                    "Solicitar cancelamento", 
+                    style: TextStyle(fontSize: 18, color: Palette.darkRed, decoration: TextDecoration.underline))
+                  ),
+              ),
             ],
           ),
         ),

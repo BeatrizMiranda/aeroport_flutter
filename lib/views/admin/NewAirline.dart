@@ -33,7 +33,7 @@ class NewAirline extends StatefulWidget {
 
 Future<Company> createCompany(BuildContext context, String name, String image) async {
   var response = await http.post(
-      globals.createCompany, 
+      globals.companyAPI, 
       headers: <String, String> {
         'Authorization': 'bearer ${globals.token}',
       },
