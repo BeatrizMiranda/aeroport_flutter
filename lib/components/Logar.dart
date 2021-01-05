@@ -30,9 +30,10 @@ class User {
 }
 
 class Logar extends StatefulWidget {
-  Logar({Key key, this.goTo }) : super(key: key);
+  Logar({Key key, this.goTo, this.stayOnComponent = false }) : super(key: key);
 
   final String goTo;
+  final bool stayOnComponent;
   
   _Logar createState() => _Logar();
 }
@@ -63,6 +64,7 @@ Future<bool> signInRequest(BuildContext context, String email, String password) 
 
   globals.isAdmin = userType == 'admin';
   globals.token = user.token;
+  globals.userName = user.name;
 
   return true;
 }
@@ -74,7 +76,12 @@ class _Logar extends State<Logar> {
 
   void _handleSignIn() async {
     await signInRequest(context, emailController.text.trim(), senhaController.text.trim());
-    Navigator.pushNamed(context, widget.goTo);
+    
+    if(widget.stayOnComponent == true) {
+      Navigator.pop(context, globals.token != '');
+    } else {
+      Navigator.pushNamed(context, widget.goTo);
+    }
   }
 
   @override

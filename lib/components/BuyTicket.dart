@@ -1,4 +1,4 @@
-import 'package:airport/components/Cadastro.dart';
+import 'package:airport/components/Logar.dart';
 import 'package:airport/components/footer.dart';
 import 'package:airport/globals/globals.dart' as globals;
 import 'package:airport/globals/globals.dart';
@@ -10,9 +10,11 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 class BuyTicket extends StatefulWidget {
-  BuyTicket({Key key, this.userFlight }) : super(key: key);
+  BuyTicket({Key key, this.userFlight, this.qtdAdults = 1, this.qtdChilds = 0 }) : super(key: key);
 
   final FlightInfo userFlight;
+  final int qtdAdults;
+  final int qtdChilds;
   
   _BuyTicket createState() => _BuyTicket();
 }
@@ -59,13 +61,15 @@ class _BuyTicket extends State<BuyTicket> {
   void initState() {
     super.initState();
     setState(() {
+      qtdAdults = widget.qtdAdults;
+      qtdChilds = widget.qtdChilds;
       shipDateFormated = widget.userFlight.ship_date;
       valorTotal = widget.userFlight.ticket_price;
       total = valorTotal - desconto;
     });
   }
 
-  void handleBuy(FlightInfo flight) async {
+  void createTicketRequest(FlightInfo flight) async {
     int qtd = qtdAdults + qtdChilds;
 
     createTicket(
@@ -76,13 +80,25 @@ class _BuyTicket extends State<BuyTicket> {
       '$qtdChilds',      
     );
   }
+  void handleBuy(FlightInfo flight) async {
+    if(globals.token != null) {
+      createTicketRequest(flight);
+    } else {
+      await Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => Logar(stayOnComponent: true)
+        )
+      );
+
+      createTicketRequest(flight);
+    }
+  }
 
   void setPassangers(adults, child) {
     setState(() {
       qtdAdults = adults;
       qtdChilds = child;
-
-      print(widget.userFlight.ticket_price * (qtdAdults + qtdChilds));
 
       valorTotal = widget.userFlight.ticket_price * (qtdAdults + qtdChilds);
       desconto = (widget.userFlight.ticket_price * 0.3) * qtdChilds;

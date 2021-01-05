@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 bool isLoged = false;
 bool isAdmin = false;
 String token = '';
+String userName = '';
 
 
 final String ip = "http://192.168.0.106:5000";

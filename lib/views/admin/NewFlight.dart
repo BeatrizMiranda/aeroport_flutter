@@ -150,12 +150,15 @@ class _NewFlightState extends State<NewFlight> {
       limiteController = TextEditingController(text: '${widget.flight.limit}');
       priceController = TextEditingController(text: '${widget.flight.ticket_price}');
       companhiaController = TextEditingController(text: '${widget.flight.airline_id}');
+      setState(() {
+        chosedDate = DateFormat("dd/MM/yyyy").parse(widget.flight.ship_date);
+        chosedDateFormated = DateFormat('dd/MM/y').format(chosedDate);
+      });
     }
   }
 
   void setDate(newDate) {
     setState(() {
-      print(newDate);
       if (newDate != null) {
         chosedDate = newDate;
         chosedDateFormated = DateFormat('dd/MM/y').format(chosedDate);
@@ -164,7 +167,7 @@ class _NewFlightState extends State<NewFlight> {
   }
 
   void _sendForm() async {
-    String formattedDate = DateFormat('y-MM-dd').format(chosedDate);
+    String formattedDate = DateFormat('dd/MM/y').format(chosedDate);
     String formattedShipTime = "${ship_time.hour}:${ship_time.minute}";
     String formattedEstTime = "${estimated_time.hour}:${estimated_time.minute}";
 

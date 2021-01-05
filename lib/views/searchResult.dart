@@ -180,11 +180,15 @@ class _SearchResultState extends State<SearchResult> {
                             return TripCard(
                               userFlight: listOfFlights[index],
                               isAdmin: globals.isAdmin,
-                              handleClick: 
+                              handleClick:
                                  () async {
                                   await Navigator.push(context, 
                                     MaterialPageRoute(builder: (context) => 
-                                      BuyTicket(userFlight: listOfFlights[index])
+                                      BuyTicket(
+                                        userFlight: listOfFlights[index],
+                                        qtdAdults: widget.flightsOptions.qtdAdults,
+                                        qtdChilds: widget.flightsOptions.qtdChilds
+                                      )
                                     )
                                   );
                                 }

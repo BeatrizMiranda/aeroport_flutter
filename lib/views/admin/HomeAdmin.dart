@@ -2,6 +2,7 @@ import 'package:airport/components/button.dart';
 import 'package:airport/components/footer.dart';
 import 'package:airport/globals/pallets.dart';
 import 'package:airport/views/MyAccount.dart';
+import 'package:airport/globals/globals.dart' as globals;
 import 'package:airport/views/admin/ListFlight.dart';
 import 'package:airport/views/admin/NewAirline.dart';
 import 'package:airport/views/admin/NewUser.dart';
@@ -15,7 +16,7 @@ class HomeAdmin extends StatefulWidget {
 }
 class _HomeAdminState extends State<HomeAdmin> {
 
-  UserInfo userData = UserInfo(id: 1, name: "João Carlos", email: "teste@teste.com", cpf: "12333212");
+  UserInfo userData = UserInfo(id: 1, name: globals.userName, email: "teste@teste.com", cpf: "12333212");
 
 
   @override
@@ -56,7 +57,7 @@ class _HomeAdminState extends State<HomeAdmin> {
               child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                CustomButton(text: "Cadastre um voo", height: 70, 
+                CustomButton(text: "Lista de Voos", height: 70, 
                   onClick: () => Navigator.pushReplacement(  
                     context, MaterialPageRoute(builder: (context) => ListFlight())
                   )

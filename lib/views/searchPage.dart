@@ -79,7 +79,6 @@ class _SearchPageState extends State<SearchPage> {
       if (newDate != null) {
         chosedDate = newDate;
         chosedDateFormated = DateFormat('dd/MM/y').format(chosedDate);
-        print(chosedDateFormated);
       }
     });
   }

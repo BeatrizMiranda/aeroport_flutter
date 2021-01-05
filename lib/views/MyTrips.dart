@@ -127,7 +127,6 @@ Future<List<TicketInfo>> getUserTickets(BuildContext context) async {
   );
 
   if (response.statusCode == 200) {
-    print(response.body);
     Iterable list = json.decode(response.body);
     List<TicketInfo> voos = list.map((model) => TicketInfo.fromJson(model)).toList();
     
