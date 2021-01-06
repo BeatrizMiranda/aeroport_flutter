@@ -28,7 +28,7 @@ void flightCancel(BuildContext context, int id) async {
   if (response.statusCode == 200) {
     showSuccessMessage(context, 'Passagem cancelada com sucesso');
   } else {
-    showFailMessage(context, 'Não foi possivel cancelar a passagem, ${response.body}');
+    showFailMessage(context, 'Não foi possivel cancelar a passagem', path: "/viagens");
     throw Exception('Failed ${response.body}');
   }
 }

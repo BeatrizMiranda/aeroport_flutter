@@ -82,7 +82,7 @@ Future<UserInfo> updateUserRequest(BuildContext context, String name, String ema
     return UserInfo.fromJson(jsonDecode(response.body));
   } else {
     
-    showFailMessage(context, 'Não foi possivel atualizar o usuario, ${response.body}');
+    showFailMessage(context, 'Não foi possivel atualizar o usuario', path: "/account");
     throw Exception('Failed to load user ${response.body}');
   }
 }

@@ -32,7 +32,7 @@ void showSuccessMessage(BuildContext context, String message) async {
   Navigator.pop(context);
 }
 
-void showFailMessage(BuildContext context, String message) async {
+void showFailMessage(BuildContext context, String message, { String path = '' }) async {
   await showDialog(
     context: context,
     builder: (ctx) => AlertDialog(
@@ -40,7 +40,7 @@ void showFailMessage(BuildContext context, String message) async {
       actions: <Widget>[
         FlatButton(
           onPressed: () => 
-            Navigator.pop(context), 
+            (path == '') ? Navigator.pop(context) : Navigator.pushReplacementNamed(context, path), 
             child: Text("Ok")
           )
       ],

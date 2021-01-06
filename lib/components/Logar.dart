@@ -47,8 +47,7 @@ Future<User> signInUser(BuildContext context, String email, String password) asy
   if (response.statusCode == 200) {
     return User.fromJson(jsonDecode(response.body));
   } else {
-    
-    showFailMessage(context, 'Failed to login ${response.body}');
+    showFailMessage(context, 'Usuário não encontrado', path: "/home");
     throw Exception('Failed to load user ${response.body}');
   }
 }
@@ -57,14 +56,14 @@ Future<bool> signInRequest(BuildContext context, String email, String password) 
   SharedPreferences localStorage = await SharedPreferences.getInstance();
   User user = await signInUser(context, email, password);
 
-  localStorage.setString('userToken', user.token);
-  localStorage.setString('userType', user.type);
+  localStorage.setString('userToken', user.token ?? '');
+  localStorage.setString('userType', user.type ?? '');
 
   String userType = localStorage.getString('userType');  
 
   globals.isAdmin = userType == 'admin';
-  globals.token = user.token;
-  globals.userName = user.name;
+  globals.token = user.token ?? '';
+  globals.userName = user.name ?? '';
 
   return true;
 }

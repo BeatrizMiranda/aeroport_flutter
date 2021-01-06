@@ -9,12 +9,16 @@ import 'package:airport/globals/globals.dart' as globals;
 import 'package:http/http.dart' as http;
 
 class TripCard extends StatefulWidget {
-  TripCard({Key key, this.userFlight, this.isAdmin, this.handleClick})
+
+  void handleDelete = () {};
+
+  TripCard({Key key, this.userFlight, this.isAdmin, this.handleClick, this.onDelete })
       : super(key: key);
 
   final FlightInfo userFlight;
   final bool isAdmin;
   final Function handleClick;
+  final Function onDelete;
 
   @override
   _TripCard createState() => _TripCard();
@@ -31,7 +35,7 @@ void flightDelete(BuildContext context, int id) async {
   if (response.statusCode == 200) {
     showSuccessMessage(context, 'Voo deletado com sucesso');
   } else {
-    showFailMessage(context, 'Não foi possivel deletar o voo, ${response.body}');
+    showFailMessage(context, 'Não foi possivel deletar o voo', path: "/list-flight");
     throw Exception('Failed ${response.body}');
   }
 }
@@ -42,7 +46,11 @@ class _TripCard extends State<TripCard> {
 
     void handleDelete() async {
       flightDelete(context, widget.userFlight.id);
-      Navigator.of(context).pop();
+      Navigator.pushReplacementNamed(context, '/list-flight');
+
+      if(widget.onDelete != null){
+        widget.onDelete();
+      }
     }
 
     DateTime estimatedHours = DateTime.parse("2020-01-01 ${widget.userFlight.estimated_time}");

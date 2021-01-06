@@ -43,7 +43,7 @@ void createTicket(BuildContext context, String id, String priceTicket, String am
       )
     );
   } else {
-    showFailMessage(context, 'Não foi possivel realizar a compra, ${response.body}');
+    showFailMessage(context, 'Não foi possivel realizar a compra, ${response.body}', path: "/home");
     throw Exception('Failed ${response.body}');
   }
 }
@@ -64,7 +64,8 @@ class _BuyTicket extends State<BuyTicket> {
       qtdAdults = widget.qtdAdults;
       qtdChilds = widget.qtdChilds;
       shipDateFormated = widget.userFlight.ship_date;
-      valorTotal = widget.userFlight.ticket_price;
+      desconto = (widget.userFlight.ticket_price * 0.3) * qtdChilds;
+      valorTotal = widget.userFlight.ticket_price * (qtdAdults + qtdChilds);
       total = valorTotal - desconto;
     });
   }
