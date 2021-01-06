@@ -133,7 +133,7 @@ Future<List<TicketInfo>> getUserTickets(BuildContext context) async {
     return voos;
   } else {
     
-    showFailMessage(context, 'Não foi possivel listar seus tickets, ${response.body}');
+    showFailMessage(context, 'Não foi possivel listar seus tickets', path: "/viagens");
     throw Exception('Failed ${response.body}');
   }
 }

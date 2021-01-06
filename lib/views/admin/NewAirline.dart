@@ -46,7 +46,7 @@ Future<Company> createCompany(BuildContext context, String name, String image) a
   } else {   
     String errorMessage = response.body.replaceAll(new RegExp("\""), "");
     
-    showFailMessage(context, 'Não foi possivel criar a airline, $errorMessage');
+    showFailMessage(context, 'Não foi possivel criar a airline', path: "/new-airline");
     throw Exception('Failed ${response.body}');
   }
 }

@@ -3,6 +3,7 @@ import 'package:airport/components/tripCard.dart';
 import 'package:airport/globals/globals.dart';
 import 'package:airport/globals/pallets.dart';
 import 'package:airport/views/MyTrips.dart';
+import 'package:airport/views/admin/NewFlight.dart';
 import 'package:flutter/material.dart';
 import 'package:airport/globals/globals.dart' as globals;
 
@@ -19,7 +20,6 @@ class ListFlight extends StatefulWidget {
 
 Future<List<FlightInfo>> getFlights(BuildContext context) async {
 
-
   var response = await http.get(globals.flightApi);
 
   if (response.statusCode == 200) {
@@ -29,7 +29,7 @@ Future<List<FlightInfo>> getFlights(BuildContext context) async {
     return voos;
   } else {
     
-    showFailMessage(context, 'Não foi possivel listar os voos, ${response.body}');
+    showFailMessage(context, 'Não foi possivel listar os voos', path: "/list-flight");
     throw Exception('Failed ${response.body}');
   }
 }
@@ -38,8 +38,7 @@ class _ListFlightState extends State<ListFlight> {
   TextEditingController flightNameController = TextEditingController();
 
   List<FlightInfo> voos = [];
-  void _flightNameChange(String text) {}
-
+  
   @override
   void initState() {
     super.initState();
@@ -89,7 +88,12 @@ class _ListFlightState extends State<ListFlight> {
                 alignment: Alignment.topLeft,
                 child: GestureDetector(
                     onTap: () {
-                      Navigator.pushNamed(context, "/new-flight");
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => NewFlight(onCreate: () => getFlightsRequest())
+                        )
+                      );
                     },
                     child: Text("Cadastre um novo voo",
                         style: TextStyle(
@@ -97,21 +101,6 @@ class _ListFlightState extends State<ListFlight> {
                             color: Palette.darkOrange,
                             decoration: TextDecoration.underline))),
               ),
-              // Container(
-              //   padding: const EdgeInsets.fromLTRB(15, 20, 15, 20),
-              //   child: TextField(
-              //     controller: flightNameController,
-              //     decoration: InputDecoration(
-              //       filled: true,
-              //       fillColor: Colors.white,
-              //       hintText: "Encontre um voo",
-              //       hintStyle: TextStyle(color: Palette.lightBlack),
-              //       prefixIcon: Icon(Icons.search, color: Palette.lightBlack),
-              //     ),
-              //     style: TextStyle(fontSize: 22),
-              //     onChanged: _flightNameChange,
-              //   ),
-              // ),
               Container(
                 padding: const EdgeInsets.only(left: 15, right: 15, top: 30),
                 child: Column(
@@ -119,6 +108,7 @@ class _ListFlightState extends State<ListFlight> {
                     return TripCard(
                         userFlight: voos[index],
                         handleClick: () {},
+                        onDelete: () => getFlightsRequest(),
                         isAdmin: globals.isAdmin);
                   }),
                 ),

@@ -45,7 +45,7 @@ Future<List<FlightInfo>> getFlightsList(String destination, String shipement, St
     return voos;
   } else {
     
-    showFailMessage(context, 'Não foi possivel listar os voos, ${response.body}');
+    showFailMessage(context, 'Não foi possivel listar os voos', path: "/search-result");
     throw Exception('Failed ${response.body}');
   }
 }

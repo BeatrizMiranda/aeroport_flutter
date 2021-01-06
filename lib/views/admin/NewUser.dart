@@ -26,7 +26,7 @@ Future<NewUser> createAdminUser(BuildContext context, String email, String passw
   if(!isAdmin) {
     String errorMessage = 'User not allowed to do this request';
     
-    showFailMessage(context, errorMessage);
+    showFailMessage(context, errorMessage, path: "/new-user");
     throw Exception(errorMessage);
   };
 
@@ -53,7 +53,7 @@ Future<NewUser> createAdminUser(BuildContext context, String email, String passw
   } else {
     String errorMessage = response.body.replaceAll(new RegExp("\""), "");
     
-    showFailMessage(context, 'Não foi possivel criar o usuario, $errorMessage');
+    showFailMessage(context, 'Não foi possivel criar o usuario', path: "/new-user");
     throw Exception('Failed to load user $errorMessage');
   }
 }

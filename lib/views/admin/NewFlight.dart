@@ -15,8 +15,9 @@ import 'dart:convert';
 
 class NewFlight extends StatefulWidget {
   final FlightInfo flight;
+  final Function onCreate;
 
-  NewFlight({ Key key, this.flight }) : super(key: key);
+  NewFlight({ Key key, this.flight, this.onCreate }) : super(key: key);
 
   @override
   _NewFlightState createState() => _NewFlightState();
@@ -61,7 +62,7 @@ Future<FlightInfo> createFlight(
     return FlightInfo.fromJson(jsonDecode(response.body));
   } else {
     
-    showFailMessage(context, 'Não foi possivel criar um voo, ${response.body}');
+    showFailMessage(context, 'Não foi possivel criar um voo', path: "/list-flight");
     throw Exception('Failed ${response.body}');
   }
 }
@@ -106,7 +107,7 @@ Future<FlightInfo> updateFlight(
     return FlightInfo.fromJson(jsonDecode(response.body));
   } else {
     
-    showFailMessage(context, 'Não foi possivel editar o voo, ${response.body}');
+    showFailMessage(context, 'Não foi possivel editar o voo', path: "/list-flight");
     throw Exception('Failed ${response.body}');
   }
 }
@@ -198,7 +199,9 @@ class _NewFlightState extends State<NewFlight> {
         companhiaController.text.trim(),
         priceController.text.trim(),
       );
-
+    }
+    if(widget.onCreate != null) {
+      widget.onCreate();
     }
   }
 
